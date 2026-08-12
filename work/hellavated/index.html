@@ -1,0 +1,949 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Hellavated packaging ecosystem by Zegoe: a two-tone fruit-hero / black-compliance system across 18+ gummy flavors and CloudBar devices."><!-- Tab icons: the wordmark's own `z`, on the page's near-black so it
+         still reads in a light tab strip. Cut by scripts/build-favicons.mjs —
+         re-run it if Wordmark_White.png is ever replaced. The .ico is listed
+         too, because that is the file a crawler asks for by name. --><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@400;600;700;800;900&family=Special+Elite&display=swap" rel="stylesheet"><title>Hellavated — Case Study · Zegoe</title><!-- Cross-document transition, arrival half. A case study fades itself out
+         and leaves this flag before navigating; whichever document loads next
+         fades in to meet it, so leaving and arriving read as one move instead
+         of a cut. Runs in <head>, before first paint, or the page would flash
+         at full opacity first. Only fires when the flag is there, so a cold
+         load or a bookmark is untouched. --><style>
+      @keyframes zg-arrive { from { opacity: 0; } to { opacity: 1; } }
+      html.zg-arriving body { animation: zg-arrive 0.45s ease-out both; }
+      /* The incoming page slides in from the side it was travelling from, so
+         it can sit outside the viewport for a frame; clip that, or the slide
+         gives the document a horizontal scrollbar. */
+      html.zg-arriving-next, html.zg-arriving-prev { overflow-x: clip; }
+      @media (prefers-reduced-motion: reduce) {
+        html.zg-arriving body { animation: none; }
+      }
+    </style><script>
+      try {
+        var nav = sessionStorage.getItem('zg-nav');
+        if (nav) {
+          sessionStorage.removeItem('zg-nav');
+          var root = document.documentElement;
+          root.classList.add('zg-arriving');
+          // "next"/"prev" carry the direction of travel; "1" is a plain move.
+          if (nav === 'next' || nav === 'prev') root.classList.add('zg-arriving-' + nav);
+        }
+      } catch (e) { /* storage blocked; no transition, no harm */ }
+    </script><link rel="stylesheet" href="/_astro/index.CF0oJHwm.css">
+<style>html,body{overscroll-behavior-x:contain}
+</style></head> <body> <div id="page-content">  <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z1nVSs7" prefix="r1" component-url="/_astro/CaseStudyContent.BwzE3xSf.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{&quot;slug&quot;:[0,&quot;hellavated&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;CaseStudyContent&quot;,&quot;value&quot;:true}" await-children><link rel="preload" as="image" href="/Wordmark_White.png"/><link rel="preload" as="image" href="/portfolio/hellavated/hellavated-brand-cover.webp"/><link rel="preload" as="image" href="/brand-logo/hellavated.png"/><link rel="preload" as="image" href="/brand-logo/holistic-industries.png"/><link rel="preload" as="image" href="/brand-logo/loot-bar.png"/><div class="cs-page" style="--cs-bg:#070707;--cs-accent:#b6ff2e;--cs-accent-text:#0a0a0a;--cs-glow:rgba(182,255,46,0.30);--cs-bg-src:url(&quot;/portfolio/hellavated/hi/hellavated-live-resin-device-revised-06-06.webp&quot;);--cs-bg-op:0.34;--cs-bg-filter:blur(7px) saturate(1.15) brightness(0.72);--cs-bg-size:cover;--cs-bg-repeat:no-repeat;--cs-bg-pos:50% 35%;--cs-bg-scrim:linear-gradient(180deg, rgba(7,7,7,0.86) 0%, rgba(7,7,7,0.62) 30%, rgba(7,7,7,0.66) 70%, rgba(7,7,7,0.9) 100%);--cs-bg-bleed:16"><div class="cs-bgpin" aria-hidden="true"><div class="cs-bglayer"><div class="cs-bgart"><div class="cs-bgart-img cs-bgart-drift"></div></div><div class="cs-bgscrim"></div></div></div><div class="cs-topbar" aria-hidden="true"></div><nav class="cs-nav" aria-label="Case study"><a href="/" class="cs-nav-logo"><img src="/Wordmark_White.png" alt="Zegoe"/></a><a href="/#work" class="cs-nav-back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12l6-6M5 12l6 6"></path></svg><span>All Work</span></a></nav><main><header class="cs-hero cs-hero-plated"><div class="cs-hero-plate"><img src="/portfolio/hellavated/hellavated-brand-cover.webp" alt="Hellavated brand cover: a model holding a CloudBar against a deep-space field, ringed by fruit and splashes of juice, under the cloud wordmark" draggable="false"/></div><div class="cs-hero-inner"><p class="cs-hero-eyebrow">Case Study<span class="cs-hero-count"><b>04</b><i>/</i>06</span></p><h1 class="cs-hero-name cs-hero-name-logo"><img src="/brand-logo/hellavated.png" alt="Hellavated" draggable="false"/></h1><p class="cs-hero-pos">A vibrant, compliance-forward edibles-and-devices brand built for Gen-Z.</p><div class="cs-hero-chips"><span class="cs-chip">Packaging</span><span class="cs-chip">Edibles</span><span class="cs-chip">Devices</span><span class="cs-chip">Beverages</span></div><p class="cs-hero-client"><span class="cs-hero-client-label">Client —</span><img class="cs-hero-clientlogo" src="/brand-logo/holistic-industries.png" alt="Holistic Industries" draggable="false"/></p></div><div class="cs-hero-scroll" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M12 19l-6-6M12 19l6-6"></path></svg></div></header><section class="cs-stage-section" aria-label="Interactive product model"><div class="cs-section-head"><p class="cs-eyebrow">The Product</p><p class="cs-stage-note">The galaxy CloudBar. Spin the real thing.</p></div><div class="cs-stage-frame"><div class="cs-stage" style="cursor:default"><div class="cs-stage-mount" aria-hidden="true"></div><img src="/portfolio/hellavated/hi/hellavated-galaxy-device-mockup.webp" alt="Hellavated galaxy CloudBar device pair" draggable="false" class="cs-stage-poster" style="opacity:1" loading="lazy"/><style>
+        .cs-stage {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+        }
+        .cs-stage-mount {
+          position: absolute;
+          inset: 0;
+        }
+        .cs-stage-poster {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          padding: clamp(1.5rem, 5vw, 4rem);
+          pointer-events: none;
+          transition: opacity 0.6s ease;
+          filter: drop-shadow(0 24px 48px rgba(0,0,0,0.55));
+        }
+        .cs-stage-hint {
+          position: absolute;
+          left: 50%;
+          bottom: 1.1rem;
+          transform: translateX(-50%);
+          display: inline-flex;
+          align-items: center;
+          gap: 0.45rem;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          opacity: 0.75;
+          pointer-events: none;
+          user-select: none;
+        }
+      </style></div></div></section><section class="cs-story"><blockquote class="cs-quote"><span class="cs-quote-bar" aria-hidden="true"></span>A vibrant, compliance-forward edibles-and-devices brand built for Gen-Z.</blockquote><p class="cs-blurb">Hellavated pairs fruit-illustration-heavy hero panels with a black technical compliance side, a two-tone system spanning 18+ gummy flavors and the CloudBar device line, balancing playful energy with dispensary-legible rigor.</p><div class="cs-story-grid"><div class="cs-story-col"><h2 class="cs-eyebrow">Deliverables</h2><ul class="cs-deliverables"><li class="cs-chip cs-chip-dim">1-pack gummy bags, 18+ flavors</li><li class="cs-chip cs-chip-dim">Variety packs</li><li class="cs-chip cs-chip-dim">CloudBar device packaging</li><li class="cs-chip cs-chip-dim">Baja beverage &amp; concentrate line</li><li class="cs-chip cs-chip-dim">Wholesale bags</li><li class="cs-chip cs-chip-dim">Compliance label systems</li><li class="cs-chip cs-chip-dim">Retail mockups</li><li class="cs-chip cs-chip-dim">Brand specs</li></ul></div><div class="cs-story-col"><h2 class="cs-eyebrow">Visual Identity<img class="cs-story-mark" src="/portfolio/hellavated/hi/hellavated-logo-07.webp" alt="Hellavated drip-cloud logo mark" loading="lazy"/></h2><p class="cs-vi">Bold and youth-forward: a fruit-illustration hero side against a black technical compliance side. The wordmark carries a cannabis-leaf icon; all-caps sans taglines keep it loud but dispensary-legible.</p></div></div></section><section class="cs-gallery" aria-label="Project gallery"><div class="cs-section-head"><p class="cs-eyebrow">The Work</p></div><div class="cs-grid"><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:4;--r:4;--cm:2;--rm:3"><img src="/portfolio/hellavated/hi/hellavated-galaxy-device-mockup.webp" alt="Hellavated galaxy CloudBar pair: device and box" loading="lazy" decoding="async"/><figcaption class="cs-cap">The galaxy CloudBar, flat: the same device you just rotated above.</figcaption></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:4;--cm:1;--rm:3"><img src="/portfolio/hellavated/hi/hellavated-cloud-bar-generic.webp" alt="Hellavated CloudBar generic device" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:3;--r:3;--cm:2;--rm:2"><img src="/portfolio/hellavated/hi/hellavated-live-resin-device-v2-graphic-side-mk-03.webp" alt="Hellavated Live Resin device, graphic side, v2" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-tint cs-pad-std cs-fit-contain" style="--c:3;--r:3;--cm:2;--rm:2"><img src="/portfolio/hellavated/hi/hellavated-ma-hellymelts-badassle.webp" alt="Hellavated HellyMelts Badassle pouch: acid green" loading="lazy" decoding="async"/><figcaption class="cs-cap">Badassle: the pouch that names the page accent.</figcaption></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:3;--cm:1;--rm:2"><img src="/portfolio/hellavated/hi/hellavated-ma-hellymelts-junglejuice.webp" alt="Hellavated HellyMelts Jungle Juice pouch" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:3;--cm:1;--rm:2"><img src="/portfolio/hellavated/hi/hellavated-live-resin-device-v1-graphic-side-mk-02.webp" alt="Hellavated Live Resin device, graphic side, v1" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:3;--cm:1;--rm:2"><img src="/portfolio/hellavated/hi/hellavated-hellymeltz-generic-ma.webp" alt="Hellavated HellyMeltz generic pouch" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:3;--cm:1;--rm:2"><img src="/portfolio/hellavated/hi/hellavated-live-resin-device-v1-graphic-side-mk-03-new.webp" alt="Hellavated Live Resin device, graphic side, mk 03" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:3;--cm:1;--rm:2"><img src="/portfolio/hellavated/hi/hellavated-vape.webp" alt="Hellavated vape device, black" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:3;--cm:1;--rm:2"><img src="/portfolio/hellavated/hi/hellavated-ma-hellymelts-blueberryyumyum.webp" alt="Hellavated HellyMelts Blueberry Yum Yum pouch" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-roomy cs-fit-contain" style="--c:3;--r:5;--cm:2;--rm:4"><img src="/portfolio/hellavated/hi/hellavated-md-juicy-stickz-razberry-blitz-mockup.webp" alt="Hellavated Juicy Stickz pre-roll tube: Razberry Blitz" loading="lazy" decoding="async"/><figcaption class="cs-cap">Juicy Stickz: the tall one.</figcaption></figure><figure class="cs-tile cs-tile-bright cs-pad-roomy cs-fit-contain" style="--c:3;--r:5;--cm:2;--rm:4"><img src="/portfolio/hellavated/hi/hellavated-vape-white.webp" alt="Hellavated vape device, white edition" loading="lazy" decoding="async"/><figcaption class="cs-cap">White edition: the palette break.</figcaption></figure></div><div class="cs-band"><img src="/portfolio/hellavated/hi/hellavated-doodle-pattern.webp" alt="Hellavated skull-and-cloud doodle pattern, full bleed" loading="lazy" decoding="async"/></div><div class="cs-grid"><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-cover" style="--c:6;--r:6;--cm:2;--rm:2"><img src="/portfolio/hellavated/hi/hellavated-keyart-strawberry-haze.webp" alt="Hellavated Strawberry Haze flavor key art: watercolor strawberries" loading="lazy" decoding="async"/><figcaption class="cs-cap">Flavor key art: the watercolor register.</figcaption></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-cover" style="--c:3;--r:3;--cm:2;--rm:2"><img src="/portfolio/hellavated/hi/hellavated-keyart-og-mint.webp" alt="Hellavated OG Mint flavor key art: watercolor mint" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-cover" style="--c:3;--r:3;--cm:2;--rm:2"><img src="/portfolio/hellavated/hi/hellavated-keyart-blackberry-dream.webp" alt="Hellavated Blackberry Dream flavor key art: watercolor blackberries" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-cover" style="--c:3;--r:3;--cm:2;--rm:2"><img src="/portfolio/hellavated/hi/hellavated-poster-tropicz.webp" alt="Hellavated retail poster: “Take a Trip to the Tropicz”" loading="lazy" decoding="async"/><figcaption class="cs-cap">Retail poster: Tropicz.</figcaption></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-cover" style="--c:3;--r:3;--cm:2;--rm:2"><img src="/portfolio/hellavated/hi/hellavated-poster-sooner.webp" alt="Hellavated retail poster: “Get Hellavated Sooner”" loading="lazy" decoding="async"/></figure></div></section><footer class="cs-next"><a href="/work/lootbar" class="cs-next-link" data-dir="next" style="--nx-bg:#02040e;--nx-accent:#00e0f0;--nx-glow:rgba(0,224,240,0.30);--nx-art:url(&quot;/portfolio/lootbar/lootbar-bg.webp&quot;);--nx-art-op:0.6;--nx-art-filter:saturate(1.25) brightness(0.72);--nx-art-size:cover;--nx-art-repeat:no-repeat;--nx-art-pos:50% 50%"><span class="cs-next-art" aria-hidden="true"></span><span class="cs-next-scrim" aria-hidden="true"></span><span class="cs-eyebrow">Next Project</span><span class="cs-next-name"><span class="cs-next-index">05</span><img class="cs-next-logo" src="/brand-logo/loot-bar.png" alt="Lootbar" draggable="false"/><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg></span></a><a href="/#work" class="cs-all-work">All Work</a></footer></main><div class="cs-pagerpin"><nav class="cs-pagerbar" aria-label="Case studies"><a href="/work/avitas" class="cs-pagerbar-link" data-dir="prev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12l6-6M5 12l6 6"></path></svg><span><i>Previous</i><b>AVITAS</b></span></a><span class="cs-pagerbar-here"><span class="cs-pagerbar-count" aria-hidden="true"><b>04</b><i>/</i>06</span><em>Hellavated</em></span><a href="/work/lootbar" class="cs-pagerbar-link cs-pagerbar-next" data-dir="next"><span><i>Next</i><b>Lootbar</b></span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M19 12l-6-6M19 12l-6 6"></path></svg></a></nav></div><style>
+        /* ═══ Page frame ═══ */
+        .cs-page {
+          position: relative;
+          background: var(--cs-bg);
+          color: #fff;
+          min-height: 100vh;
+          animation: cs-page-in 0.5s ease-out both;
+        }
+        /* Opacity on the page, the rise on <main> — a transform on .cs-page
+           would make it the containing block for the sticky pins it holds. */
+        .cs-page > main { animation: cs-main-in 0.6s ease-out both; }
+        @keyframes cs-page-in { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes cs-main-in {
+          from { transform: translate3d(0, 18px, 0); }
+          to   { transform: translate3d(0, 0, 0); }
+        }
+        .cs-page.cs-leaving,
+        .cs-page.cs-leaving-next,
+        .cs-page.cs-leaving-prev { animation: cs-page-out 0.26s ease-in forwards; }
+        .cs-page.cs-leaving > main { animation: cs-main-out 0.26s ease-in forwards; }
+        @keyframes cs-page-out { to { opacity: 0; } }
+        @keyframes cs-main-out { to { transform: translate3d(0, -12px, 0); } }
+        /* Moving forward, the page you are leaving exits to the left and the
+           one you are opening arrives from the right — the set reads as a
+           strip you travel along. Backwards is the mirror. */
+        .cs-page.cs-leaving-next > main { animation: cs-slide-out-left 0.26s ease-in forwards; }
+        .cs-page.cs-leaving-prev > main { animation: cs-slide-out-right 0.26s ease-in forwards; }
+        @keyframes cs-slide-out-left  { to { transform: translate3d(-7vw, 0, 0); } }
+        @keyframes cs-slide-out-right { to { transform: translate3d(7vw, 0, 0); } }
+        html.zg-arriving-next .cs-page > main { animation: cs-slide-in-right 0.55s cubic-bezier(.16,.84,.34,1) both; }
+        html.zg-arriving-prev .cs-page > main { animation: cs-slide-in-left 0.55s cubic-bezier(.16,.84,.34,1) both; }
+        @keyframes cs-slide-in-right { from { transform: translate3d(7vw, 0, 0); } to { transform: translate3d(0, 0, 0); } }
+        @keyframes cs-slide-in-left  { from { transform: translate3d(-7vw, 0, 0); } to { transform: translate3d(0, 0, 0); } }
+        /* Everything in the flow sits above the art layer. */
+        .cs-page > main { position: relative; z-index: 1; }
+
+        /* ═══ Full-page art background ═══ */
+        .cs-bgpin {
+          height: 0;
+          position: sticky;
+          top: 0;
+          z-index: 0;
+          pointer-events: none;
+        }
+        .cs-bglayer {
+          position: relative;
+          width: 100%;
+          height: 100vh;
+          overflow: hidden;
+        }
+        .cs-bgart {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: calc(100% + var(--cs-bg-bleed, 14) * 1vh);
+          transform: translate3d(0, 0, 0);
+          will-change: transform;
+        }
+        .cs-bgart-img {
+          position: absolute;
+          inset: 0;
+          background-image: var(--cs-bg-src);
+          background-size: var(--cs-bg-size, cover);
+          background-position: var(--cs-bg-pos, 50% 50%);
+          background-repeat: var(--cs-bg-repeat, no-repeat);
+          opacity: var(--cs-bg-op, 1);
+          filter: var(--cs-bg-filter, none);
+          transform-origin: 50% 50%;
+        }
+        .cs-bgart-drift { animation: cs-bg-drift 55s ease-in-out infinite alternate; }
+        @keyframes cs-bg-drift {
+          from { transform: scale(1); }
+          to { transform: scale(1.055); }
+        }
+        .cs-bgscrim {
+          position: absolute;
+          inset: 0;
+          background: var(--cs-bg-scrim);
+        }
+
+        .cs-topbar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 5px;
+          z-index: 60;
+          pointer-events: none;
+          background: linear-gradient(90deg, var(--cs-bg) 0%, var(--cs-accent) 45%, var(--cs-accent) 70%, var(--cs-bg) 100%);
+        }
+        .cs-nav {
+          position: fixed;
+          top: 5px;
+          left: 0;
+          right: 0;
+          z-index: 50;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 clamp(1.25rem, 4vw, 3rem);
+          height: 4rem;
+          /* Deeper than it was: the hero plate now runs to the top of the
+             viewport, so All Work can land on bright artwork. Mirrors the
+             pager bar's fade at the other end of the page. */
+          background: linear-gradient(180deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 55%, transparent 100%);
+        }
+        .cs-nav-logo img { height: 1.25rem; width: auto; display: block; }
+        .cs-nav-logo { transition: opacity 0.2s ease; }
+        .cs-nav-logo:hover { opacity: 0.8; }
+        .cs-nav-back {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.75);
+          transition: color 0.2s ease, gap 0.2s ease;
+        }
+        .cs-nav-back:hover { color: var(--cs-accent); gap: 0.75rem; }
+
+        /* ═══ Shared bits ═══ */
+        .cs-eyebrow {
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 600;
+          letter-spacing: 0.35em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.35);
+          display: flex;
+          align-items: center;
+          gap: 0.9rem;
+        }
+        .cs-chip {
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.65rem;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          padding: 0.4rem 0.85rem;
+          border: 1px solid rgba(255,255,255,0.16);
+          border-radius: 999px;
+          color: var(--cs-accent);
+        }
+        .cs-chip-dim { color: rgba(255,255,255,0.7); letter-spacing: 0.1em; text-transform: none; font-weight: 600; font-size: 0.78rem; }
+
+        /* ═══ Hero ═══ */
+        .cs-hero {
+          position: relative;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+          padding: 7rem clamp(1.5rem, 6vw, 6rem) 4rem;
+          /* Glow only — no flat fill, or it would occlude the art layer.
+             .cs-page already paints the base color beneath the art. */
+          background: radial-gradient(110% 110% at 85% 0%, var(--cs-glow) 0%, transparent 50%);
+        }
+        .cs-hero-inner { position: relative; z-index: 2; max-width: 56rem; }
+        /* Where the case-study number lives now: readable, and it carries the
+           set total so the hero says where you are, not just who you are. */
+        .cs-hero-count {
+          display: inline-flex;
+          align-items: baseline;
+          gap: 0.3rem;
+          margin-left: 0.2rem;
+          font-size: 1.35rem;
+          font-weight: 900;
+          letter-spacing: 0.02em;
+          color: rgba(255,255,255,0.32);
+          line-height: 1;
+        }
+        .cs-hero-count b { font-weight: 900; color: var(--cs-accent); }
+        .cs-hero-count i { font-style: normal; opacity: 0.45; font-weight: 600; }
+
+        /* ── Persistent pager bar, pinned to the foot of the viewport ── */
+        .cs-pagerpin {
+          height: 0;
+          position: sticky;
+          bottom: 0;
+          z-index: 20;
+        }
+        .cs-pagerbar {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 5rem;
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 1rem;
+          padding: 0 clamp(1rem, 4vw, 3rem) 0.95rem;
+          /* Neutral dark rather than the brand colour: this bar sits over
+             every section of the page, including the light gallery plates.
+             No border, no flat panel — it fades up out of the page. */
+          background: linear-gradient(
+            to top,
+            rgba(0,0,0,0.90) 0%,
+            rgba(0,0,0,0.78) 34%,
+            rgba(0,0,0,0.42) 68%,
+            rgba(0,0,0,0) 100%
+          );
+          pointer-events: none;
+        }
+        .cs-pagerbar > * { pointer-events: auto; }
+        /* backdrop-filter clips hard at the element box, which is what put a
+           visible horizontal seam across the page. Masking the blur layer to
+           the same ramp as the tint lets the blur die out instead of stopping. */
+        .cs-pagerbar::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          z-index: -1;
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          -webkit-mask-image: linear-gradient(to top, #000 0%, #000 30%, rgba(0,0,0,0.35) 65%, transparent 100%);
+          mask-image: linear-gradient(to top, #000 0%, #000 30%, rgba(0,0,0,0.35) 65%, transparent 100%);
+          pointer-events: none;
+        }
+        .cs-pagerbar-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.7rem;
+          min-width: 0;
+          color: rgba(255,255,255,0.62);
+          text-decoration: none;
+          transition: color 0.2s ease;
+        }
+        .cs-pagerbar-link span {
+          display: flex;
+          align-items: baseline;
+          gap: 0.5rem;
+          min-width: 0;
+        }
+        /* Previous / Next stay in the accessibility tree but come off the
+           screen: the arrow already says which way, and the labels were the
+           second line that made this bar twice as tall as it needed to be. */
+        .cs-pagerbar-link i {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          overflow: hidden;
+          clip-path: inset(50%);
+          white-space: nowrap;
+        }
+        .cs-pagerbar-link b {
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.92rem;
+          font-weight: 700;
+          line-height: 1.1;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .cs-pagerbar-link svg { flex: none; transition: transform 0.25s ease; }
+        .cs-pagerbar-link:hover { color: var(--cs-accent); }
+        .cs-pagerbar-link:hover svg { transform: translateX(-4px); }
+        .cs-pagerbar-next:hover svg { transform: translateX(4px); }
+        /* Where you are: the count with the current project under it. */
+        .cs-pagerbar-here {
+          display: flex;
+          align-items: baseline;
+          gap: 0.55rem;
+          flex: none;
+          min-width: 0;
+        }
+        .cs-pagerbar-here em::before {
+          content: '·';
+          margin-right: 0.55rem;
+          opacity: 0.4;
+        }
+        .cs-pagerbar-here em {
+          font-style: normal;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.62);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 18rem;
+        }
+        .cs-pagerbar-count {
+          display: inline-flex;
+          align-items: baseline;
+          gap: 0.28rem;
+          flex: none;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.95rem;
+          font-weight: 900;
+          color: rgba(255,255,255,0.34);
+          line-height: 1;
+        }
+        .cs-pagerbar-count b { color: var(--cs-accent); font-weight: 900; }
+        .cs-pagerbar-count i { font-style: normal; opacity: 0.5; font-weight: 600; }
+        /* Clear the bar so the last of the page is never trapped behind it.
+           The space goes on <main>, ABOVE the pin — put it on .cs-page and the
+           pin's natural resting place ends up a bar-height off the page floor,
+           so the bar visibly lifts when you hit the bottom. */
+        .cs-page > main { padding-bottom: 3.5rem; }
+        .cs-hero-eyebrow {
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 600;
+          letter-spacing: 0.35em;
+          text-transform: uppercase;
+          color: var(--cs-accent);
+          margin-bottom: 1.4rem;
+        }
+        .cs-hero-name {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 900;
+          text-transform: uppercase;
+          line-height: 0.92;
+          letter-spacing: -0.01em;
+          font-size: clamp(2.4rem, 5.5vw, 4.5rem);
+          color: #fff;
+        }
+        /* Logo titles run taller than the type they replace — a wordmark has
+           no ascenders and descenders inflating its box, so matching the h1's
+           cap height means overshooting its font-size. */
+        .cs-hero-name-logo { line-height: 0; }
+        .cs-hero-name-logo img {
+          display: block;
+          /* One height for the set, times the mark's own correction (see
+             logo.scale in caseStudies.ts). Multiplying inside the clamp
+             would scale the floor and the ceiling too and let a boosted mark
+             blow past the cap on wide screens; multiplying the clamped result
+             keeps every mark on the same viewport curve. */
+          height: calc(clamp(3.5rem, 8vw, 7rem) * var(--cs-logo-scale, 1));
+          /* Width follows the art, but the copy column is the hard limit:
+             beyond it the mark would cross into the cover plate. Contain (not
+             a squashed width) keeps the ratio and drops the drawn height
+             instead, and left-aligns it back onto the copy's edge. */
+          width: auto;
+          max-width: 100%;
+          object-fit: contain;
+          object-position: left center;
+        }
+        .cs-hero-pos {
+          margin-top: 1.6rem;
+          font-size: clamp(1.1rem, 2vw, 1.55rem);
+          font-weight: 600;
+          line-height: 1.35;
+          color: rgba(255,255,255,0.88);
+          max-width: 38rem;
+        }
+        .cs-hero-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.8rem; }
+        .cs-hero-client {
+          margin-top: 2.2rem;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.72rem;
+          font-weight: 600;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.4);
+        }
+        /* The label keeps the small-caps treatment and gives up the line: a
+           mark set inline after "CLIENT —" reads as the end of a sentence, and
+           its baseline never agrees with the letterspaced caps beside it. On
+           its own row it reads as what it is, a credited party under a
+           heading. Same shape whether the client is a mark or a name. */
+        .cs-hero-client-label { display: block; margin-bottom: 0.6rem; }
+        .cs-hero-client-name { color: rgba(255,255,255,0.85); }
+        /* Sized off the label, not the h1 — this is a credit, so the mark
+           stays near the caps' own height and must not read as a subtitle. */
+        .cs-hero-clientlogo {
+          display: block;
+          height: 1.85rem;
+          width: auto;
+          max-width: min(100%, 14rem);
+          object-fit: contain;
+          object-position: left center;
+          opacity: 0.85;
+        }
+        .cs-hero-scroll {
+          position: absolute;
+          left: 50%;
+          bottom: 1.6rem;
+          transform: translateX(-50%);
+          color: rgba(255,255,255,0.35);
+          animation: cs-bob 2.4s ease-in-out infinite;
+        }
+        @keyframes cs-bob {
+          0%, 100% { transform: translate(-50%, 0); }
+          50% { transform: translate(-50%, 8px); }
+        }
+
+        /* ═══ Brand-cover exhibit plate ═══
+           The 4:5 cover mounted as a bounded object in the hero's right half,
+           with the h1 crossing its left edge. Deliberately NOT a background:
+           run full-bleed under the type it would have to be cropped to 16:9,
+           which is exactly what these compositions can't survive, and it would
+           duplicate the job the sticky page-art layer already does. */
+        .cs-hero-plate {
+          position: absolute;
+          z-index: 1;
+          right: clamp(0.75rem, 2.5vw, 2.5rem);
+          /* Centred on the hero, capped at 48vw so a tall narrow window can't
+             hand the plate two thirds of the screen. */
+          top: 50%;
+          bottom: auto;
+          transform: translateY(-50%);
+          /* Width leads and height follows from 4:5 — never the other way
+             round. Height-leads plus a max-width cap silently broke the
+             ratio on any window under ~1.42:1 (the cap bound, the box went
+             narrow, and object-fit: cover shaved up to 9.7% off the sides —
+             at 1280x1000 the covers lost their left and right frame). 68vh is
+             the same width height:85% used to produce, so wide windows are
+             unchanged; narrow ones now lose a little height instead of art. */
+          width: min(48vw, 68vh);
+          height: auto;
+          aspect-ratio: 4 / 5;
+          /* No frame, no mat, no hairline — this box is only a layout slot;
+             the artwork is the object and it floats inside it. */
+          overflow: visible;
+        }
+        /* Keep the copy clear of the plate — the h1 used to run onto it.
+           68vh is the plate's width when height is 85% of a 100vh hero. */
+        .cs-hero-plated {
+          padding-right: calc(
+            min(48vw, 68vh) + clamp(0.75rem, 2.5vw, 2.5rem) + clamp(2rem, 5vw, 5rem)
+          );
+        }
+        /* Bloom under the art, in the brand accent — what lifts it off the
+           page. Sits behind the image, inside the slot. */
+        .cs-hero-plate::before {
+          content: '';
+          position: absolute;
+          inset: 8% -6% -4%;
+          background: radial-gradient(60% 52% at 50% 62%, var(--cs-glow) 0%, transparent 72%);
+          filter: blur(38px);
+          pointer-events: none;
+        }
+        .cs-hero-plate img {
+          position: relative;
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transform-origin: 50% 50%;
+          /* The cast shadow is the ONLY floating cue — no bob. Long and soft,
+             so it reads as height off the page rather than a card border. */
+          box-shadow:
+            0 2.5rem 4.5rem rgba(0,0,0,0.55),
+            0 0.75rem 1.5rem rgba(0,0,0,0.35);
+        }
+        /* Art that isn't 4:5 — the flavor key arts are square, and their HUD
+           frame runs nearly edge to edge so cropping to fill would cut it off
+           both sides. It keeps its own aspect and floats in the slot; there's
+           no mat behind it any more, so the slot is invisible. */
+        .cs-hero-plate[data-mat] img {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 100%;
+          height: auto;
+          aspect-ratio: 1;
+          object-fit: contain;
+          transform: translate(-50%, -50%);
+        }
+        /* The glow stops being ambience and becomes the plate's halo. */
+        .cs-hero-plated {
+          background: radial-gradient(90% 100% at 78% 35%, var(--cs-glow) 0%, transparent 40%);
+        }
+
+        /* ═══ Unplated hero — a case study with no cover ═══
+           The copy column is sized to leave the plate its half of the screen.
+           With no plate there is nothing in that half, so left-aligned copy
+           hangs off the edge of a large empty area. Centred, the copy is the
+           composition instead of the leftover of one. Written as :not() rather
+           than a modifier class so none of it can reach the plated heroes —
+           they are excluded by the selector, not by ordering. No breakpoint
+           undoes it: the stacked layout exists to get the copy out from under
+           the plate, and an unplated hero never had one at any width. */
+        .cs-hero:not(.cs-hero-plated) {
+          justify-content: center;
+          text-align: center;
+          /* Same reason: the glow was thrown to the top right to sit over the
+             artwork. Nothing is there now, so it moves over the copy. */
+          background: radial-gradient(110% 110% at 50% 0%, var(--cs-glow) 0%, transparent 55%);
+        }
+        .cs-hero:not(.cs-hero-plated) .cs-hero-pos { margin-inline: auto; }
+        .cs-hero:not(.cs-hero-plated) .cs-hero-chips { justify-content: center; }
+        /* Both marks are display:block boxes with object-position: left — the
+           rule that keeps a width-clamped logo pinned to the copy's left edge
+           is exactly what fights a centred column, so it inverts here. */
+        .cs-hero:not(.cs-hero-plated) .cs-hero-name-logo img,
+        .cs-hero:not(.cs-hero-plated) .cs-hero-clientlogo {
+          margin-inline: auto;
+          object-position: center;
+        }
+
+        /* Below this the overlap stops being a composition and starts being a
+           collision: the plate stacks under the copy at full column width. */
+        @media (max-width: 1180px) {
+          .cs-hero-plated {
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: 0;
+            /* Undo the gutter that reserves the plate's column on desktop —
+               stacked there is no column to reserve, and leaving it in
+               squeezed the hero to a 135px-wide sliver. */
+            padding-right: clamp(1.5rem, 6vw, 6rem);
+            padding-bottom: 5.5rem;
+          }
+          .cs-hero-plated .cs-hero-inner { order: 1; max-width: 100%; }
+          .cs-hero-plate {
+            order: 2;
+            /* relative, not static: the matted art is absolutely positioned
+               against the plate, and a static plate hands that job to the
+               hero — the art then covers the copy. */
+            position: relative;
+            top: auto;
+            right: auto;
+            bottom: auto;
+            max-width: none;
+            transform: none;
+            /* Capped, or at ~1100px the stacked plate becomes a billboard —
+               it has to stay an object you could pick up. */
+            width: min(100%, 32rem);
+            height: auto;
+            max-height: none;
+            margin-top: 2.75rem;
+          }
+        }
+
+        /* ═══ Stage ═══ */
+        .cs-stage-section { padding: 4.5rem clamp(1.25rem, 4vw, 3rem) 2rem; }
+        .cs-section-head {
+          max-width: 1280px;
+          margin: 0 auto 1.5rem;
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 1.5rem;
+          flex-wrap: wrap;
+        }
+        .cs-stage-note { font-size: 0.9rem; color: rgba(255,255,255,0.45); }
+        .cs-stage-frame {
+          position: relative;
+          max-width: 1280px;
+          margin: 0 auto;
+          height: clamp(420px, 72vh, 680px);
+          border: 1px solid rgba(255,255,255,0.09);
+          border-radius: 1.75rem;
+          overflow: hidden;
+          /* Opaque, and lit like a studio box. The renderer draws with
+             alpha:true, so at rgba(0,0,0,0.25) the page's art layer showed
+             straight through and the device looked like it was floating in
+             the page rather than standing in a viewport. Base is the brand
+             near-black: key light from above, glow bounced off the floor.
+             Both radials are sized past 100% on purpose: at 75%/65% wide they
+             drew a lit oval that stopped short of the corners, so the box read
+             as a shape sitting in a frame rather than a filled viewport. */
+          background:
+            radial-gradient(145% 78% at 50% 112%, var(--cs-glow) 0%, transparent 72%),
+            radial-gradient(130% 82% at 50% -14%, rgba(255,255,255,0.11) 0%, transparent 74%),
+            linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 45%, rgba(0,0,0,0.22) 100%),
+            var(--cs-bg);
+          box-shadow: 0 30px 90px rgba(0,0,0,0.5);
+        }
+
+        /* ═══ Story ═══ */
+        .cs-story {
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 4.5rem clamp(1.25rem, 4vw, 3rem);
+        }
+        .cs-quote {
+          position: relative;
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 800;
+          font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+          line-height: 1.2;
+          max-width: 46rem;
+          padding-left: 1.75rem;
+          margin: 0;
+        }
+        .cs-quote-bar {
+          position: absolute;
+          left: 0;
+          top: 0.25em;
+          bottom: 0.25em;
+          width: 4px;
+          border-radius: 4px;
+          background: var(--cs-accent);
+        }
+        .cs-blurb {
+          margin-top: 2rem;
+          max-width: 44rem;
+          font-size: 1rem;
+          line-height: 1.75;
+          color: rgba(255,255,255,0.6);
+        }
+        .cs-story-grid {
+          display: grid;
+          grid-template-columns: 1.1fr 0.9fr;
+          gap: 3rem;
+          margin-top: 3.5rem;
+          padding-top: 3rem;
+          border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .cs-deliverables {
+          list-style: none;
+          padding: 0;
+          margin: 1.4rem 0 0;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.6rem;
+        }
+        .cs-story-mark { height: 2.4rem; width: auto; opacity: 0.9; }
+        .cs-vi {
+          margin-top: 1.4rem;
+          font-size: 0.95rem;
+          line-height: 1.75;
+          color: rgba(255,255,255,0.6);
+        }
+
+        /* ═══ Gallery ═══ */
+        .cs-gallery { padding: 1rem clamp(1.25rem, 4vw, 3rem) 5rem; }
+        .cs-gallery .cs-section-head { margin-bottom: 1.5rem; }
+        .cs-grid {
+          max-width: 1280px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: repeat(6, 1fr);
+          grid-auto-rows: 105px;
+          gap: 1rem;
+        }
+        .cs-grid + .cs-grid { margin-top: 1rem; }
+        .cs-tile {
+          grid-column: span var(--c);
+          grid-row: span var(--r);
+          position: relative;
+          margin: 0;
+          border-radius: 1.1rem;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .cs-tile img {
+          width: 100%;
+          height: 100%;
+          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .cs-tile:hover img { transform: scale(1.025); }
+        .cs-fit-contain img { object-fit: contain; filter: drop-shadow(0 18px 32px rgba(0,0,0,0.45)); }
+        .cs-fit-cover img { object-fit: cover; object-position: var(--pos, center); filter: none; }
+        .cs-pad-tight img { padding: 0.5rem; }
+        .cs-pad-std img { padding: 1.4rem; }
+        .cs-pad-roomy img { padding: clamp(1.75rem, 4vw, 3.25rem); }
+        .cs-fit-cover img { padding: 0 !important; }
+
+        .cs-tile-plain { background: rgba(255,255,255,0.025); }
+        .cs-tile-tint {
+          background:
+            radial-gradient(90% 90% at 50% 60%, var(--cs-glow) 0%, transparent 70%),
+            rgba(255,255,255,0.025);
+        }
+        .cs-tile-framed {
+          background: #eceae5;
+          border: 1px solid rgba(255,255,255,0.25);
+          outline: 6px solid rgba(255,255,255,0.05);
+          outline-offset: -6px;
+        }
+        .cs-tile-framed img { filter: none; }
+        .cs-tile-plate { background: #ffffff; }
+        .cs-tile-plate img { filter: none; }
+        .cs-tile-bright { background: #f1f1ee; }
+        .cs-tile-bright img { filter: none; }
+
+        .cs-cap {
+          position: absolute;
+          left: 1rem;
+          right: 1rem;
+          bottom: 0.85rem;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.72rem;
+          font-weight: 700;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.55);
+          text-shadow: 0 1px 8px rgba(0,0,0,0.7);
+          pointer-events: none;
+        }
+        .cs-tile-framed .cs-cap,
+        .cs-tile-plate .cs-cap,
+        .cs-tile-bright .cs-cap { color: rgba(0,0,0,0.55); text-shadow: none; }
+
+        /* Full-bleed divider band */
+        .cs-band {
+          width: 100vw;
+          margin: 2.5rem calc(50% - 50vw);
+          height: clamp(200px, 38vh, 400px);
+          overflow: hidden;
+        }
+        .cs-band img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+        }
+
+        /* ═══ Next-project footer ═══ */
+        .cs-next { border-top: 1px solid rgba(255,255,255,0.08); }
+        .cs-next-link {
+          position: relative;
+          isolation: isolate;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          gap: 1.1rem;
+          padding: 4.5rem clamp(1.5rem, 6vw, 6rem);
+          background: var(--nx-bg);
+          transition: filter 0.3s ease;
+        }
+        .cs-next-link:hover { filter: brightness(1.18); }
+        /* Art layer, then scrim, then copy — the eyebrow and mark are flow
+           children, so they need lifting above both absolute layers. */
+        .cs-next-link > .cs-eyebrow,
+        .cs-next-name { position: relative; z-index: 2; }
+        .cs-next-art {
+          position: absolute;
+          inset: 0;
+          background-image: var(--nx-art);
+          background-size: var(--nx-art-size, cover);
+          background-position: var(--nx-art-pos, 50% 50%);
+          background-repeat: var(--nx-art-repeat, no-repeat);
+          filter: var(--nx-art-filter, none);
+          opacity: var(--nx-art-op, 0);
+          transform: scale(1.03);
+          transition: transform 0.55s cubic-bezier(.16,.84,.34,1);
+          z-index: 0;
+        }
+        .cs-next-link:hover .cs-next-art { transform: scale(1.07); }
+        /* The project glow, plus a wash off the left edge so the mark keeps its
+           contrast over whatever the art happens to be doing under it. */
+        .cs-next-scrim {
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          background:
+            radial-gradient(110% 130% at 90% 0%, var(--nx-glow) 0%, transparent 50%),
+            linear-gradient(90deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.34) 42%, rgba(0,0,0,0) 80%),
+            linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 40%);
+        }
+        .cs-next-name {
+          display: inline-flex;
+          align-items: baseline;
+          gap: 1.2rem;
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 900;
+          text-transform: uppercase;
+          font-size: clamp(2.4rem, 7vw, 5.5rem);
+          line-height: 1;
+          color: #fff;
+        }
+        /* Smaller than the hero's mark — this is a teaser, not the title — but
+           it carries the same per-mark correction so a stacked lockup doesn't
+           come in at a fraction of a wordmark's optical mass. */
+        .cs-next-logo {
+          height: calc(clamp(1.9rem, 4.6vw, 3.6rem) * var(--nx-logo-scale, 1));
+          width: auto;
+          max-width: min(100%, 26rem);
+          object-fit: contain;
+          object-position: left bottom;
+          /* baseline-aligned in the row: an image's baseline is its bottom
+             edge, which puts the index and the mark on one line. */
+          display: inline-block;
+        }
+        .cs-next-name svg { color: var(--nx-accent); align-self: center; transition: transform 0.3s ease; }
+        .cs-next-link:hover .cs-next-name svg { transform: translate(4px, -4px); }
+        .cs-next-index {
+          font-size: 0.35em;
+          font-weight: 800;
+          color: var(--nx-accent);
+        }
+        .cs-all-work {
+          display: block;
+          padding: 1.5rem clamp(1.5rem, 6vw, 6rem);
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.5);
+          background: #050505;
+          transition: color 0.2s ease;
+        }
+        .cs-all-work:hover { color: var(--cs-accent); }
+
+        /* ═══ Mobile ═══ */
+        @media (max-width: 767px) {
+          .cs-hero { min-height: 88vh; padding-top: 6rem; }
+          .cs-hero-count { font-size: 1.15rem; }
+          .cs-pagerbar { height: 4.25rem; padding-bottom: 0.8rem; }
+          .cs-pagerbar-link b { font-size: 0.78rem; max-width: 6.5rem; }
+          .cs-pagerbar-here em { display: none; }
+          .cs-page > main { padding-bottom: 3rem; }
+          .cs-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 82px; gap: 0.7rem; }
+          .cs-tile { grid-column: span var(--cm); grid-row: span var(--rm); }
+          .cs-pad-roomy img { padding: 1.25rem; }
+          .cs-pad-std img { padding: 0.9rem; }
+          .cs-story-grid { grid-template-columns: 1fr; gap: 2.25rem; }
+          .cs-band { height: 180px; margin: 1.5rem calc(50% - 50vw); }
+          /* 0.55rem was 8.8px of letterspaced caps over artwork — under the
+             readable floor on a phone. The tracking comes in a little to pay
+             for the extra width so the captions still hold one or two lines. */
+          .cs-cap { font-size: 0.75rem; letter-spacing: 0.1em; left: 0.7rem; right: 0.7rem; bottom: 0.6rem; }
+
+          /* A phone column is narrow enough that body copy and section
+             eyebrows run the full width, and the desktop scrim is out of
+             ramp by the bar's own 4rem — so mid-scroll a paragraph would
+             slide clean through the logo and ALL WORK with nothing between
+             them. Deeper at the top, and a second ramp carried below the bar
+             (::after, outside the flex row, so the row's layout is
+             untouched): ~7rem of gradient in all, still reading as a scrim
+             over the artwork rather than a painted bar. */
+          .cs-nav {
+            background: linear-gradient(180deg, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.94) 55%, rgba(0,0,0,0.86) 100%);
+          }
+          .cs-nav::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 4.5rem;
+            pointer-events: none;
+            background: linear-gradient(180deg, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.16) 75%, transparent 100%);
+          }
+        }
+
+        /* Reduced motion: no bobbing arrow, no hover zoom */
+        @media (prefers-reduced-motion: reduce) {
+          .cs-page, .cs-page > main { animation: none !important; }
+          .cs-hero-scroll { animation: none; }
+          .cs-tile img { transition: none; }
+          .cs-bgart-drift { animation: none; }
+        }
+      </style></div><!--astro:end--></astro-island> <script>(function(){const prefetch = [{"url":"/work/avitas/","as":"document"},{"url":"/work/lootbar/","as":"document"},{"url":"/portfolio/avitas/avitas-brand-cover.webp","as":"image"},{"url":"/portfolio/lootbar/hi/lootbar-blueberry-dream.webp","as":"image"}];
+
+    (() => {
+      const c = navigator.connection;
+      if (c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''))) return;
+      const warm = () => {
+        for (const item of prefetch) {
+          const l = document.createElement('link');
+          l.rel = 'prefetch';
+          l.href = item.url;
+          if (item.as === 'image') l.as = 'image';
+          document.head.appendChild(l);
+        }
+      };
+      const idle = () =>
+        'requestIdleCallback' in window
+          ? requestIdleCallback(warm, { timeout: 3000 })
+          : setTimeout(warm, 1200);
+      if (document.readyState === 'complete') idle();
+      else addEventListener('load', idle, { once: true });
+    })();
+  })();</script>  </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync --> <script type="module">const l=document.getElementById("main-nav");if(l){let s=function(){a=!1;const e=window.scrollY>60,n=d.some(r=>{const u=r.getBoundingClientRect();return u.top<=b&&u.bottom>0});n===c&&e===g||(c=n,g=e,l.classList.toggle("nav-on-light",n),l.classList.toggle("nav-scrolled",e),t&&(n?(t.style.backgroundColor="rgba(255,255,255,0.78)",t.style.backdropFilter="blur(14px) saturate(1.8)",t.style.webkitBackdropFilter="blur(14px) saturate(1.8)",t.style.borderBottomColor="rgba(0,0,0,0.07)",i.forEach(r=>{r.style.color="#1a1a1a"}),o&&(o.style.filter="invert(1)")):(t.style.backgroundColor=e?"rgba(0,0,0,0.45)":"rgba(0,0,0,0)",t.style.backdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.webkitBackdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.borderBottomColor=e?"rgba(255,160,64,0.10)":"transparent",i.forEach(r=>{r.style.color=""}),o&&(o.style.filter=""))))};const t=document.getElementById("nav-bg"),o=l.querySelector("img"),i=Array.from(l.querySelectorAll(".nav-link")),d=Array.from(document.querySelectorAll("[data-nav-light]")),b=69;let a=!1,c=null,g=null;window.addEventListener("scroll",()=>{a||(a=!0,requestAnimationFrame(s))},{passive:!0}),s()}</script> <!-- Nav color switch on light sections.
+         The single owner of the nav's appearance. This used to be two scroll
+         listeners — this one toggling classes, and a second, unguarded one in
+         index.astro writing the inline styles that actually painted the bar.
+         They also disagreed on geometry, so the inline copy (which triggers
+         earlier and releases later) decided every visible flip. The inline
+         copy's thresholds are the ones kept here; the class toggles ride along
+         unchanged. --> <script type="module" src="/_astro/BaseLayout.astro_astro_type_script_index_1_lang.CJX12xpz.js"></script> </body> </html> 

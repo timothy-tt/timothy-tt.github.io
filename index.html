@@ -1,0 +1,1783 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Zegoe is a brand and product studio. Packaging, product and digital design for consumer goods, from first sketch to store shelf."><!-- Tab icons: the wordmark's own `z`, on the page's near-black so it
+         still reads in a light tab strip. Cut by scripts/build-favicons.mjs —
+         re-run it if Wordmark_White.png is ever replaced. The .ico is listed
+         too, because that is the file a crawler asks for by name. --><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@400;600;700;800;900&family=Special+Elite&display=swap" rel="stylesheet"><title>Zegoe — Brand &amp; Product Studio</title><!-- Cross-document transition, arrival half. A case study fades itself out
+         and leaves this flag before navigating; whichever document loads next
+         fades in to meet it, so leaving and arriving read as one move instead
+         of a cut. Runs in <head>, before first paint, or the page would flash
+         at full opacity first. Only fires when the flag is there, so a cold
+         load or a bookmark is untouched. --><style>
+      @keyframes zg-arrive { from { opacity: 0; } to { opacity: 1; } }
+      html.zg-arriving body { animation: zg-arrive 0.45s ease-out both; }
+      /* The incoming page slides in from the side it was travelling from, so
+         it can sit outside the viewport for a frame; clip that, or the slide
+         gives the document a horizontal scrollbar. */
+      html.zg-arriving-next, html.zg-arriving-prev { overflow-x: clip; }
+      @media (prefers-reduced-motion: reduce) {
+        html.zg-arriving body { animation: none; }
+      }
+    </style><script>
+      try {
+        var nav = sessionStorage.getItem('zg-nav');
+        if (nav) {
+          sessionStorage.removeItem('zg-nav');
+          var root = document.documentElement;
+          root.classList.add('zg-arriving');
+          // "next"/"prev" carry the direction of travel; "1" is a plain move.
+          if (nav === 'next' || nav === 'prev') root.classList.add('zg-arriving-' + nav);
+        }
+      } catch (e) { /* storage blocked; no transition, no harm */ }
+    </script><link rel="stylesheet" href="/_astro/index.CF0oJHwm.css"></head> <body> <div id="page-content">   <div class="fixed top-0 inset-x-0 z-[60] h-[5px] pointer-events-none" style="background: linear-gradient(90deg, #730D01 0%, #FF5A1F 30%, #FFD43B 60%, #FFA040 85%, #FFD43B 100%);"></div>  <nav id="main-nav" class="fixed top-[5px] inset-x-0 z-50 transition-all duration-300"> <!-- Background layer (opacity driven by JS) --> <div id="nav-bg" class="absolute inset-0 bg-black/0 backdrop-blur-none transition-all duration-300 pointer-events-none" style="border-bottom: 1px solid transparent;"></div> <div class="relative z-10 max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4"> <!-- Logo --> <a href="/" class="nav-text flex items-center shrink-0 transition-opacity duration-300 hover:opacity-80"> <img src="/Wordmark_White.png" alt="Zegoe" class="h-5 w-auto"> </a> <!-- Center nav links (hidden on mobile) --> <div class="hidden md:flex items-center gap-8 text-[13px] font-medium tracking-wide"> <a href="#services" class="nav-link text-neutral-300 hover:text-[#FF5A1F] transition-colors duration-200">Services</a> <a href="#work" class="nav-link text-neutral-300 hover:text-[#FF5A1F] transition-colors duration-200">Work</a> <a href="#testimonials" class="nav-link text-neutral-300 hover:text-[#FF5A1F] transition-colors duration-200">Testimonials</a> <a href="#team" class="nav-link text-neutral-300 hover:text-[#FF5A1F] transition-colors duration-200">Team</a> </div> <!-- CTA + hamburger --> <div class="flex items-center gap-2 shrink-0"> <a href="#contact" class="hidden md:inline-flex items-center px-5 py-2 text-[13px] font-semibold text-black rounded-full transition-all duration-200 shadow-[0_0_18px_rgba(255,90,31,0.25)] hover:shadow-[0_0_26px_rgba(255,160,64,0.35)]" style="background: linear-gradient(135deg, #FF5A1F 0%, #FFA040 100%);">
+Start a Project
+</a> <!-- Hamburger --> <button id="nav-hamburger" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-mobile" class="md:hidden relative h-10 w-10 inline-flex items-center justify-center rounded-lg border border-[#FFA040]/20 text-white hover:border-[#FF5A1F]/60 hover:text-[#FF5A1F] transition-colors"> <span class="hamburger-bar block absolute left-2.5 right-2.5 h-[2px] bg-current rounded-full transition-transform duration-300" style="top: 14px;"></span> <span class="hamburger-bar block absolute left-2.5 right-2.5 h-[2px] bg-current rounded-full transition-opacity duration-200" style="top: 19px;"></span> <span class="hamburger-bar block absolute left-2.5 right-2.5 h-[2px] bg-current rounded-full transition-transform duration-300" style="top: 24px;"></span> </button> </div> </div> <!-- Mobile dropdown (full width) --> <div id="nav-mobile" class="relative z-10 md:hidden hidden w-full border-t border-[#FFA040]/20 bg-black/85 backdrop-blur-xl"> <div class="px-6 py-6 flex flex-col gap-1 text-[15px] font-medium"> <a href="#services" class="py-3 text-neutral-200 hover:text-[#FF5A1F] transition-colors">Services</a> <a href="#work" class="py-3 text-neutral-200 hover:text-[#FF5A1F] transition-colors">Work</a> <a href="#testimonials" class="py-3 text-neutral-200 hover:text-[#FF5A1F] transition-colors">Testimonials</a> <a href="#team" class="py-3 text-neutral-200 hover:text-[#FF5A1F] transition-colors">Team</a> <div class="mt-3 pt-4 border-t border-white/10"> <a href="#contact" class="inline-flex items-center justify-center w-full px-5 py-3 text-[14px] font-semibold text-black rounded-full transition-all duration-200 shadow-[0_0_18px_rgba(255,90,31,0.25)] hover:shadow-[0_0_26px_rgba(255,160,64,0.35)]" style="background: linear-gradient(135deg, #FF5A1F 0%, #FFA040 100%);">
+Start a Project
+</a> </div> </div> </div> </nav> <script type="module">const e=document.getElementById("nav-hamburger"),r=document.getElementById("nav-mobile");if(e&&r){const[a,s,n]=Array.from(e.querySelectorAll(".hamburger-bar")),l=t=>{r.classList.toggle("hidden",!t),e.setAttribute("aria-expanded",String(t)),t?(a.style.transform="translateY(5px) rotate(45deg)",s.style.opacity="0",n.style.transform="translateY(-5px) rotate(-45deg)"):(a.style.transform="",s.style.opacity="",n.style.transform="")};e.addEventListener("click",()=>l(r.classList.contains("hidden"))),r.querySelectorAll("a").forEach(t=>t.addEventListener("click",()=>l(!1)))}</script>  <main> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z1s89OB" prefix="r7" component-url="/_astro/PixelHero.BS8dKiGF.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;PixelHero&quot;,&quot;value&quot;:true}" await-children><section class="relative min-h-screen w-full overflow-hidden bg-black"><div class="absolute inset-0 z-0 pointer-events-none"><div class="absolute inset-0" style="background:radial-gradient(ellipse 60% 50% at 72% 38%, rgba(255,90,31,0.10) 0%, rgba(115,13,1,0.22) 45%, rgba(0,0,0,0) 75%)"></div></div><div class="absolute inset-0 pointer-events-none z-[3]" style="background-image:url(&quot;data:image/svg+xml,%3Csvg viewBox=&#x27;0 0 512 512&#x27; xmlns=&#x27;http://www.w3.org/2000/svg&#x27;%3E%3Cfilter id=&#x27;n&#x27;%3E%3CfeTurbulence type=&#x27;fractalNoise&#x27; baseFrequency=&#x27;0.65&#x27; numOctaves=&#x27;4&#x27; stitchTiles=&#x27;stitch&#x27;/%3E%3C/filter%3E%3Crect width=&#x27;100%25&#x27; height=&#x27;100%25&#x27; filter=&#x27;url(%23n)&#x27;/%3E%3C/svg%3E&quot;);background-size:256px 256px;opacity:0.28;mix-blend-mode:overlay"></div><div class="relative z-[2] mx-auto max-w-7xl min-h-screen px-6 pt-24 pb-10 lg:py-0 grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)]"><div class="text-left w-full min-w-0"><h1 class="text-[27px] sm:text-6xl md:text-7xl lg:text-7xl font-black leading-[0.9] tracking-tight"><div class="block mb-2"><span style="display:inline-block;overflow:hidden;vertical-align:bottom"><span style="display:inline-block;background-image:linear-gradient(180deg, #FFFFFF 0%, #EDEDF0 40%, #BEC0C6 85%, #9DA0A8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;transform:translateY(115%)">THE</span><span style="display:inline-block;width:0.28em"></span></span><span style="display:inline-block;overflow:hidden;vertical-align:bottom"><span style="display:inline-block;background-image:linear-gradient(180deg, #FFFFFF 0%, #EDEDF0 40%, #BEC0C6 85%, #9DA0A8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;transform:translateY(115%)">STUDIO</span><span style="display:inline-block;width:0.28em"></span></span><span style="display:inline-block;overflow:hidden;vertical-align:bottom"><span style="display:inline-block;background-image:linear-gradient(180deg, #FFFFFF 0%, #EDEDF0 40%, #BEC0C6 85%, #9DA0A8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;transform:translateY(115%)">THAT</span></span></div><div class="block pb-2 text-[27px] sm:text-5xl md:text-6xl lg:text-6xl whitespace-nowrap"><span style="display:inline-block;overflow:hidden;vertical-align:bottom"><span style="display:inline-block;background-image:linear-gradient(180deg, #FFFFFF 0%, #EDEDF0 40%, #BEC0C6 85%, #9DA0A8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;transform:translateY(115%)">TURNS</span><span style="display:inline-block;width:0.28em"></span></span><span style="display:inline-block;overflow:hidden;vertical-align:bottom"><span style="display:inline-block;background-image:linear-gradient(180deg, #FFFFFF 0%, #EDEDF0 40%, #BEC0C6 85%, #9DA0A8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;transform:translateY(115%)">YOUR</span></span><span style="display:inline-block;width:0.28em"></span><span class="inline-block relative" style="width:4.8em;height:1em;white-space:nowrap;text-align:left;vertical-align:baseline"><span style="position:absolute;left:0;bottom:0;line-height:1;white-space:nowrap;transform:translateY(0.28em)"></span></span></div><div class="block"><span style="display:inline-block;overflow:hidden;vertical-align:bottom"><span style="display:inline-block;background-image:linear-gradient(180deg, #FFFFFF 0%, #EDEDF0 40%, #BEC0C6 85%, #9DA0A8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;transform:translateY(115%)">INTO</span><span style="display:inline-block;width:0.28em"></span></span><span style="display:inline-block;overflow:hidden;vertical-align:bottom"><span style="display:inline-block;background-image:linear-gradient(180deg, #FFFFFF 0%, #EDEDF0 40%, #BEC0C6 85%, #9DA0A8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;transform:translateY(115%)">REALITY</span></span></div></h1><p class="mt-7 max-w-xl text-[15px] sm:text-base leading-relaxed text-white/60" style="opacity:0;transform:translateY(20px)">We build brands you can hold. Packaging, product and digital design for consumer goods, taken from first sketch to store shelf.</p><div class="mt-6 md:mt-9 flex flex-row items-stretch md:items-center gap-3 md:gap-4 [&amp;&gt;a]:flex-1 md:[&amp;&gt;a]:flex-none [&amp;&gt;a&gt;div]:w-full md:[&amp;&gt;a&gt;div]:w-auto [&amp;&gt;a&gt;div]:px-4 md:[&amp;&gt;a&gt;div]:px-8 [&amp;&gt;a&gt;div]:whitespace-nowrap [&amp;&gt;a&gt;div&gt;span]:justify-center" style="opacity:0;transform:translateY(20px)"><a href="#work" class="relative inline-flex items-center justify-center group"><div class="relative overflow-hidden rounded-full px-8 py-4 font-semibold text-sm transition-all duration-300 text-black border border-white/30" style="background:linear-gradient(135deg, #FF5A1F 0%, #FFA040 100%);box-shadow:0 0 18px rgba(255,90,31,0.25)"><div class="absolute inset-0 rounded-full pointer-events-none transition-opacity duration-500" style="background:linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 50%, rgba(255,255,255,0.03) 100%);opacity:0.6"></div><span class="relative z-[1] flex items-center gap-2">See the Work <span>→</span></span></div></a><a href="#contact" class="relative inline-flex items-center justify-center group"><div class="relative overflow-hidden rounded-full px-8 py-4 font-semibold text-sm transition-all duration-300 text-[#FF5A1F] border border-[#FF5A1F]/40 hover:border-[#FF5A1F]/70 hover:text-white" style="background:rgba(255,255,255,0.08);box-shadow:0 0 10px rgba(255,255,255,0.05)"><div class="absolute inset-0 rounded-full pointer-events-none transition-opacity duration-500" style="background:linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 50%);opacity:0.6"></div><span class="relative z-[1] flex items-center gap-2">Start a Project</span></div></a></div></div><div class="relative h-[45vh] w-full lg:h-[72vh]"><div class="relative h-full w-full" style="opacity:0;transform:scale(0.96)"></div></div></div><div class="absolute bottom-0 left-0 right-0 z-[1] pointer-events-none" style="height:35%;background:linear-gradient(to top, #000 0%, transparent 100%)"></div></section><!--astro:end--></astro-island> <!-- Recent Work — flagship horizontal showcase --> <astro-island uid="ZwGoxl" prefix="r8" component-url="/_astro/RecentWork.Bfr6ML1B.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;RecentWork&quot;,&quot;value&quot;:true}" await-children><link rel="preload" as="image" href="/portfolio/garcia/hi/ghp-mi-flowerbag-28g-trim.webp" fetchPriority="high"/><section id="work" class="rw-section relative z-20" style="background:#050505"><div class="rw-wrap"><div class="rw-head"><p class="rw-eyebrow">Recent Work</p><h2 class="rw-title">Brands, with <span style="color:#FF5A1F">conviction</span>.</h2><p class="rw-intro">Each its own world, built end to end.</p></div><div class="w-full overflow-hidden"><div class="rw-strip" role="group" aria-roledescription="carousel" aria-label="Recent work" tabindex="0"><div class="rw-strip-item"><article class="rw-panel" style="background:radial-gradient(120% 120% at 100% 0%, rgba(255,120,220,0.35) 0%, transparent 45%), #080608;border-color:rgba(255,255,255,0.08)"><div class="rw-panel-visual"><div class="rw-marble-wrap"><div class="rw-marble" aria-hidden="true"><div class="rw-marble-flow"></div></div><img src="/portfolio/garcia/hi/ghp-mi-flowerbag-28g-trim.webp" width="850" height="1423" decoding="async" draggable="false" fetchPriority="high" alt="Garcia HandPicked hero" class="rw-marble-img"/></div><span class="rw-panel-index" style="color:#ff4fd8">01</span></div><div class="rw-panel-copy"><span class="rw-panel-cat" style="color:#ff4fd8;border-color:rgba(255,255,255,0.14)">Packaging · Flower / Edibles / Pre-rolls</span><h3 class="rw-panel-name">Garcia HandPicked</h3><p class="rw-panel-pos">A Jerry Garcia-licensed cannabis brand that puts psychedelic concert-poster art on the shelf.</p><p class="rw-panel-blurb">Grateful Dead concert-poster energy meets compliant cannabis packaging. Fluid rainbow liquid-marble artwork and an integrated Jerry Garcia portrait carry a deep SKU range and strain-coded variants.</p><a href="/work/garcia" data-project="garcia" class="rw-panel-cta" style="color:#ff4fd8"><span>View Case Study</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg></a></div><a href="/work/garcia" class="rw-panel-hit" tabindex="-1" aria-hidden="true"></a></article></div><div class="rw-strip-item"><article class="rw-panel" style="background:radial-gradient(120% 120% at 100% 0%, rgba(229,255,0,0.30) 0%, transparent 45%), #0b0b06;border-color:rgba(255,255,255,0.08)"><div class="rw-panel-visual"><div class="rw-brick"><div class="rw-brick-bg" style="background-image:url(/portfolio/strane/strane_brick_bg_yellow.webp)" aria-hidden="true"></div><div class="rw-brick-splatter" aria-hidden="true"></div><img src="/portfolio/strane/hi/strane-display-side-4-trim.webp" width="670" height="1347" decoding="async" draggable="false" loading="lazy" alt="Strane device" class="rw-brick-device"/></div><span class="rw-panel-index" style="color:#e5ff00">02</span></div><div class="rw-panel-copy"><span class="rw-panel-cat" style="color:#e5ff00;border-color:rgba(255,255,255,0.14)">Branding · Disposable Vapes &amp; Cartridges</span><h3 class="rw-panel-name">Strane</h3><p class="rw-panel-pos">Cannabis vapes with a punk streak: street-art grit meets clean device renders.</p><p class="rw-panel-blurb">A distinctly punk visual system: distressed brick, paint splatter and retro collage against hard acid-yellow-and-black, while premium 3D device renders keep it product-forward.</p><a href="/work/strane" data-project="strane" class="rw-panel-cta" style="color:#e5ff00"><span>View Case Study</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg></a></div><a href="/work/strane" class="rw-panel-hit" tabindex="-1" aria-hidden="true"></a></article></div><div class="rw-strip-item"><article class="rw-panel" style="background:radial-gradient(120% 120% at 100% 0%, rgba(64,200,210,0.30) 0%, transparent 45%), #04141c;border-color:rgba(255,255,255,0.08)"><div class="rw-panel-visual"><div class="rw-land"><div class="rw-land-bg" style="background-image:url(/portfolio/avitas/hi/avitas-homepage-illustration-01.webp)" aria-hidden="true"></div><div class="rw-land-vig" aria-hidden="true"></div><img src="/portfolio/avitas/hi/avitas-live-resin-cartridge-front-trim.webp" width="657" height="1404" decoding="async" draggable="false" loading="lazy" alt="AVITAS landscape" class="rw-land-img"/></div><span class="rw-panel-index" style="color:#e8c87a">03</span></div><div class="rw-panel-copy"><span class="rw-panel-cat" style="color:#e8c87a;border-color:rgba(255,255,255,0.14)">Branding · Vape Cartridges &amp; Gummies</span><h3 class="rw-panel-name">AVITAS</h3><p class="rw-panel-pos">A premium, nature-forward cartridge system built on illustrated landscapes.</p><p class="rw-panel-blurb">A full identity system where each tier owns an illustrated landscape: mountains, ocean and botanicals in turquoise-to-navy with gold accents, anchored by a distinctive geometric “A” mark.</p><a href="/work/avitas" data-project="avitas" class="rw-panel-cta" style="color:#e8c87a"><span>View Case Study</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg></a></div><a href="/work/avitas" class="rw-panel-hit" tabindex="-1" aria-hidden="true"></a></article></div><div class="rw-strip-item"><article class="rw-panel" style="background:radial-gradient(120% 120% at 100% 0%, rgba(182,255,46,0.30) 0%, transparent 45%), #070707;border-color:rgba(255,255,255,0.08)"><div class="rw-panel-visual"><div class="rw-still"><img src="/portfolio/hellavated/hellavated-brand-cover.webp" width="1080" height="1350" decoding="async" draggable="false" loading="lazy" alt="Hellavated key visual" class="rw-still-art rw-still-art-tight" style="object-position:50% 86%"/><div class="rw-still-vig" aria-hidden="true"></div></div><span class="rw-panel-index" style="color:#b6ff2e">04</span></div><div class="rw-panel-copy"><span class="rw-panel-cat" style="color:#b6ff2e;border-color:rgba(255,255,255,0.14)">Packaging · Edibles, Devices &amp; Beverages</span><h3 class="rw-panel-name">Hellavated</h3><p class="rw-panel-pos">A vibrant, compliance-forward edibles-and-devices brand built for Gen-Z.</p><p class="rw-panel-blurb">Fruit-illustration hero panels meet a black technical compliance side, a two-tone system spanning 18+ gummy flavors, CloudBar vape devices and the Baja beverage line.</p><a href="/work/hellavated" data-project="hellavated" class="rw-panel-cta" style="color:#b6ff2e"><span>View Case Study</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg></a></div><a href="/work/hellavated" class="rw-panel-hit" tabindex="-1" aria-hidden="true"></a></article></div><div class="rw-strip-item"><article class="rw-panel" style="background:radial-gradient(120% 120% at 100% 0%, rgba(0,224,240,0.30) 0%, transparent 45%), #02040e;border-color:rgba(255,255,255,0.08)"><div class="rw-panel-visual"><div class="rw-crt"><img src="/portfolio/lootbar/hi/lootbar-blueberry-dream.webp" width="1200" height="1200" decoding="async" draggable="false" loading="lazy" alt="Lootbar key visual" class="rw-crt-art"/><div class="rw-crt-ghost rw-crt-ghost-r" aria-hidden="true"><img src="/portfolio/lootbar/hi/lootbar-blueberry-dream.webp" width="1200" height="1200" decoding="async" draggable="false" loading="lazy" alt=""/></div><div class="rw-crt-ghost rw-crt-ghost-c" aria-hidden="true"><img src="/portfolio/lootbar/hi/lootbar-blueberry-dream.webp" width="1200" height="1200" decoding="async" draggable="false" loading="lazy" alt=""/></div><div class="rw-crt-lines" aria-hidden="true"></div><div class="rw-crt-vig" aria-hidden="true"></div></div><span class="rw-panel-index" style="color:#00e0f0">05</span></div><div class="rw-panel-copy"><span class="rw-panel-cat" style="color:#00e0f0;border-color:rgba(255,255,255,0.14)">Packaging · Disposable Vapes &amp; Key Art</span><h3 class="rw-panel-name">Lootbar</h3><p class="rw-panel-pos">Vaporwave flavor system for LightHouse, where every flavor is a loot drop.</p><p class="rw-panel-blurb">Every flavor staged as an open treasure chest with the device floating beside it as the prize, inside one neon HUD frame that recolors across 11 key-arts. Y2K chrome lettering, pixel hearts and arcade checkerboards run throughout.</p><a href="/work/lootbar" data-project="lootbar" class="rw-panel-cta" style="color:#00e0f0"><span>View Case Study</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg></a></div><a href="/work/lootbar" class="rw-panel-hit" tabindex="-1" aria-hidden="true"></a></article></div><div class="rw-strip-item"><article class="rw-panel" style="background:radial-gradient(120% 120% at 100% 0%, rgba(255,79,163,0.32) 0%, transparent 45%), #15060f;border-color:rgba(255,255,255,0.08)"><div class="rw-panel-visual"><div class="rw-still"><img src="/portfolio/better/hi/better-pink-picasso-hero.webp" width="2560" height="1898" decoding="async" draggable="false" loading="lazy" alt="BETTER key visual" class="rw-still-art"/><div class="rw-still-vig" aria-hidden="true"></div></div><span class="rw-panel-index" style="color:#ff4fa3">06</span></div><div class="rw-panel-copy"><span class="rw-panel-cat" style="color:#ff4fa3;border-color:rgba(255,255,255,0.14)">Packaging · Cartridges &amp; Gummies</span><h3 class="rw-panel-name">BETTER</h3><p class="rw-panel-pos">An occasion-based cannabis system that colors by time of day: Days, Sleep, Anytime.</p><p class="rw-panel-blurb">Three occasions, three worlds: sunset orange for Sunshine Tangerine days, midnight navy for Midnight Mixed Berry sleep, lavender-and-lemon for Easy Lemon Lavender anytime. Script sub-wordmarks sit under one bold BETTER sans, from blister-carded cartridges to gummy pouches.</p><a href="/work/better" data-project="better" class="rw-panel-cta" style="color:#ff4fa3"><span>View Case Study</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg></a></div><a href="/work/better" class="rw-panel-hit" tabindex="-1" aria-hidden="true"></a></article></div><div class="rw-strip-item"><article class="rw-panel" style="background:radial-gradient(120% 120% at 100% 0%, rgba(233,167,184,0.26) 0%, transparent 45%), #0d090b;border-color:rgba(255,255,255,0.08)"><div class="rw-panel-visual"><div class="rw-still"><img src="/portfolio/zeife/zeife-logo-debossed.webp" width="1920" height="1080" decoding="async" draggable="false" loading="lazy" alt="Zëife key visual" class="rw-still-art"/><div class="rw-still-vig" aria-hidden="true"></div></div><span class="rw-panel-index" style="color:#e9a7b8">07</span></div><div class="rw-panel-copy"><span class="rw-panel-cat" style="color:#e9a7b8;border-color:rgba(255,255,255,0.14)">Branding · Soaps &amp; Aromatics</span><h3 class="rw-panel-name">Zëife</h3><p class="rw-panel-pos">A crescent-moon-and-lotus identity for a soap &amp; aromatics house, the first non-cannabis brand in the set.</p><p class="rw-panel-blurb">One pink mark, a crescent moon cradling a lotus, set in Pantone-specced moon-dust gray and lotus pink: debossed into black card stock, screened onto shopping bags, framed art-nouveau on business cards. Identity first; the product line comes next.</p><span class="rw-panel-cta rw-panel-cta-soon" aria-disabled="true"><span>Case Study Soon</span></span></div></article></div><div class="rw-strip-item"><article class="rw-panel" style="background:radial-gradient(120% 120% at 100% 0%, rgba(156,215,100,0.28) 0%, transparent 45%), #0a0c06;border-color:rgba(255,255,255,0.08)"><div class="rw-panel-visual"><div class="rw-float" style="--rw-bloom:rgba(255,202,79,0.15)"><img src="/portfolio/dougie/dougie-strain-trio-trim.webp" width="1142" height="1159" decoding="async" draggable="false" loading="lazy" alt="Dougie device" class="rw-float-device"/></div><span class="rw-panel-index" style="color:#ffca4f">08</span></div><div class="rw-panel-copy"><span class="rw-panel-cat" style="color:#ffca4f;border-color:rgba(255,255,255,0.14)">Packaging · Infused Blunts &amp; POS</span><h3 class="rw-panel-name">Dougie</h3><p class="rw-panel-pos">Graffiti-wall packaging for cannabis-infused blunts, distributed under LightHouse.</p><p class="rw-panel-blurb">One gold wordmark over a scratched-up graffiti wall that recolors by strain: green for hybrid, purple for indica, orange for sativa, across one-gram and two-gram pouches. A ripped-paper table tent carries the same wall onto the dispensary counter under the line “Make More Mischief.”</p><span class="rw-panel-cta rw-panel-cta-soon" aria-disabled="true"><span>Case Study Soon</span></span></div></article></div><div class="rw-strip-item"><article class="rw-panel" style="background:radial-gradient(120% 120% at 100% 0%, rgba(126,166,224,0.24) 0%, transparent 45%), #120c09;border-color:rgba(255,255,255,0.08)"><div class="rw-panel-visual"><div class="rw-still"><img src="/portfolio/ardent/ardent-truffle-cups-kit.webp" width="1400" height="1400" decoding="async" draggable="false" loading="lazy" alt="Ardent key visual" class="rw-still-art"/><div class="rw-still-vig" aria-hidden="true"></div></div><span class="rw-panel-index" style="color:#7ea6e0">09</span></div><div class="rw-panel-copy"><span class="rw-panel-cat" style="color:#7ea6e0;border-color:rgba(255,255,255,0.14)">Packaging · Infusion &amp; Edibles Kits</span><h3 class="rw-panel-name">Ardent</h3><p class="rw-panel-pos">A kit line where every recipe gets its own color, pattern and hand-painted plate.</p><p class="rw-panel-blurb">Each corrugated mailer tiles the lowercase swirl monogram with the recipe’s own motif: cocoa pods for Mini Truffle Cups, apples for Apple Pie. A textured paper label fronts the box with a watercolor plate of the finished bake, and the wordmark repeats inside the lid. Shown across Apple Pie, Olive Oil, Birthday Cupcakes, Breakfast Cloud Cakes and Mini Truffle Cups.</p><span class="rw-panel-cta rw-panel-cta-soon" aria-disabled="true"><span>Case Study Soon</span></span></div></article></div></div></div><div class="rw-foot"><div class="rw-count"><span style="color:#FF5A1F">01</span><span class="rw-count-sep">/</span><span>09</span></div><div class="rw-progress-track"><div class="rw-progress-bar" style="background:linear-gradient(90deg, #FF5A1F, #FFA040)"></div></div><div class="rw-arrows"><button type="button" class="rw-arrow" aria-label="Previous project" disabled=""><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button><button type="button" class="rw-arrow" aria-label="Next project"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></button></div></div></div><style>
+        .rw-section { color: #fff; }
+        .rw-wrap { padding: 3.5rem 0 3rem; }
+
+        /* ── Header ── */
+        .rw-head { padding: 0 3rem 1.75rem; }
+        .rw-eyebrow {
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 600;
+          letter-spacing: 0.35em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.32);
+          margin-bottom: 0.9rem;
+        }
+        .rw-title {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 900;
+          text-transform: uppercase;
+          line-height: 0.95;
+          letter-spacing: -0.01em;
+          font-size: clamp(2rem, 4.5vw, 4rem);
+          color: #fff;
+        }
+        .rw-intro {
+          margin-top: 0.9rem;
+          max-width: 34rem;
+          color: rgba(255,255,255,0.42);
+          font-size: 0.95rem;
+          line-height: 1.5;
+        }
+
+        /* ── Native horizontal-scroll strip ── */
+        .rw-strip {
+          --rw-card: min(72vw, 1280px);
+          display: flex;
+          gap: 2rem;
+          overflow-x: auto;
+          overflow-y: hidden;
+          overscroll-behavior-x: contain;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          /* Center the first card; the symmetric inline padding leaves the next
+             card peeking on the right, and centers each card under the arrows. */
+          padding-block: 0.5rem 1.5rem;
+          padding-inline: max(1.5rem, calc((100vw - var(--rw-card)) / 2));
+          cursor: grab;
+        }
+        .rw-strip::-webkit-scrollbar { display: none; }
+        .rw-strip:focus-visible {
+          outline: 2px solid #FF5A1F;
+          outline-offset: 4px;
+        }
+        .rw-strip.rw-dragging {
+          cursor: grabbing;
+          scroll-behavior: auto;
+          user-select: none;
+          -webkit-user-select: none;
+        }
+        .rw-strip.rw-dragging * {
+          user-select: none;
+          -webkit-user-select: none;
+        }
+        .rw-strip.rw-dragging .rw-panel { pointer-events: none; }
+        .rw-strip-item {
+          flex: 0 0 auto;
+          width: var(--rw-card);
+          height: clamp(420px, 60vh, 560px);
+        }
+
+        /* ── Footer: counter + progress + arrows ── */
+        .rw-foot {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+          padding: 1rem 3rem 0;
+        }
+        .rw-count {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 800;
+          font-size: 0.9rem;
+          letter-spacing: 0.1em;
+          color: rgba(255,255,255,0.35);
+          display: flex;
+          gap: 0.35rem;
+        }
+        .rw-count-sep { color: rgba(255,255,255,0.2); }
+        .rw-progress-track {
+          flex: 1 1 auto;
+          height: 3px;
+          border-radius: 3px;
+          background: rgba(255,255,255,0.1);
+          overflow: hidden;
+        }
+        .rw-progress-bar {
+          height: 100%;
+          width: 100%;
+          transform: scaleX(0);
+          transform-origin: left center;
+          border-radius: 3px;
+          transition: transform 0.1s linear;
+        }
+        .rw-arrows { display: flex; gap: 0.6rem; flex: none; }
+        .rw-arrow {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 2.75rem;
+          height: 2.75rem;
+          border-radius: 999px;
+          border: 1px solid rgba(255,255,255,0.16);
+          background: rgba(255,255,255,0.03);
+          color: #fff;
+          cursor: pointer;
+          transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, transform 0.1s ease;
+        }
+        .rw-arrow:hover:not(:disabled) {
+          background: rgba(255,255,255,0.09);
+          border-color: rgba(255,255,255,0.32);
+        }
+        .rw-arrow:active:not(:disabled) { transform: scale(0.94); }
+        .rw-arrow:disabled { opacity: 0.28; cursor: default; }
+
+        /* ── Panel ── */
+        .rw-panel {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 1.75rem;
+          overflow: hidden;
+          display: grid;
+          grid-template-columns: 1.05fr 0.95fr;
+          box-shadow: 0 30px 90px rgba(0,0,0,0.55);
+        }
+        .rw-panel-visual {
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2.5rem;
+        }
+        .rw-panel-index {
+          position: absolute;
+          top: 1.5rem;
+          left: 1.75rem;
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 900;
+          font-size: 2.75rem;
+          line-height: 1;
+          opacity: 0.9;
+          z-index: 5;
+          text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+        }
+        .rw-panel-copy {
+          position: relative;
+          z-index: 4;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 1rem;
+          padding: 3rem;
+          background: linear-gradient(90deg, transparent, rgba(0,0,0,0.35) 30%);
+        }
+        .rw-panel-cat {
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.65rem;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          padding: 0.4rem 0.8rem;
+          border: 1px solid;
+          border-radius: 999px;
+        }
+        .rw-panel-name {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 900;
+          text-transform: uppercase;
+          font-size: clamp(1.8rem, 3vw, 3rem);
+          line-height: 0.98;
+          color: #fff;
+        }
+        .rw-panel-pos {
+          font-size: clamp(1rem, 1.4vw, 1.35rem);
+          font-weight: 600;
+          line-height: 1.3;
+          color: rgba(255,255,255,0.9);
+          max-width: 26rem;
+        }
+        .rw-panel-blurb {
+          font-size: 0.92rem;
+          line-height: 1.6;
+          color: rgba(255,255,255,0.55);
+          max-width: 27rem;
+        }
+        .rw-panel-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-top: 0.5rem;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.72rem;
+          font-weight: 700;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          transition: gap 0.25s ease, opacity 0.25s ease;
+        }
+        .rw-panel-cta:hover { gap: 0.85rem; opacity: 0.85; }
+        /* The whole card is the click target, so the CTA answers to a hover
+           anywhere on the card — that arrow sliding out is the only signal
+           the card is live. */
+        .rw-panel:hover .rw-panel-cta:not(.rw-panel-cta-soon) {
+          gap: 0.85rem;
+          opacity: 0.85;
+        }
+        .rw-panel-hit {
+          position: absolute;
+          inset: 0;
+          z-index: 6;
+          /* inherit, not pointer: the strip's grab/grabbing cursor is the drag
+             affordance and it stays the primary gesture here. */
+          cursor: inherit;
+        }
+        .rw-panel-cta-soon {
+          color: rgba(255,255,255,0.32);
+          cursor: default;
+        }
+        .rw-panel-cta-soon:hover { gap: 0.5rem; opacity: 1; }
+
+        /* Cutout stages (marble / brick / landscape / float) are absolute like
+           .rw-crt and .rw-still, so their art ignores .rw-panel-visual's padding
+           and reaches the panel edge. The subject then measures against the WHOLE
+           half — a cutout at 100% here is as big as the full-bleed art on the
+           Lootbar / BETTER / Ardent panels, which is the look those three get. */
+        .rw-marble-wrap,
+        .rw-brick,
+        .rw-land,
+        .rw-float {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        /* ── Garcia: liquid-marble ──
+           The turn/breathe half of the motion. The colour band that slides
+           across it is .rw-marble-flow, a child, because the slide used to be
+           an animated background-position — and background-position is not a
+           compositor property, so every frame re-rasterised a 40px-blurred
+           conic gradient on the main thread, for a panel that is off screen
+           most of the time. */
+        .rw-marble {
+          position: absolute;
+          inset: -30%;
+          opacity: 0.55;
+          animation: rw-marble-turn 18s ease-in-out infinite;
+          will-change: transform;
+        }
+        /* Same pixels, expressed as a translate. background-size: 200% 200%
+           painted a 2W x 2H gradient behind the W x H layer and background-
+           position slid it from x=0 to x=-W; this layer IS 2W wide, shows the
+           gradient's middle horizontal band (100% 200% at 0% 50% — still a
+           2W x 2H image), and travels the same -W, which is -50% of its own
+           width. The parent's rotate/scale then applies on top, exactly as it
+           did when the gradient was the parent's own background. */
+        .rw-marble-flow {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 200%;
+          height: 100%;
+          background: conic-gradient(from 0deg,
+            #ff0040, #ff8a00, #ffe600, #37ff5b, #00c2ff, #7a3bff, #ff2fd0, #ff0040);
+          background-size: 100% 200%;
+          background-position: 0% 50%;
+          filter: blur(40px) saturate(1.3);
+          animation: rw-marble-flow 18s ease-in-out infinite;
+          will-change: transform;
+        }
+        .rw-marble-img {
+          position: relative;
+          z-index: 2;
+          height: 94%;
+          width: auto;
+          max-width: 88%;
+          object-fit: contain;
+          filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+        }
+        @keyframes rw-marble-turn {
+          0%   { transform: rotate(0deg) scale(1); }
+          50%  { transform: rotate(8deg) scale(1.12); }
+          100% { transform: rotate(0deg) scale(1); }
+        }
+        @keyframes rw-marble-flow {
+          0%   { transform: translate3d(0, 0, 0); }
+          50%  { transform: translate3d(-50%, 0, 0); }
+          100% { transform: translate3d(0, 0, 0); }
+        }
+
+        /* ── Strane: brick backdrop + device ── */
+        .rw-brick-bg {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center;
+          opacity: 0.55;
+          animation: rw-brick-drift 24s ease-in-out infinite alternate;
+        }
+        .rw-brick-splatter {
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(circle at 20% 30%, rgba(229,255,0,0.25) 0, transparent 12%),
+            radial-gradient(circle at 78% 70%, rgba(229,255,0,0.18) 0, transparent 16%),
+            radial-gradient(circle at 60% 15%, rgba(229,255,0,0.12) 0, transparent 9%);
+          mix-blend-mode: screen;
+        }
+        /* Trimmed render, so 100% height IS the shelf display: it stands the
+           full height of the half, like a product on a shelf, instead of hovering
+           at 46% of the width. */
+        .rw-brick-device {
+          position: relative;
+          z-index: 2;
+          height: 100%;
+          width: auto;
+          max-width: 92%;
+          object-fit: contain;
+          filter: drop-shadow(0 24px 44px rgba(0,0,0,0.7));
+        }
+        /* This one keeps its background-position term. Unlike the marble, the
+           distance it travels is 12% of (layer width − COVER width), and cover
+           width depends on the panel's aspect ratio at the current viewport —
+           there is no transform that equals it at every size, so re-expressing
+           it would be an approximation, not a translation. Measured: the term
+           resolves to exactly 0 at the common desktop sizes (the layer is wider
+           than 773:800, so cover fits width and there is no horizontal slack),
+           ~7px at 1024x768 and ~0.5px on a phone. It is a cheap repaint too —
+           an unblurred bitmap, not the marble's blurred conic — and off-screen
+           panels no longer run it at all. */
+        @keyframes rw-brick-drift {
+          from { background-position: 0% 50%; transform: scale(1.05); }
+          to   { background-position: 12% 50%; transform: scale(1.12); }
+        }
+
+        /* ── AVITAS: ken-burns landscape ── */
+        .rw-land {
+          background:
+            radial-gradient(120% 90% at 50% 10%, rgba(64,200,210,0.22), transparent 60%);
+        }
+        /* The ken-burns moved off the pack and onto the landscape behind it: a
+           product render that slowly grows and slides reads as a glitch, an
+           illustrated backdrop that does is the effect this panel is named for. */
+        .rw-land-bg {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: 50% 55%;
+          opacity: 0.72;
+          animation: rw-kenburns 26s ease-in-out infinite alternate;
+        }
+        /* Same edge fade the crt / still panels use, so the illustration darkens
+           into the panel instead of ending on a hard line. */
+        .rw-land-vig {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background:
+            radial-gradient(115% 105% at 45% 50%, transparent 45%, rgba(4,20,28,0.85) 100%),
+            linear-gradient(90deg, transparent 66%, rgba(4,20,28,0.9) 100%);
+        }
+        .rw-land-img {
+          position: relative;
+          z-index: 2;
+          height: 92%;
+          width: auto;
+          max-width: 88%;
+          object-fit: contain;
+          filter: drop-shadow(0 26px 46px rgba(0,0,0,0.6));
+        }
+        @keyframes rw-kenburns {
+          from { transform: scale(1.04) translateY(0); }
+          to   { transform: scale(1.14) translateY(-1.5%); }
+        }
+
+        /* ── Dougie: floating cutout render ── */
+        .rw-float {
+          background:
+            radial-gradient(120% 90% at 50% 12%, var(--rw-bloom, rgba(182,255,46,0.16)), transparent 62%);
+        }
+        /* Trimmed render, so this is sized against the whole half and the trio
+           runs the full height. The bob is translate-only — a scale on a
+           100%-sized cutout would clip it against the panel edge at the top of
+           the cycle. */
+        .rw-float-device {
+          position: relative;
+          z-index: 2;
+          max-height: 96%;
+          max-width: 92%;
+          object-fit: contain;
+          filter: drop-shadow(0 22px 42px rgba(0,0,0,0.6));
+          animation: rw-float-bob 9s ease-in-out infinite alternate;
+        }
+        @keyframes rw-float-bob {
+          from { transform: translateY(0.7%); }
+          to   { transform: translateY(-0.7%); }
+        }
+
+        /* ── Lootbar: full-bleed key art under a CRT treatment ── */
+        /* Absolute, so the art ignores .rw-panel-visual's padding and bleeds
+           to the panel edge — this hero is composed key art, not a cutout. */
+        .rw-crt { position: absolute; inset: 0; overflow: hidden; }
+        /* Fills the whole half, like every other panel. This used to be a
+           72%-tall letterboxed band because the hero was a 16:9 campaign
+           visual that a near-square cover crop destroyed; the hero is now a
+           1200x1200 flavor key art, so it fills edge to edge with ~1% crop and
+           there is no dead ground above or below it. */
+        .rw-crt-art,
+        .rw-crt-ghost img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: 50% 50%;
+          display: block;
+        }
+        /* Channel ghosts: the art multiplied down to one channel, screened
+           back over the base. Idle at opacity 0 — only the tick reveals them. */
+        /* The ghost box tracks the art box exactly — its tint fills its own
+           box, so any mismatch would flood the gap with flat colour. */
+        .rw-crt-ghost {
+          position: absolute;
+          inset: 0;
+          mix-blend-mode: screen;
+          opacity: 0;
+          pointer-events: none;
+        }
+        .rw-crt-ghost img { inset: 0; height: 100%; mix-blend-mode: multiply; }
+        .rw-crt-ghost-r { background: #ff2e55; animation: rw-crt-tick-r 7.2s steps(1, end) infinite; }
+        .rw-crt-ghost-c { background: #2ee6ff; animation: rw-crt-tick-c 7.2s steps(1, end) infinite; }
+        /* ~120ms of split every 7.2s. Deliberately weak: at 0.75 opacity the
+           art washed out completely — this is a fringe, not a takeover. */
+        @keyframes rw-crt-tick-r {
+          0%,     1.09%  { opacity: 0.34; transform: translate3d(-3px, 1px, 0); }
+          1.1%,   1.68%  { opacity: 0.22; transform: translate3d(2px, -1px, 0); }
+          1.69%, 100%    { opacity: 0; transform: none; }
+        }
+        @keyframes rw-crt-tick-c {
+          0%,     1.09%  { opacity: 0.34; transform: translate3d(3px, -1px, 0); }
+          1.1%,   1.68%  { opacity: 0.22; transform: translate3d(-2px, 1px, 0); }
+          1.69%, 100%    { opacity: 0; transform: none; }
+        }
+        .rw-crt-lines {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background: repeating-linear-gradient(
+            0deg,
+            rgba(0,0,0,0.30) 0px,
+            rgba(0,0,0,0.30) 1px,
+            transparent 1px,
+            transparent 3px
+          );
+        }
+        .rw-crt-vig {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background:
+            radial-gradient(115% 105% at 50% 45%, transparent 58%, rgba(2,4,14,0.62) 100%),
+            linear-gradient(90deg, transparent 72%, rgba(2,4,14,0.55) 100%);
+        }
+
+        /* ── Hellavated / BETTER / Zeife: full-bleed opaque comp, slow ken-burns ── */
+        /* Absolute like .rw-crt, so the art ignores .rw-panel-visual's padding
+           and bleeds to the panel edge — these are composed photographs with
+           baked backgrounds, not cutouts. */
+        .rw-still { position: absolute; inset: 0; overflow: hidden; }
+        .rw-still-art {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: 50% 50%;
+          display: block;
+          transform-origin: 50% 50%;
+          animation: rw-still-drift 48s ease-in-out infinite alternate;
+          will-change: transform;
+        }
+        /* Art with a wordmark near the crop edge (Hellavated's cover) gets a
+           gentler drift — the default 1.09 zoom plus translate walks the logo
+           straight off the bottom of the half. */
+        .rw-still-art-tight { animation-name: rw-still-drift-tight; }
+        @keyframes rw-still-drift-tight {
+          from { transform: scale(1.01) translate3d(0, 0, 0); }
+          to   { transform: scale(1.045) translate3d(-0.5%, 0, 0); }
+        }
+        @keyframes rw-still-drift {
+          from { transform: scale(1.02) translate3d(0, 0, 0); }
+          to   { transform: scale(1.09) translate3d(-1.2%, -1%, 0); }
+        }
+        .rw-still-vig {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background:
+            radial-gradient(115% 105% at 50% 45%, transparent 58%, rgba(0,0,0,0.55) 100%),
+            linear-gradient(90deg, transparent 72%, rgba(0,0,0,0.5) 100%);
+        }
+
+        /* ── Tablet / mobile: stack the panel, shrink the strip ── */
+        @media (max-width: 1023px) {
+          .rw-wrap { padding: 3.5rem 0 3rem; }
+          .rw-head { padding: 0 1.5rem 1.5rem; }
+          .rw-strip {
+            --rw-card: min(84vw, 480px);
+            gap: 1rem;
+            padding-block: 0.5rem 1rem;
+          }
+          .rw-foot { padding: 1rem 1.5rem 0; }
+          .rw-strip-item {
+            height: auto;
+            min-height: 74vh;
+          }
+          .rw-panel {
+            height: 100%;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1.1fr 0.9fr;
+          }
+          .rw-panel-visual { padding: 1.5rem; min-height: 40vh; }
+          .rw-panel-copy {
+            padding: 1.75rem;
+            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.35) 20%);
+          }
+          .rw-panel-index { font-size: 2rem; top: 1rem; left: 1.25rem; }
+          /* Square key art covers the mobile half without losing the device,
+             so it fills here too and the RGB-split tick stays in play. */
+          /* Copy sits below the art here, so the still panel's edge fade
+             turns vertical too. */
+          .rw-still-vig {
+            background:
+              radial-gradient(120% 110% at 50% 45%, transparent 62%, rgba(0,0,0,0.5) 100%),
+              linear-gradient(180deg, transparent 72%, rgba(0,0,0,0.5) 100%);
+          }
+          /* Copy sits below the art here, so the edge fade turns vertical. */
+          .rw-crt-vig {
+            background:
+              radial-gradient(120% 110% at 50% 45%, transparent 62%, rgba(2,4,14,0.55) 100%),
+              linear-gradient(180deg, transparent 72%, rgba(2,4,14,0.55) 100%);
+          }
+        }
+
+        /* Off-strip / off-screen panels: every ambience layer holds its frame.
+           (See the IntersectionObserver above.) */
+        .rw-strip-item.rw-idle .rw-marble,
+        .rw-strip-item.rw-idle .rw-marble-flow,
+        .rw-strip-item.rw-idle .rw-brick-bg,
+        .rw-strip-item.rw-idle .rw-land-bg,
+        .rw-strip-item.rw-idle .rw-float-device,
+        .rw-strip-item.rw-idle .rw-still-art,
+        .rw-strip-item.rw-idle .rw-crt-ghost {
+          animation-play-state: paused;
+        }
+
+        /* Reduced motion: kill all decorative animation + smooth scroll. */
+        @media (prefers-reduced-motion: reduce) {
+          .rw-marble,
+          .rw-marble-flow,
+          .rw-brick-bg,
+          .rw-land-bg,
+          .rw-float-device { animation: none !important; }
+          .rw-still-art { animation: none !important; transform: none !important; }
+          /* Scanlines stay (they're static texture); the glitch tick does not. */
+          .rw-crt-ghost { animation: none !important; opacity: 0 !important; }
+          .rw-progress-bar { transition: none !important; }
+        }
+      </style></section><!--astro:end--></astro-island> <!-- Services Section --> <script>(()=>{var a=(s,i,o)=>{let r=async()=>{await(await s())()},t=typeof i.value=="object"?i.value:void 0,c={rootMargin:t==null?void 0:t.rootMargin},n=new IntersectionObserver(e=>{for(let l of e)if(l.isIntersecting){n.disconnect(),r();break}},c);for(let e of o.children)n.observe(e)};(self.Astro||(self.Astro={})).visible=a;window.dispatchEvent(new Event("astro:visible"));})();</script><astro-island uid="Z2j9Eel" prefix="r9" component-url="/_astro/Services.CJNIwj6f.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{}" ssr client="visible" opts="{&quot;name&quot;:&quot;Services&quot;,&quot;value&quot;:true}" await-children><section id="services" class="svc-section"><div style="position:absolute;top:-140px;left:50%;transform:translateX(-50%);width:clamp(600px, 80vw, 1200px);height:500px;border-radius:50%;background:radial-gradient(ellipse, rgba(220,220,225,0.08) 0%, rgba(185,185,190,0.04) 35%, rgba(150,150,155,0.02) 55%, transparent 75%);filter:blur(70px);pointer-events:none"></div><div style="position:absolute;top:-60px;right:5%;width:400px;height:300px;border-radius:50%;background:radial-gradient(ellipse, rgba(210,210,215,0.05) 0%, rgba(180,180,185,0.025) 50%, transparent 75%);filter:blur(60px);pointer-events:none"></div><div class="svc-container"><div class="svc-header"><div class="svc-header-left"><p class="svc-label">[  OUR SERVICES  ]</p><h2 class="svc-heading">The services<br/>we <span class="svc-heading-accent">provide</span></h2></div><div class="svc-header-right"><p class="svc-header-desc">Identity, product visualization, digital and embedded design, all built as one system. Pick a lane, or hand us the whole brand.</p></div></div><div class="svc-list"><div class="svc-row" role="button" tabindex="0" aria-haspopup="dialog" aria-label="BRAND IDENTITY — service details"><div class="svc-row-inner"><div class="svc-row-left"><span class="svc-row-number">01</span><h3 class="svc-row-title">BRAND IDENTITY</h3></div><div class="svc-row-right"><div class="svc-row-arrow"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></div></div></div></div><div class="svc-row" role="button" tabindex="0" aria-haspopup="dialog" aria-label="PRODUCT VISUALIZATION — service details"><div class="svc-row-inner"><div class="svc-row-left"><span class="svc-row-number">02</span><h3 class="svc-row-title">PRODUCT VISUALIZATION</h3></div><div class="svc-row-right"><div class="svc-row-arrow"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></div></div></div></div><div class="svc-row" role="button" tabindex="0" aria-haspopup="dialog" aria-label="WEB &amp; DIGITAL PRESENTATION — service details"><div class="svc-row-inner"><div class="svc-row-left"><span class="svc-row-number">03</span><h3 class="svc-row-title">WEB &amp; DIGITAL PRESENTATION</h3></div><div class="svc-row-right"><div class="svc-row-arrow"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></div></div></div></div><div class="svc-row" role="button" tabindex="0" aria-haspopup="dialog" aria-label="EMBEDDED DESIGN — service details"><div class="svc-row-inner"><div class="svc-row-left"><span class="svc-row-number">04</span><h3 class="svc-row-title">EMBEDDED DESIGN</h3></div><div class="svc-row-right"><div class="svc-row-arrow"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></div></div></div></div></div></div><div style="position:absolute;bottom:0;left:0;right:0;height:160px;background:linear-gradient(to bottom, transparent, #000);pointer-events:none"></div><style>
+        .svc-section {
+          /* Pull up into Hero fade zone — eliminates dead dark gap */
+          margin-top: -60px;
+          /* Golden ratio inspired: top padding ~1.618× bottom padding */
+          padding: clamp(40px, 5vw, 72px) 0 clamp(80px, 10vw, 140px);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .svc-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 clamp(16px, 4vw, 40px);
+        }
+
+        /* ── Header — split ── */
+        .svc-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          gap: 40px;
+          /* ~golden ratio of section top padding: 100px × 0.618 ≈ 62px */
+          margin-bottom: clamp(40px, 5vw, 64px);
+        }
+
+        .svc-header-left {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .svc-header-right {
+          flex: 0 1 380px;
+          display: flex;
+          align-items: flex-end;
+        }
+
+        .svc-label {
+          font-size: 11px;
+          letter-spacing: 0.3em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.3);
+          margin-bottom: 16px;
+        }
+
+        .svc-heading {
+          font-size: clamp(2.5rem, 6vw, 5rem);
+          font-weight: 900;
+          line-height: 1;
+          color: #ffffff;
+          letter-spacing: -0.03em;
+        }
+
+        .svc-heading-accent {
+          background: linear-gradient(90deg, #FFA040, #FF5A1F, #E64500, #FFA040);
+          background-size: 200% 100%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: gradient-slide 4s linear infinite;
+        }
+
+        .svc-header-desc {
+          font-size: 14px;
+          line-height: 1.7;
+          color: rgba(255, 255, 255, 0.4);
+          max-width: 360px;
+        }
+
+        /* ── Service list ── */
+        .svc-list {
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* ── Service row ── */
+        .svc-row {
+          position: relative;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          cursor: pointer;
+          overflow: hidden;
+        }
+
+        .svc-row:focus-visible {
+          outline: 2px solid rgba(255, 90, 31, 0.7);
+          outline-offset: -2px;
+        }
+
+        .svc-row::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: rgba(255, 255, 255, 0.04);
+          transform: scaleX(0);
+          transform-origin: left center;
+          transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+          pointer-events: none;
+        }
+
+        .svc-row:hover::before,
+        .svc-row:focus-visible::before {
+          transform: scaleX(1);
+        }
+
+        .svc-row:hover .svc-row-number,
+        .svc-row:focus-visible .svc-row-number {
+          color: rgba(255, 255, 255, 0.9);
+        }
+
+        .svc-row:hover .svc-row-title,
+        .svc-row:focus-visible .svc-row-title {
+          color: #ffffff;
+        }
+
+        .svc-row-inner {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: clamp(24px, 3.5vw, 40px) 0;
+          gap: clamp(24px, 4vw, 48px);
+        }
+
+        /* Left side: number + title */
+        .svc-row-left {
+          display: flex;
+          align-items: center;
+          gap: clamp(16px, 2.5vw, 28px);
+          flex-shrink: 0;
+        }
+
+        .svc-row-number {
+          font-size: clamp(13px, 1.2vw, 16px);
+          font-weight: 500;
+          color: rgba(255, 255, 255, 0.35);
+          font-variant-numeric: tabular-nums;
+          transition: color 0.35s ease;
+          min-width: 28px;
+        }
+
+        .svc-row-title {
+          font-size: clamp(1.4rem, 3.5vw, 3rem);
+          font-weight: 800;
+          color: rgba(255, 255, 255, 0.75);
+          text-transform: uppercase;
+          letter-spacing: -0.02em;
+          line-height: 1.1;
+          transition: color 0.35s ease;
+          white-space: nowrap;
+          flex: 1;
+          text-align: center;
+        }
+
+        /* Right side: arrow */
+        .svc-row-right {
+          display: flex;
+          align-items: center;
+          flex-shrink: 0;
+        }
+
+        .svc-row-arrow {
+          color: rgba(255, 255, 255, 0.3);
+          transition: color 0.35s ease;
+          flex-shrink: 0;
+          width: 44px;
+          height: 44px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          transition: color 0.35s ease, border-color 0.35s ease;
+        }
+
+        .svc-row:hover .svc-row-arrow,
+        .svc-row:focus-visible .svc-row-arrow {
+          color: #E64500;
+          border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ── Service detail popup ── */
+        .svc-modal-root {
+          position: fixed;
+          inset: 0;
+          z-index: 200;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+        }
+
+        .svc-modal-overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.72);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          opacity: 0;
+        }
+
+        .svc-modal-panel {
+          position: relative;
+          width: min(620px, 100%);
+          max-height: min(86vh, 720px);
+          overflow-y: auto;
+          background: #101012;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 18px;
+          padding: clamp(28px, 4vw, 44px);
+          box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6), 0 0 60px rgba(255, 90, 31, 0.06);
+          opacity: 0;
+        }
+
+        .svc-modal-close {
+          position: absolute;
+          top: 18px;
+          right: 18px;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: transparent;
+          color: rgba(255, 255, 255, 0.55);
+          cursor: pointer;
+          transition: color 0.25s ease, border-color 0.25s ease;
+        }
+
+        .svc-modal-close:hover,
+        .svc-modal-close:focus-visible {
+          color: #ffffff;
+          border-color: rgba(255, 90, 31, 0.6);
+        }
+
+        .svc-modal-head {
+          display: flex;
+          align-items: baseline;
+          gap: 16px;
+          margin-bottom: 18px;
+          padding-right: 48px;
+        }
+
+        .svc-modal-number {
+          font-size: clamp(1.6rem, 3vw, 2.2rem);
+          font-weight: 900;
+          line-height: 1;
+          color: rgba(255, 255, 255, 0.18);
+          font-variant-numeric: tabular-nums;
+          letter-spacing: -0.02em;
+        }
+
+        .svc-modal-title {
+          font-size: clamp(1.5rem, 3.4vw, 2.4rem);
+          font-weight: 900;
+          line-height: 1.05;
+          color: #ffffff;
+          text-transform: uppercase;
+          letter-spacing: -0.02em;
+        }
+
+        .svc-modal-spine {
+          font-size: clamp(1rem, 1.6vw, 1.15rem);
+          font-weight: 700;
+          color: #FF5A1F;
+          margin-bottom: 14px;
+        }
+
+        .svc-modal-body {
+          font-size: 15px;
+          line-height: 1.75;
+          color: rgba(255, 255, 255, 0.62);
+          margin-bottom: 24px;
+        }
+
+        .svc-modal-chips {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-bottom: 26px;
+        }
+
+        .svc-modal-chip {
+          display: inline-flex;
+          align-items: center;
+          padding: 6px 13px;
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          border-radius: 999px;
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.6);
+          white-space: nowrap;
+        }
+
+        .svc-modal-seen {
+          display: flex;
+          align-items: baseline;
+          flex-wrap: wrap;
+          gap: 8px 14px;
+          margin-bottom: 30px;
+          padding-top: 20px;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .svc-modal-seen-label {
+          font-size: 10px;
+          letter-spacing: 0.25em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.3);
+        }
+
+        .svc-modal-seen-items {
+          display: inline-flex;
+          align-items: baseline;
+          flex-wrap: wrap;
+          gap: 8px 16px;
+        }
+
+        .svc-modal-seen-link {
+          font-size: 13px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.78);
+          text-decoration: underline;
+          text-decoration-color: rgba(255, 90, 31, 0.5);
+          text-underline-offset: 4px;
+          transition: color 0.25s ease, text-decoration-color 0.25s ease;
+        }
+
+        .svc-modal-seen-link:hover,
+        .svc-modal-seen-link:focus-visible {
+          color: #FF5A1F;
+          text-decoration-color: #FF5A1F;
+        }
+
+        .svc-modal-seen-flat {
+          font-size: 13px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.55);
+        }
+
+        /* Text-led detail points — services with no project proof to show */
+        .svc-modal-points {
+          display: block;
+        }
+
+        .svc-modal-point-list {
+          list-style: none;
+          margin: 12px 0 0;
+          padding: 0;
+          display: grid;
+          gap: 8px;
+        }
+
+        .svc-modal-point {
+          position: relative;
+          padding-left: 18px;
+          font-size: 13px;
+          line-height: 1.55;
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+        .svc-modal-point::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0.55em;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #FF5A1F;
+          opacity: 0.75;
+        }
+
+        /* ── Project proof cards ── */
+        .svc-modal-panel--proof {
+          width: min(880px, 100%);
+        }
+
+        .svc-modal-proof {
+          margin-bottom: 30px;
+          padding-top: 20px;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .svc-proof-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+          margin-top: 14px;
+        }
+
+        /* Desktop: two-column — copy left, proof cards stacked right */
+        @media (min-width: 768px) {
+          .svc-modal-panel--proof {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 316px;
+            column-gap: 22px;
+            align-content: start;
+          }
+
+          .svc-modal-panel--proof > .svc-modal-head,
+          .svc-modal-panel--proof > .svc-modal-spine,
+          .svc-modal-panel--proof > .svc-modal-body,
+          .svc-modal-panel--proof > .svc-modal-chips,
+          .svc-modal-panel--proof > .svc-modal-cta {
+            grid-column: 1;
+          }
+
+          .svc-modal-panel--proof > .svc-modal-cta {
+            justify-self: start;
+            align-self: end;
+          }
+
+          .svc-modal-panel--proof > .svc-modal-proof {
+            grid-column: 2;
+            grid-row: 1 / span 5;
+            margin-bottom: 0;
+            padding-top: 0;
+            border-top: none;
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            padding-left: 22px;
+          }
+
+          .svc-modal-panel--proof .svc-proof-grid {
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 12px;
+          }
+
+          .svc-modal-panel--proof .svc-proof-card {
+            flex-direction: row;
+            align-items: stretch;
+          }
+
+          .svc-modal-panel--proof .svc-proof-thumb {
+            width: 96px;
+            height: auto;
+            min-height: 84px;
+            padding: 8px;
+            flex-shrink: 0;
+          }
+
+          .svc-modal-panel--proof .svc-proof-meta {
+            flex: 1;
+            justify-content: center;
+            padding: 10px 12px;
+          }
+        }
+
+        .svc-proof-card {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          border: 1px solid color-mix(in srgb, var(--pa) 22%, transparent);
+          border-radius: 12px;
+          overflow: hidden;
+          background: rgba(255, 255, 255, 0.02);
+          text-decoration: none;
+          transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        a.svc-proof-card:hover,
+        a.svc-proof-card:focus-visible {
+          border-color: color-mix(in srgb, var(--pa) 65%, transparent);
+          box-shadow: 0 0 22px color-mix(in srgb, var(--pa) 24%, transparent);
+        }
+
+        .svc-proof-card--soon {
+          opacity: 0.6;
+        }
+
+        .svc-proof-thumb {
+          display: block;
+          height: 128px;
+          background: var(--pb);
+          padding: 10px;
+          box-sizing: border-box;
+          flex-shrink: 0;
+        }
+
+        .svc-proof-thumb img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+
+        .svc-proof-thumb--cover {
+          padding: 0;
+        }
+
+        .svc-proof-thumb--cover img {
+          object-fit: cover;
+        }
+
+        .svc-proof-meta {
+          display: flex;
+          flex-direction: column;
+          gap: 3px;
+          padding: 11px 13px 13px;
+        }
+
+        .svc-proof-name {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          color: #ffffff;
+        }
+
+        .svc-proof-arrow {
+          color: rgba(255, 255, 255, 0.35);
+          transition: color 0.25s ease, transform 0.25s ease;
+        }
+
+        a.svc-proof-card:hover .svc-proof-arrow,
+        a.svc-proof-card:focus-visible .svc-proof-arrow {
+          color: var(--pa);
+          transform: translate(1px, -1px);
+        }
+
+        .svc-proof-credit {
+          font-size: 11px;
+          line-height: 1.45;
+          color: rgba(255, 255, 255, 0.48);
+        }
+
+        .svc-proof-soon-tag {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          padding: 3px 8px;
+          border-radius: 999px;
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          background: rgba(0, 0, 0, 0.45);
+          font-size: 9px;
+          font-weight: 600;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.55);
+        }
+
+        .svc-modal-cta {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 12px 28px;
+          border-radius: 999px;
+          font-size: 13px;
+          font-weight: 600;
+          color: #000000;
+          background: linear-gradient(135deg, #FF5A1F 0%, #FFA040 100%);
+          box-shadow: 0 0 18px rgba(255, 90, 31, 0.25);
+          transition: box-shadow 0.2s ease;
+        }
+
+        .svc-modal-cta:hover,
+        .svc-modal-cta:focus-visible {
+          box-shadow: 0 0 26px rgba(255, 160, 64, 0.35);
+        }
+
+        /* ── Mobile ── */
+        @media (max-width: 768px) {
+          .svc-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 24px;
+          }
+
+          .svc-header-right {
+            flex: none;
+          }
+
+          .svc-row-inner {
+            padding: 20px 0;
+          }
+
+          /* Long titles wrap instead of shoving the arrow off-screen */
+          .svc-row-left {
+            flex-shrink: 1;
+            min-width: 0;
+          }
+
+          .svc-row-title {
+            white-space: normal;
+            text-align: left;
+            overflow-wrap: break-word;
+          }
+        }
+
+        /* Popup becomes a bottom sheet on mobile */
+        @media (max-width: 767px) {
+          .svc-modal-root {
+            align-items: flex-end;
+            padding: 0;
+          }
+
+          .svc-modal-panel {
+            width: 100%;
+            max-height: 88vh;
+            border-radius: 20px 20px 0 0;
+            border-left: none;
+            border-right: none;
+            border-bottom: none;
+            padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+          }
+
+          /* Proof cards stack full-width as compact horizontal rows */
+          .svc-proof-grid {
+            grid-template-columns: 1fr;
+            gap: 10px;
+          }
+
+          .svc-proof-card {
+            flex-direction: row;
+            align-items: stretch;
+          }
+
+          .svc-proof-thumb {
+            width: 96px;
+            height: auto;
+            min-height: 76px;
+            padding: 8px;
+          }
+
+          .svc-proof-meta {
+            flex: 1;
+            justify-content: center;
+            padding: 10px 12px;
+          }
+        }
+      </style></section><!--astro:end--></astro-island> <!-- Our Clients Section --> <astro-island uid="1d2tSu" prefix="r10" component-url="/_astro/OurClients.DtWw0u2H.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{}" ssr client="visible" opts="{&quot;name&quot;:&quot;OurClients&quot;,&quot;value&quot;:true}" await-children><section class="oc-section relative z-10 pt-28 md:pt-36 pb-28 md:pb-36 bg-black overflow-hidden"><div class="absolute bottom-0 left-0 right-0 h-32 pointer-events-none" style="background:linear-gradient(to top, rgba(10,10,10,1), transparent)"></div><div class="oc-heading max-w-7xl mx-auto px-6 mb-6 md:mb-8 text-center"><p class="text-xs uppercase tracking-[0.3em] text-white/30 mb-6">[  TRUSTED BY  ]</p><h2 class="text-4xl md:text-6xl lg:text-7xl font-black text-white uppercase leading-[0.95]">OUR<!-- --> <span class="bg-clip-text text-transparent" style="background-image:linear-gradient(90deg, #FFA040, #FF5A1F, #E64500, #FFA040);background-size:200% 100%;animation:gradient-slide 4s linear infinite">CLIENTS</span></h2></div><div class="oc-desc max-w-2xl mx-auto px-6 mb-16 md:mb-20 text-center"><p class="text-sm md:text-base text-white/40 leading-relaxed">We partner with forward-thinking brands to craft digital experiences that drive growth, elevate engagement, and leave a lasting impression.</p></div><div class="max-w-5xl mx-auto px-6"><div class="flex flex-wrap justify-center gap-4 md:gap-5"><div class="oc-pill" style="transition-delay:0ms"><div class="flex-shrink-0 flex items-center justify-center px-8 py-4
+                 rounded-full border border-white/[0.12] bg-white/[0.03]
+                 hover:bg-white/[0.07] transition-all duration-300 ease-out cursor-default select-none"><img src="/brand-logo/avitas-wordmark.png" alt="AVITAS" class="h-8 md:h-10 w-auto object-contain opacity-90" loading="lazy"/></div></div><div class="oc-pill" style="transition-delay:60ms"><div class="flex-shrink-0 flex items-center justify-center px-8 py-4
+                 rounded-full border border-white/[0.12] bg-white/[0.03]
+                 hover:bg-white/[0.07] transition-all duration-300 ease-out cursor-default select-none"><img src="/brand-logo/better.png" alt="BETTER" class="h-8 md:h-10 w-auto object-contain opacity-90" loading="lazy"/></div></div><div class="oc-pill" style="transition-delay:120ms"><div class="flex-shrink-0 flex items-center justify-center px-8 py-4
+                 rounded-full border border-white/[0.12] bg-white/[0.03]
+                 hover:bg-white/[0.07] transition-all duration-300 ease-out cursor-default select-none"><img src="/brand-logo/ghp-wordmark.png" alt="GHP" class="h-8 md:h-10 w-auto object-contain opacity-90" loading="lazy"/></div></div><div class="oc-pill" style="transition-delay:180ms"><div class="flex-shrink-0 flex items-center justify-center px-8 py-4
+                 rounded-full border border-white/[0.12] bg-white/[0.03]
+                 hover:bg-white/[0.07] transition-all duration-300 ease-out cursor-default select-none"><img src="/brand-logo/hellavated.png" alt="HELLAVATED" class="h-8 md:h-10 w-auto object-contain opacity-90" loading="lazy"/></div></div><div class="oc-pill" style="transition-delay:240ms"><div class="flex-shrink-0 flex items-center justify-center px-8 py-4
+                 rounded-full border border-white/[0.12] bg-white/[0.03]
+                 hover:bg-white/[0.07] transition-all duration-300 ease-out cursor-default select-none"><img src="/brand-logo/holistic-industries.png" alt="HOLISTIC INDUSTRIES" class="h-8 md:h-10 w-auto object-contain opacity-90" loading="lazy"/></div></div><div class="oc-pill" style="transition-delay:300ms"><div class="flex-shrink-0 flex items-center justify-center px-8 py-4
+                 rounded-full border border-white/[0.12] bg-white/[0.03]
+                 hover:bg-white/[0.07] transition-all duration-300 ease-out cursor-default select-none"><img src="/brand-logo/loot-bar.png" alt="LOOT BAR" class="h-8 md:h-10 w-auto object-contain opacity-90" loading="lazy"/></div></div><div class="oc-pill" style="transition-delay:360ms"><div class="flex-shrink-0 flex items-center justify-center px-8 py-4
+                 rounded-full border border-white/[0.12] bg-white/[0.03]
+                 hover:bg-white/[0.07] transition-all duration-300 ease-out cursor-default select-none"><img src="/brand-logo/strane.png" alt="STRANE" class="h-8 md:h-10 w-auto object-contain opacity-90" loading="lazy"/></div></div><div class="oc-pill" style="transition-delay:420ms"><div class="flex-shrink-0 flex items-center justify-center px-8 py-4
+                 rounded-full border border-white/[0.12] bg-white/[0.03]
+                 hover:bg-white/[0.07] transition-all duration-300 ease-out cursor-default select-none"><img src="/brand-logo/dodrops.png" alt="DO DROPS" class="h-8 md:h-10 w-auto object-contain opacity-90" loading="lazy"/></div></div><div class="oc-pill" style="transition-delay:480ms"><div class="flex-shrink-0 flex items-center justify-center px-8 py-4
+                 rounded-full border border-white/[0.12] bg-white/[0.03]
+                 hover:bg-white/[0.07] transition-all duration-300 ease-out cursor-default select-none"><img src="/brand-logo/sunny-jays.png" alt="SUNNY JAYS" class="h-8 md:h-10 w-auto object-contain opacity-90" loading="lazy"/></div></div><div class="oc-pill" style="transition-delay:540ms"><div class="flex-shrink-0 flex items-center justify-center px-8 py-4
+                 rounded-full border border-white/[0.12] bg-white/[0.03]
+                 hover:bg-white/[0.07] transition-all duration-300 ease-out cursor-default select-none"><img src="/brand-logo/dougie.png" alt="DOUGIE" class="h-8 md:h-10 w-auto object-contain opacity-90" loading="lazy"/></div></div></div></div><style>
+        .oc-heading,
+        .oc-desc,
+        .oc-pill {
+          opacity: 0;
+          transform: translateY(40px);
+          transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .oc-section.in-view .oc-heading {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .oc-section.in-view .oc-desc {
+          opacity: 1;
+          transform: translateY(0);
+          transition-delay: 0.15s;
+        }
+        .oc-section.in-view .oc-pill {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      </style></section><!--astro:end--></astro-island> <!-- Testimonials Section --> <astro-island uid="6dgUK" prefix="r11" component-url="/_astro/Testimonials.CLXHSQbM.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{}" ssr client="visible" opts="{&quot;name&quot;:&quot;Testimonials&quot;,&quot;value&quot;:true}" await-children><section id="testimonials" class="relative py-28 md:py-36 px-6 overflow-hidden"><div class="absolute top-0 left-0 right-0 h-32 pointer-events-none z-10" style="background:linear-gradient(to bottom, rgba(10,10,10,1), transparent)"></div><div class="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-10" style="background:linear-gradient(to top, rgba(10,10,10,1), transparent)"></div><div class="max-w-7xl mx-auto"><div class="text-center mb-16 md:mb-20"><p class="text-xs uppercase tracking-[0.3em] text-white/30 mb-6">[  TESTIMONIALS  ]</p><h2 class="text-4xl md:text-6xl lg:text-7xl font-black text-white uppercase leading-[0.95]">WHAT OUR<br/><span class="bg-clip-text text-transparent" style="background-image:linear-gradient(90deg, #FFA040, #FF5A1F, #E64500, #FFA040);background-size:200% 100%;animation:gradient-slide 4s linear infinite">CLIENTS SAY</span></h2></div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"><div class="tc-card"><div class="group relative h-full" style="opacity:0;transform:translateY(40px)"><div class="h-full"><div class="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-[#FFA040]/60 via-[#FF5A1F]/40 to-[#E64500]/30 opacity-40 group-hover:opacity-80 transition-opacity duration-500"></div><div class="card-metallic relative rounded-2xl backdrop-blur-sm p-6 md:p-8 h-full flex flex-col"><div class="absolute inset-0 rounded-2xl pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="background:radial-gradient(circle at 50% 50%, rgba(255,90,31,0.25) 0%, rgba(255,160,64,0.1) 40%, transparent 70%)"></div><div class="flex items-start justify-between mb-5"><div class="flex gap-0.5 text-[#FF5A1F]"><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div><svg viewBox="0 0 32 32" fill="none" class="w-8 h-8 text-white/[0.06]" aria-hidden="true"><path d="M12.8 5.6C7.36 8.96 4 14.08 4 19.84c0 4.16 2.72 6.56 5.76 6.56 2.88 0 5.12-2.24 5.12-5.12 0-2.72-1.92-4.8-4.48-5.12.32-3.2 2.56-6.56 6.4-8.48L12.8 5.6zm14.4 0c-5.44 3.36-8.8 8.48-8.8 14.24 0 4.16 2.72 6.56 5.76 6.56 2.88 0 5.12-2.24 5.12-5.12 0-2.72-1.92-4.8-4.48-5.12.32-3.2 2.56-6.56 6.4-8.48L27.2 5.6z" fill="currentColor"></path></svg></div><blockquote class="text-sm md:text-[15px] leading-[1.8] text-white/70 flex-1 mb-6">&quot;<!-- -->Zegoe transformed our brand identity from the ground up. Their attention to detail and creative vision exceeded every expectation we had.<!-- -->&quot;</blockquote><div class="flex items-center gap-3 pt-5 border-t border-white/[0.06]"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFA040] to-[#FF5A1F] flex items-center justify-center shrink-0"><span class="text-xs font-bold text-white/90">SC</span></div><div class="min-w-0"><p class="text-sm font-semibold text-white truncate">Sarah Chen</p><p class="text-xs text-white/40 truncate">Head of Marketing<!-- -->, <!-- -->BETTER</p></div></div></div></div></div></div><div class="tc-card"><div class="group relative h-full" style="opacity:0;transform:translateY(40px)"><div class="h-full"><div class="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-[#FFA040]/60 via-[#FF5A1F]/40 to-[#E64500]/30 opacity-40 group-hover:opacity-80 transition-opacity duration-500"></div><div class="card-metallic relative rounded-2xl backdrop-blur-sm p-6 md:p-8 h-full flex flex-col"><div class="absolute inset-0 rounded-2xl pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="background:radial-gradient(circle at 50% 50%, rgba(255,90,31,0.25) 0%, rgba(255,160,64,0.1) 40%, transparent 70%)"></div><div class="flex items-start justify-between mb-5"><div class="flex gap-0.5 text-[#FF5A1F]"><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div><svg viewBox="0 0 32 32" fill="none" class="w-8 h-8 text-white/[0.06]" aria-hidden="true"><path d="M12.8 5.6C7.36 8.96 4 14.08 4 19.84c0 4.16 2.72 6.56 5.76 6.56 2.88 0 5.12-2.24 5.12-5.12 0-2.72-1.92-4.8-4.48-5.12.32-3.2 2.56-6.56 6.4-8.48L12.8 5.6zm14.4 0c-5.44 3.36-8.8 8.48-8.8 14.24 0 4.16 2.72 6.56 5.76 6.56 2.88 0 5.12-2.24 5.12-5.12 0-2.72-1.92-4.8-4.48-5.12.32-3.2 2.56-6.56 6.4-8.48L27.2 5.6z" fill="currentColor"></path></svg></div><blockquote class="text-sm md:text-[15px] leading-[1.8] text-white/70 flex-1 mb-6">&quot;<!-- -->Working with Zegoe felt like having an in-house creative team that truly understood our vision. The results speak for themselves.<!-- -->&quot;</blockquote><div class="flex items-center gap-3 pt-5 border-t border-white/[0.06]"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFA040] to-[#FF5A1F] flex items-center justify-center shrink-0"><span class="text-xs font-bold text-white/90">ML</span></div><div class="min-w-0"><p class="text-sm font-semibold text-white truncate">Marcus Lee</p><p class="text-xs text-white/40 truncate">Product Director<!-- -->, <!-- -->LOOT BAR</p></div></div></div></div></div></div><div class="tc-card"><div class="group relative h-full" style="opacity:0;transform:translateY(40px)"><div class="h-full"><div class="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-[#FFA040]/60 via-[#FF5A1F]/40 to-[#E64500]/30 opacity-40 group-hover:opacity-80 transition-opacity duration-500"></div><div class="card-metallic relative rounded-2xl backdrop-blur-sm p-6 md:p-8 h-full flex flex-col"><div class="absolute inset-0 rounded-2xl pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="background:radial-gradient(circle at 50% 50%, rgba(255,90,31,0.25) 0%, rgba(255,160,64,0.1) 40%, transparent 70%)"></div><div class="flex items-start justify-between mb-5"><div class="flex gap-0.5 text-[#FF5A1F]"><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div><svg viewBox="0 0 32 32" fill="none" class="w-8 h-8 text-white/[0.06]" aria-hidden="true"><path d="M12.8 5.6C7.36 8.96 4 14.08 4 19.84c0 4.16 2.72 6.56 5.76 6.56 2.88 0 5.12-2.24 5.12-5.12 0-2.72-1.92-4.8-4.48-5.12.32-3.2 2.56-6.56 6.4-8.48L12.8 5.6zm14.4 0c-5.44 3.36-8.8 8.48-8.8 14.24 0 4.16 2.72 6.56 5.76 6.56 2.88 0 5.12-2.24 5.12-5.12 0-2.72-1.92-4.8-4.48-5.12.32-3.2 2.56-6.56 6.4-8.48L27.2 5.6z" fill="currentColor"></path></svg></div><blockquote class="text-sm md:text-[15px] leading-[1.8] text-white/70 flex-1 mb-6">&quot;<!-- -->The level of craft and polish Zegoe brings to every project is remarkable. They don&#x27;t just deliver. They elevate.<!-- -->&quot;</blockquote><div class="flex items-center gap-3 pt-5 border-t border-white/[0.06]"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFA040] to-[#FF5A1F] flex items-center justify-center shrink-0"><span class="text-xs font-bold text-white/90">EV</span></div><div class="min-w-0"><p class="text-sm font-semibold text-white truncate">Elena Voss</p><p class="text-xs text-white/40 truncate">Brand Manager<!-- -->, <!-- -->DO DROPS</p></div></div></div></div></div></div><div class="tc-card"><div class="group relative h-full" style="opacity:0;transform:translateY(40px)"><div class="h-full"><div class="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-[#FFA040]/60 via-[#FF5A1F]/40 to-[#E64500]/30 opacity-40 group-hover:opacity-80 transition-opacity duration-500"></div><div class="card-metallic relative rounded-2xl backdrop-blur-sm p-6 md:p-8 h-full flex flex-col"><div class="absolute inset-0 rounded-2xl pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="background:radial-gradient(circle at 50% 50%, rgba(255,90,31,0.25) 0%, rgba(255,160,64,0.1) 40%, transparent 70%)"></div><div class="flex items-start justify-between mb-5"><div class="flex gap-0.5 text-[#FF5A1F]"><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div><svg viewBox="0 0 32 32" fill="none" class="w-8 h-8 text-white/[0.06]" aria-hidden="true"><path d="M12.8 5.6C7.36 8.96 4 14.08 4 19.84c0 4.16 2.72 6.56 5.76 6.56 2.88 0 5.12-2.24 5.12-5.12 0-2.72-1.92-4.8-4.48-5.12.32-3.2 2.56-6.56 6.4-8.48L12.8 5.6zm14.4 0c-5.44 3.36-8.8 8.48-8.8 14.24 0 4.16 2.72 6.56 5.76 6.56 2.88 0 5.12-2.24 5.12-5.12 0-2.72-1.92-4.8-4.48-5.12.32-3.2 2.56-6.56 6.4-8.48L27.2 5.6z" fill="currentColor"></path></svg></div><blockquote class="text-sm md:text-[15px] leading-[1.8] text-white/70 flex-1 mb-6">&quot;<!-- -->From concept to execution, Zegoe delivered a world-class experience. Our engagement metrics increased by 300% after the redesign.<!-- -->&quot;</blockquote><div class="flex items-center gap-3 pt-5 border-t border-white/[0.06]"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFA040] to-[#FF5A1F] flex items-center justify-center shrink-0"><span class="text-xs font-bold text-white/90">DP</span></div><div class="min-w-0"><p class="text-sm font-semibold text-white truncate">David Park</p><p class="text-xs text-white/40 truncate">VP of Digital<!-- -->, <!-- -->HOLISTIC INDUSTRIES</p></div></div></div></div></div></div><div class="tc-card hidden md:block"><div class="group relative h-full" style="opacity:0;transform:translateY(40px)"><div class="h-full"><div class="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-[#FFA040]/60 via-[#FF5A1F]/40 to-[#E64500]/30 opacity-40 group-hover:opacity-80 transition-opacity duration-500"></div><div class="card-metallic relative rounded-2xl backdrop-blur-sm p-6 md:p-8 h-full flex flex-col"><div class="absolute inset-0 rounded-2xl pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="background:radial-gradient(circle at 50% 50%, rgba(255,90,31,0.25) 0%, rgba(255,160,64,0.1) 40%, transparent 70%)"></div><div class="flex items-start justify-between mb-5"><div class="flex gap-0.5 text-[#FF5A1F]"><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div><svg viewBox="0 0 32 32" fill="none" class="w-8 h-8 text-white/[0.06]" aria-hidden="true"><path d="M12.8 5.6C7.36 8.96 4 14.08 4 19.84c0 4.16 2.72 6.56 5.76 6.56 2.88 0 5.12-2.24 5.12-5.12 0-2.72-1.92-4.8-4.48-5.12.32-3.2 2.56-6.56 6.4-8.48L12.8 5.6zm14.4 0c-5.44 3.36-8.8 8.48-8.8 14.24 0 4.16 2.72 6.56 5.76 6.56 2.88 0 5.12-2.24 5.12-5.12 0-2.72-1.92-4.8-4.48-5.12.32-3.2 2.56-6.56 6.4-8.48L27.2 5.6z" fill="currentColor"></path></svg></div><blockquote class="text-sm md:text-[15px] leading-[1.8] text-white/70 flex-1 mb-6">&quot;<!-- -->Zegoe has an extraordinary ability to translate complex ideas into beautiful, intuitive designs. A truly exceptional partner.<!-- -->&quot;</blockquote><div class="flex items-center gap-3 pt-5 border-t border-white/[0.06]"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFA040] to-[#FF5A1F] flex items-center justify-center shrink-0"><span class="text-xs font-bold text-white/90">AO</span></div><div class="min-w-0"><p class="text-sm font-semibold text-white truncate">Amara Obi</p><p class="text-xs text-white/40 truncate">Creative Lead<!-- -->, <!-- -->HELLAVATED</p></div></div></div></div></div></div><div class="tc-card hidden md:block"><div class="group relative h-full" style="opacity:0;transform:translateY(40px)"><div class="h-full"><div class="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-[#FFA040]/60 via-[#FF5A1F]/40 to-[#E64500]/30 opacity-40 group-hover:opacity-80 transition-opacity duration-500"></div><div class="card-metallic relative rounded-2xl backdrop-blur-sm p-6 md:p-8 h-full flex flex-col"><div class="absolute inset-0 rounded-2xl pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="background:radial-gradient(circle at 50% 50%, rgba(255,90,31,0.25) 0%, rgba(255,160,64,0.1) 40%, transparent 70%)"></div><div class="flex items-start justify-between mb-5"><div class="flex gap-0.5 text-[#FF5A1F]"><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg><svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg></div><svg viewBox="0 0 32 32" fill="none" class="w-8 h-8 text-white/[0.06]" aria-hidden="true"><path d="M12.8 5.6C7.36 8.96 4 14.08 4 19.84c0 4.16 2.72 6.56 5.76 6.56 2.88 0 5.12-2.24 5.12-5.12 0-2.72-1.92-4.8-4.48-5.12.32-3.2 2.56-6.56 6.4-8.48L12.8 5.6zm14.4 0c-5.44 3.36-8.8 8.48-8.8 14.24 0 4.16 2.72 6.56 5.76 6.56 2.88 0 5.12-2.24 5.12-5.12 0-2.72-1.92-4.8-4.48-5.12.32-3.2 2.56-6.56 6.4-8.48L27.2 5.6z" fill="currentColor"></path></svg></div><blockquote class="text-sm md:text-[15px] leading-[1.8] text-white/70 flex-1 mb-6">&quot;<!-- -->Their creative process is world-class. Every deliverable was polished, on-brand, and exceeded our expectations by miles.<!-- -->&quot;</blockquote><div class="flex items-center gap-3 pt-5 border-t border-white/[0.06]"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFA040] to-[#FF5A1F] flex items-center justify-center shrink-0"><span class="text-xs font-bold text-white/90">JW</span></div><div class="min-w-0"><p class="text-sm font-semibold text-white truncate">James Wright</p><p class="text-xs text-white/40 truncate">CEO<!-- -->, <!-- -->STRANE</p></div></div></div></div></div></div></div></div></section><!--astro:end--></astro-island> <!-- Our Team Section --> <astro-island uid="vBOov" prefix="r12" component-url="/_astro/OurTeam.DJu__g3B.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{}" ssr client="visible" opts="{&quot;name&quot;:&quot;OurTeam&quot;,&quot;value&quot;:true}" await-children><section id="team" class="tm-section" aria-labelledby="tm-heading"><div class="tm-seam" aria-hidden="true"></div><div class="tm-container"><div class="tm-header"><div class="tm-header-left"><p class="tm-label"><span aria-hidden="true">[  </span>Our Team<span aria-hidden="true">  ]</span></p><h2 id="tm-heading" class="tm-heading">Small crew.<br/><span class="tm-heading-accent">Full stack.</span></h2></div><div class="tm-header-right"><p class="tm-intro">Zegoe is four people: art direction, engineering, 3D, and design under one roof. No account layers, no handoffs: the people on this page are the people on your project.</p></div></div></div><div class="tm-strip-clip"><div class="tm-strip" role="group" aria-roledescription="carousel" aria-label="Our team" tabindex="0"><div class="tm-strip-item" style="--tm-delay:0ms"><article class="tm-panel" tabindex="0" aria-label="Lenore Hensley — Artistic Head" style="--tm-accent:#FFA040;--tm-accent-soft:rgba(255,160,64,0.14)"><span class="tm-index" aria-hidden="true">01</span><div class="tm-panel-body"><h3 class="tm-name">Lenore Hensley</h3><p class="tm-credits"><span class="tm-role">Artistic Head</span><span class="tm-sep" aria-hidden="true"></span><span class="tm-meta">Atlanta Metro</span></p><div class="tm-bio-wrap"><p class="tm-bio">The taste behind the brands. Lenore sets the creative direction and pushes every concept past safe. If a piece has a signature, it&#x27;s hers.</p></div></div><span class="tm-rule" aria-hidden="true"></span></article></div><div class="tm-strip-item" style="--tm-delay:90ms"><article class="tm-panel" tabindex="0" aria-label="Timothy Ton-That — Technical Head" style="--tm-accent:#FF7A2F;--tm-accent-soft:rgba(255,122,47,0.14)"><span class="tm-index" aria-hidden="true">02</span><div class="tm-panel-body"><h3 class="tm-name">Timothy Ton-That</h3><p class="tm-credits"><span class="tm-role">Technical Head</span><span class="tm-sep" aria-hidden="true"></span><span class="tm-meta">HCM Metro</span></p><div class="tm-bio-wrap"><p class="tm-bio">If it renders, animates, deploys, or has to survive contact with a real browser, it crosses Tim&#x27;s desk first.</p></div></div><span class="tm-rule" aria-hidden="true"></span></article></div><div class="tm-strip-item" style="--tm-delay:180ms"><article class="tm-panel" tabindex="0" aria-label="Van Luu — 3D Specialist" style="--tm-accent:#FF5A1F;--tm-accent-soft:rgba(255,90,31,0.14)"><span class="tm-index" aria-hidden="true">03</span><div class="tm-panel-body"><h3 class="tm-name">Van Luu</h3><p class="tm-credits"><span class="tm-role">3D Specialist</span><span class="tm-sep" aria-hidden="true"></span><span class="tm-meta">HCM Metro</span></p><div class="tm-bio-wrap"><p class="tm-bio">Renders, mockups, motion. Van builds the photoreal 3D that makes packaging feel shelf-ready before it exists.</p></div></div><span class="tm-rule" aria-hidden="true"></span></article></div><div class="tm-strip-item" style="--tm-delay:270ms"><article class="tm-panel" tabindex="0" aria-label="Quynh Nguyen — Designer" style="--tm-accent:#E64500;--tm-accent-soft:rgba(230,69,0,0.16)"><span class="tm-index" aria-hidden="true">04</span><div class="tm-panel-body"><h3 class="tm-name">Quynh Nguyen</h3><p class="tm-credits"><span class="tm-role">Designer</span><span class="tm-sep" aria-hidden="true"></span><span class="tm-meta">HCM Metro</span></p><div class="tm-bio-wrap"><p class="tm-bio">Layout, packaging systems, production design. Quynh turns direction into files that actually ship.</p></div></div><span class="tm-rule" aria-hidden="true"></span></article></div></div></div><div class="tm-foot"><div class="tm-count"><span style="color:#FF5A1F">01</span><span class="tm-count-sep">/</span><span>04</span></div><div class="tm-progress-track"><div class="tm-progress-bar" style="background:linear-gradient(90deg, #FF5A1F, #FFA040)"></div></div><div class="tm-arrows"><button type="button" class="tm-arrow" aria-label="Previous team member" disabled=""><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button><button type="button" class="tm-arrow" aria-label="Next team member"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></button></div></div><style>
+        .tm-section {
+          position: relative;
+          background: #0a0a0a;
+          padding: clamp(72px, 9vw, 130px) 0 clamp(88px, 11vw, 150px);
+          overflow: hidden;
+          /* Gutter that lines the strip and footer up with the header column. */
+          --tm-gutter: calc(max(0px, (100vw - 1200px) / 2) + clamp(16px, 4vw, 40px));
+        }
+
+        .tm-seam {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 8rem;
+          pointer-events: none;
+          background: linear-gradient(to bottom, rgba(10, 10, 10, 1), transparent);
+        }
+
+        .tm-container {
+          position: relative;
+          z-index: 1;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 clamp(16px, 4vw, 40px);
+        }
+
+        /* ── Header — split ── */
+        .tm-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          gap: 40px;
+          margin-bottom: clamp(34px, 4.4vw, 56px);
+        }
+
+        .tm-header-left { flex: 1; min-width: 0; }
+
+        .tm-header-right {
+          flex: 0 1 400px;
+          display: flex;
+          align-items: flex-end;
+        }
+
+        .tm-label {
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.3em;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.3);
+          margin-bottom: 16px;
+        }
+
+        .tm-heading {
+          font-size: clamp(2.5rem, 6vw, 5rem);
+          font-weight: 900;
+          line-height: 1;
+          color: #ffffff;
+          letter-spacing: -0.03em;
+        }
+
+        .tm-heading-accent {
+          background: linear-gradient(90deg, #FFA040, #FF5A1F, #E64500, #FFA040);
+          background-size: 200% 100%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: gradient-slide 4s linear infinite;
+        }
+
+        .tm-intro {
+          font-size: 14px;
+          line-height: 1.75;
+          color: rgba(255, 255, 255, 0.4);
+          max-width: 380px;
+        }
+
+        /* ── Native horizontal-scroll strip ── */
+        .tm-strip-clip {
+          position: relative;
+          z-index: 1;
+          width: 100%;
+          overflow: hidden;
+        }
+
+        .tm-strip {
+          --tm-card: min(80vw, 460px);
+          display: flex;
+          align-items: stretch;
+          gap: 28px;
+          overflow-x: auto;
+          overflow-y: hidden;
+          overscroll-behavior-x: contain;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          /* Left gutter matches the header column; the symmetric right gutter
+             leaves the trailing panel flush with it at the end of the run. */
+          padding-block: 6px 10px;
+          padding-inline: var(--tm-gutter);
+          cursor: grab;
+        }
+        .tm-strip::-webkit-scrollbar { display: none; }
+
+        .tm-strip:focus-visible {
+          outline: 2px solid #FF5A1F;
+          outline-offset: 4px;
+        }
+
+        .tm-strip.tm-dragging {
+          cursor: grabbing;
+          scroll-behavior: auto;
+          user-select: none;
+          -webkit-user-select: none;
+        }
+        .tm-strip.tm-dragging * {
+          user-select: none;
+          -webkit-user-select: none;
+        }
+        /* No hover flicker while panning across cards. */
+        .tm-strip.tm-dragging .tm-panel { pointer-events: none; }
+
+        /* height:auto + the strip's align-items:stretch equalises every panel
+           to the tallest (the longest bio) — no dead space above the fold. */
+        .tm-strip-item {
+          flex: 0 0 auto;
+          width: var(--tm-card);
+          height: auto;
+          opacity: 0;
+          transform: translateY(28px);
+          transition: opacity 0.7s ease-out, transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
+          transition-delay: var(--tm-delay, 0ms);
+        }
+
+        .tm-section.in-view .tm-strip-item {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        /* ── Panel ── */
+        .tm-panel {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          min-height: clamp(300px, 30vh, 340px);
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          padding: clamp(26px, 2.4vw, 34px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 1.25rem;
+          overflow: hidden;
+          outline: none;
+          background:
+            radial-gradient(120% 110% at 100% 0%, var(--tm-accent-soft) 0%, transparent 52%),
+            linear-gradient(165deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
+          transition: border-color 0.45s ease, background-color 0.45s ease;
+        }
+
+        .tm-panel:hover,
+        .tm-panel:focus-visible { border-color: rgba(255, 255, 255, 0.18); }
+
+        .tm-panel:focus-visible {
+          outline: 2px solid rgba(255, 90, 31, 0.7);
+          outline-offset: -2px;
+        }
+
+        /* Hover/focus wash — sweeps left to right, same idiom as the rows it replaced */
+        .tm-panel::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.05),
+            rgba(255, 255, 255, 0.012) 55%,
+            transparent
+          );
+          transform: scaleX(0);
+          transform-origin: left center;
+          transition: transform 0.55s cubic-bezier(0.25, 0.1, 0.25, 1);
+          pointer-events: none;
+        }
+
+        .tm-panel:hover::before,
+        .tm-panel:focus-visible::before { transform: scaleX(1); }
+
+        /* Outlined numeral — fills with the panel accent on hover.
+           Weight stays at 500: Montserrat's heavier cuts keep overlapping
+           contours, which -webkit-text-stroke draws as internal seams. */
+        .tm-index {
+          position: relative;
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 500;
+          font-size: clamp(3rem, 4.4vw, 4.4rem);
+          line-height: 0.8;
+          letter-spacing: 0.01em;
+          font-variant-numeric: tabular-nums;
+          color: transparent;
+          -webkit-text-stroke: 1.4px rgba(255, 255, 255, 0.22);
+          user-select: none;
+          flex: none;
+          transition: -webkit-text-stroke-color 0.45s ease, color 0.45s ease;
+        }
+
+        .tm-panel:hover .tm-index,
+        .tm-panel:focus-visible .tm-index {
+          -webkit-text-stroke-color: var(--tm-accent);
+          color: var(--tm-accent-soft);
+        }
+
+        /* Top-aligned under the numeral so names and bios line up across the
+           run — a bio one line longer only changes the slack at the foot. */
+        .tm-panel-body {
+          position: relative;
+          min-width: 0;
+          margin-top: clamp(26px, 2.8vw, 40px);
+        }
+
+        .tm-name {
+          font-size: clamp(1.45rem, 2.1vw, 1.95rem);
+          font-weight: 800;
+          line-height: 1.05;
+          letter-spacing: -0.025em;
+          color: rgba(255, 255, 255, 0.82);
+          transition: color 0.4s ease;
+        }
+
+        .tm-panel:hover .tm-name,
+        .tm-panel:focus-visible .tm-name { color: #ffffff; }
+
+        .tm-credits {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 8px 12px;
+          margin-top: 12px;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.24em;
+          text-transform: uppercase;
+        }
+
+        /* Wrap as whole credits, never mid-phrase. */
+        .tm-role,
+        .tm-meta { white-space: nowrap; }
+
+        .tm-role { color: var(--tm-accent); }
+
+        .tm-sep {
+          width: 16px;
+          height: 1px;
+          background: rgba(255, 255, 255, 0.22);
+          flex: none;
+        }
+
+        .tm-meta { color: rgba(255, 255, 255, 0.34); }
+
+        /* Bio — always visible in a panel you swipe past. The accent tick
+           anchors the column and brightens with the rest on hover/focus. */
+        .tm-bio-wrap {
+          position: relative;
+          margin-top: 20px;
+          padding-left: 16px;
+        }
+
+        .tm-bio-wrap::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 1px;
+          height: 100%;
+          background: var(--tm-accent);
+          opacity: 0.45;
+          transition: opacity 0.4s ease;
+        }
+
+        .tm-panel:hover .tm-bio-wrap::before,
+        .tm-panel:focus-visible .tm-bio-wrap::before { opacity: 0.9; }
+
+        .tm-bio {
+          font-size: 13.5px;
+          line-height: 1.75;
+          color: rgba(255, 255, 255, 0.55);
+          transition: color 0.4s ease;
+        }
+
+        .tm-panel:hover .tm-bio,
+        .tm-panel:focus-visible .tm-bio { color: rgba(255, 255, 255, 0.68); }
+
+        /* Accent bar that draws along the panel baseline */
+        .tm-rule {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 2px;
+          background: linear-gradient(90deg, var(--tm-accent), rgba(255, 90, 31, 0) 78%);
+          transform: scaleX(0);
+          transform-origin: left center;
+          transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+          pointer-events: none;
+        }
+
+        .tm-panel:hover .tm-rule,
+        .tm-panel:focus-visible .tm-rule { transform: scaleX(1); }
+
+        /* ── Footer: counter + progress + arrows ── */
+        .tm-foot {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+          padding: 1.25rem var(--tm-gutter) 0;
+        }
+        .tm-count {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 800;
+          font-size: 0.9rem;
+          letter-spacing: 0.1em;
+          color: rgba(255, 255, 255, 0.35);
+          display: flex;
+          gap: 0.35rem;
+        }
+        .tm-count-sep { color: rgba(255, 255, 255, 0.2); }
+        .tm-progress-track {
+          flex: 1 1 auto;
+          height: 3px;
+          border-radius: 3px;
+          background: rgba(255, 255, 255, 0.1);
+          overflow: hidden;
+        }
+        .tm-progress-bar {
+          height: 100%;
+          width: 100%;
+          transform: scaleX(0);
+          transform-origin: left center;
+          border-radius: 3px;
+          transition: transform 0.1s linear;
+        }
+        .tm-arrows { display: flex; gap: 0.6rem; flex: none; }
+        .tm-arrow {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 2.75rem;
+          height: 2.75rem;
+          border-radius: 999px;
+          border: 1px solid rgba(255, 255, 255, 0.16);
+          background: rgba(255, 255, 255, 0.03);
+          color: #fff;
+          cursor: pointer;
+          transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, transform 0.1s ease;
+        }
+        .tm-arrow:hover:not(:disabled) {
+          background: rgba(255, 255, 255, 0.09);
+          border-color: rgba(255, 255, 255, 0.32);
+        }
+        .tm-arrow:active:not(:disabled) { transform: scale(0.94); }
+        .tm-arrow:disabled { opacity: 0.28; cursor: default; }
+
+        /* ── Mobile ── */
+        @media (max-width: 860px) {
+          .tm-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 22px;
+          }
+
+          .tm-header-right { flex: none; }
+
+          .tm-intro { max-width: none; }
+
+          .tm-strip {
+            --tm-card: min(82vw, 400px);
+            gap: 16px;
+          }
+
+          .tm-panel { min-height: 300px; }
+
+          .tm-panel-body { margin-top: 22px; }
+
+          .tm-index {
+            font-size: 2.4rem;
+            -webkit-text-stroke-width: 1.2px;
+            -webkit-text-stroke-color: var(--tm-accent);
+            color: var(--tm-accent-soft);
+          }
+
+          .tm-name { font-size: 1.55rem; }
+
+          /* 9.5px of tracked-out caps is the smallest type on the site and it
+             sits on the card a phone spends the longest with. Tracking drops
+             to buy back the width the bigger size costs, so a credit line
+             still fits beside its rule. */
+          .tm-credits {
+            margin-top: 10px;
+            gap: 6px 7px;
+            font-size: 11.5px;
+            letter-spacing: 0.12em;
+          }
+
+          .tm-bio { font-size: 13px; }
+
+          .tm-rule { transform: scaleX(1); opacity: 0.5; height: 1px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .tm-strip-item,
+          .tm-panel,
+          .tm-panel::before,
+          .tm-index,
+          .tm-name,
+          .tm-bio,
+          .tm-bio-wrap::before,
+          .tm-rule {
+            transition-duration: 0.01ms !important;
+            transition-delay: 0ms !important;
+          }
+
+          .tm-strip-item { opacity: 1; transform: none; }
+
+          .tm-progress-bar { transition: none !important; }
+
+          .tm-heading-accent { animation: none; }
+        }
+      </style></section><!--astro:end--></astro-island> <!-- Contact Form Section --> <div id="contact" data-nav-light> <astro-island uid="Z16kTco" prefix="r13" component-url="/_astro/ContactForm.Dwvp9K1E.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{}" ssr client="visible" opts="{&quot;name&quot;:&quot;ContactForm&quot;,&quot;value&quot;:true}" await-children><section class="cf-section relative bg-white py-24 px-6 overflow-hidden"><div class="absolute top-16 left-1/2 -translate-x-1/2 select-none pointer-events-none"><span class="text-[6rem] md:text-[8rem] lg:text-[10rem] font-black uppercase tracking-tight text-neutral-100 whitespace-nowrap leading-none">CONTACT US</span></div><div class="relative max-w-7xl mx-auto"><div class="cf-label flex items-center justify-center gap-2 mb-4"><span class="w-2 h-2 rounded-full bg-[#FF5A1F]"></span><span class="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-600">Contact Us</span><span class="w-2 h-2 rounded-full bg-[#FF5A1F]"></span></div><h2 class="cf-heading text-center text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-16">Let&#x27;s Talk for<!-- --> <span class="bg-clip-text text-transparent" style="background-image:linear-gradient(90deg, #FFA040, #FF5A1F, #E64500, #FFA040);background-size:200% 100%;animation:gradient-slide 4s linear infinite">Your Next Projects</span></h2><div class="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-10 items-start"><form class="cf-form space-y-6"><div class="grid grid-cols-1 sm:grid-cols-2 gap-6"><div><label class="block text-sm font-medium text-neutral-700 mb-2">Your Name <span class="text-[#E64500]">*</span></label><input type="text" placeholder="Ex. John Doe" required="" class="w-full rounded-2xl border border-neutral-200 bg-white px-5 py-3.5 text-neutral-800 placeholder:text-neutral-400 outline-none transition-all focus:border-[#FFA040] focus:ring-2 focus:ring-[#FFA040]/20 text-base md:text-sm" name="name" value=""/></div><div><label class="block text-sm font-medium text-neutral-700 mb-2">Email <span class="text-[#E64500]">*</span></label><input type="email" placeholder="example@gmail.com" required="" class="w-full rounded-2xl border border-neutral-200 bg-white px-5 py-3.5 text-neutral-800 placeholder:text-neutral-400 outline-none transition-all focus:border-[#FFA040] focus:ring-2 focus:ring-[#FFA040]/20 text-base md:text-sm" name="email" value=""/></div><div><label class="block text-sm font-medium text-neutral-700 mb-2">Phone <span class="text-[#E64500]">*</span></label><input type="tel" placeholder="Enter Phone Number" required="" class="w-full rounded-2xl border border-neutral-200 bg-white px-5 py-3.5 text-neutral-800 placeholder:text-neutral-400 outline-none transition-all focus:border-[#FFA040] focus:ring-2 focus:ring-[#FFA040]/20 text-base md:text-sm" name="phone" value=""/></div><div class="relative"><label class="block text-sm font-medium text-neutral-700 mb-2">I&#x27;m Interested in <span class="text-[#E64500]">*</span></label><div class="relative"><select name="interested" required="" class="w-full rounded-2xl border border-neutral-200 bg-white px-5 py-3.5 text-neutral-800 outline-none transition-all focus:border-[#FFA040] focus:ring-2 focus:ring-[#FFA040]/20 text-base md:text-sm appearance-none text-neutral-400"><option value="" disabled="" selected="">Select</option><option value="UI/UX Design">UI/UX Design</option><option value="Branding">Branding</option><option value="Web Development">Web Development</option><option value="Motion Graphics">Motion Graphics</option><option value="Social Media">Social Media</option><option value="3D Visualization">3D Visualization</option><option value="Other">Other</option></select><svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg></div></div><div class="relative"><label class="block text-sm font-medium text-neutral-700 mb-2">Budget Range (USD) <span class="text-[#E64500]">*</span></label><div class="relative"><select name="budget" required="" class="w-full rounded-2xl border border-neutral-200 bg-white px-5 py-3.5 text-neutral-800 outline-none transition-all focus:border-[#FFA040] focus:ring-2 focus:ring-[#FFA040]/20 text-base md:text-sm appearance-none text-neutral-400"><option value="" disabled="" selected="">Select Range</option><option value="Under $5,000">Under $5,000</option><option value="$5,000 - $10,000">$5,000 - $10,000</option><option value="$10,000 - $25,000">$10,000 - $25,000</option><option value="$25,000 - $50,000">$25,000 - $50,000</option><option value="$50,000+">$50,000+</option></select><svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg></div></div><div class="relative"><label class="block text-sm font-medium text-neutral-700 mb-2">Country <span class="text-[#E64500]">*</span></label><div class="relative"><select name="country" required="" class="w-full rounded-2xl border border-neutral-200 bg-white px-5 py-3.5 text-neutral-800 outline-none transition-all focus:border-[#FFA040] focus:ring-2 focus:ring-[#FFA040]/20 text-base md:text-sm appearance-none text-neutral-400"><option value="" disabled="" selected="">Select Country</option><option value="United States">United States</option><option value="United Kingdom">United Kingdom</option><option value="Canada">Canada</option><option value="Australia">Australia</option><option value="Germany">Germany</option><option value="France">France</option><option value="Vietnam">Vietnam</option><option value="Japan">Japan</option><option value="South Korea">South Korea</option><option value="Singapore">Singapore</option><option value="Other">Other</option></select><svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg></div></div></div><div><label class="block text-sm font-medium text-neutral-700 mb-2">Your Message <span class="text-[#E64500]">*</span></label><textarea name="message" placeholder="Enter here.." required="" rows="4" class="w-full rounded-2xl border border-neutral-200 bg-white px-5 py-3.5 text-neutral-800 placeholder:text-neutral-400 outline-none transition-all focus:border-[#FFA040] focus:ring-2 focus:ring-[#FFA040]/20 text-base md:text-sm resize-none"></textarea></div><div><p class="text-sm font-bold text-neutral-800 mb-3 tracking-wide uppercase">Doodle Anything to Send</p><div class="relative rounded-2xl overflow-hidden transition-all duration-300" style="border:2px dashed #e5e7eb;background:#fafaf9;box-shadow:none"><canvas class="block w-full" style="height:140px;cursor:url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;20&#x27; height=&#x27;20&#x27; viewBox=&#x27;0 0 20 20&#x27;%3E%3Cellipse cx=&#x27;10&#x27; cy=&#x27;14&#x27; rx=&#x27;5&#x27; ry=&#x27;4&#x27; fill=&#x27;%23F27A34&#x27;/%3E%3Cellipse cx=&#x27;4&#x27; cy=&#x27;9&#x27; rx=&#x27;2.5&#x27; ry=&#x27;2&#x27; fill=&#x27;%23F27A34&#x27;/%3E%3Cellipse cx=&#x27;8&#x27; cy=&#x27;7&#x27; rx=&#x27;2.5&#x27; ry=&#x27;2&#x27; fill=&#x27;%23F27A34&#x27;/%3E%3Cellipse cx=&#x27;12.5&#x27; cy=&#x27;7&#x27; rx=&#x27;2.5&#x27; ry=&#x27;2&#x27; fill=&#x27;%23F27A34&#x27;/%3E%3Cellipse cx=&#x27;16.5&#x27; cy=&#x27;9&#x27; rx=&#x27;2.5&#x27; ry=&#x27;2&#x27; fill=&#x27;%23F27A34&#x27;/%3E%3C/svg%3E&quot;) 10 10, crosshair;touch-action:none"></canvas></div><p style="font-size:13px;color:rgba(242,122,52,0.85);margin-top:8px;line-height:1.6">*Just a fun interactive way to say hi. No legally binding contracts here! 😉</p></div></form><div class="cf-info card-metallic rounded-2xl p-8 text-white space-y-8"><div><h4 class="font-bold text-lg mb-2 text-white">Studios</h4><p class="text-neutral-300 text-sm leading-relaxed">HCM Metro, Vietnam<br/>Atlanta Metro, USA</p></div><div><h4 class="font-bold text-lg mb-2 text-white">Contact</h4><div class="space-y-1.5 text-sm text-neutral-300"><p>Phone : <a href="tel:+84123456789" class="hover:text-white transition-colors">+84-123-456-789</a></p><p>Email : <a href="mailto:hello@zegoe.com" class="hover:text-white transition-colors">hello@zegoe.com</a></p></div></div><div><h4 class="font-bold text-lg mb-2 text-white">Time</h4><div class="space-y-1 text-sm text-neutral-300"><p>Monday – Friday : 10:00 – 20:00</p><p>Saturday – Sunday : 11:00 – 18:00</p></div></div><div><div class="rounded-xl px-5 py-3 mb-4" style="background:linear-gradient(90deg, #FFA040, #E64500)"><h4 class="text-white font-bold text-lg">Stay Connected</h4></div><div class="flex items-center gap-3"><a href="#" aria-label="Twitter" class="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-800 text-neutral-300 hover:bg-[#FFA040] hover:text-white transition-all"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg></a><a href="#" aria-label="Dribbble" class="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-800 text-neutral-300 hover:bg-[#FFA040] hover:text-white transition-all"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.605 4.61a8.502 8.502 0 011.93 5.314c-.281-.054-3.101-.629-5.943-.271-.065-.141-.12-.293-.184-.445a25.416 25.416 0 00-.564-1.236c3.145-1.28 4.577-3.124 4.761-3.362zM12 3.475c2.17 0 4.154.813 5.662 2.148-.152.216-1.443 1.941-4.48 3.08-1.399-2.57-2.95-4.675-3.189-5A8.687 8.687 0 0112 3.475zm-3.633.803a53.896 53.896 0 013.167 4.935c-3.992 1.063-7.517 1.04-7.896 1.04a8.581 8.581 0 014.729-5.975zM3.453 12.01v-.26c.37.01 4.512.065 8.775-1.215.245.477.477.965.694 1.453-.109.033-.228.065-.336.098-4.404 1.42-6.747 5.303-6.942 5.629a8.522 8.522 0 01-2.19-5.705zM12 20.547a8.482 8.482 0 01-5.239-1.8c.152-.315 1.888-3.656 6.703-5.337.022-.01.033-.01.054-.022a35.318 35.318 0 011.823 6.475 8.4 8.4 0 01-3.341.684zm4.761-1.465c-.086-.52-.542-3.015-1.659-6.084 2.679-.423 5.022.271 5.314.369a8.468 8.468 0 01-3.655 5.715z"></path></svg></a><a href="#" aria-label="GitHub" class="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-800 text-neutral-300 hover:bg-[#FFA040] hover:text-white transition-all"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg></a><a href="#" aria-label="Instagram" class="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-800 text-neutral-300 hover:bg-[#FFA040] hover:text-white transition-all"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"></path></svg></a></div></div></div></div></div><style>
+        .cf-label, .cf-heading, .cf-form, .cf-info {
+          opacity: 0;
+          transform: translateY(40px);
+          transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .cf-section.in-view .cf-label { opacity: 1; transform: translateY(0); }
+        .cf-section.in-view .cf-heading { opacity: 1; transform: translateY(0); transition-delay: 0.1s; }
+        .cf-section.in-view .cf-form { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+        .cf-section.in-view .cf-info { opacity: 1; transform: translateY(0); transition-delay: 0.3s; }
+        @keyframes gradient-slide {
+          0% { background-position: 0% 50%; }
+          100% { background-position: 200% 50%; }
+        }
+      </style></section><!--astro:end--></astro-island> </div> </main>  <footer class="border-t border-white/5 py-12 px-6"> <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-neutral-500"> <p>&copy; 2026 Zegoe. All rights reserved.</p> <div class="flex items-center gap-6"> <a href="#" class="hover:text-white transition-colors">Twitter</a> <a href="#" class="hover:text-white transition-colors">Dribbble</a> <a href="#" class="hover:text-white transition-colors">GitHub</a> </div> </div> </footer> <script>(function(){const workWarm = [{"slug":"garcia","doc":"/work/garcia/","cover":"/portfolio/garcia/garcia-brand-cover.webp","model":null},{"slug":"strane","doc":"/work/strane/","cover":"/portfolio/strane/strane-brand-cover.webp","model":"/models/work/strane.glb"},{"slug":"avitas","doc":"/work/avitas/","cover":"/portfolio/avitas/avitas-brand-cover.webp","model":"/models/work/avitas.glb"},{"slug":"hellavated","doc":"/work/hellavated/","cover":"/portfolio/hellavated/hellavated-brand-cover.webp","model":"/models/work/hellavated.glb"},{"slug":"lootbar","doc":"/work/lootbar/","cover":"/portfolio/lootbar/hi/lootbar-blueberry-dream.webp","model":null},{"slug":"better","doc":"/work/better/","cover":null,"model":null}];
+
+    (() => {
+      const c = navigator.connection;
+      if (c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''))) return;
+      const sent = new Set();
+      const grab = (url, as) => {
+        if (!url || sent.has(url)) return;
+        sent.add(url);
+        const l = document.createElement('link');
+        l.rel = 'prefetch';
+        l.href = url;
+        if (as === 'image') l.as = 'image';
+        document.head.appendChild(l);
+      };
+
+      const warm = () => {
+        for (const w of workWarm) grab(w.doc);
+      };
+      const idle = () =>
+        'requestIdleCallback' in window
+          ? requestIdleCallback(warm, { timeout: 3000 })
+          : setTimeout(warm, 1200);
+      if (document.readyState === 'complete') idle();
+      else addEventListener('load', idle, { once: true });
+
+      const bySlug = new Map(workWarm.map((w) => [w.slug, w]));
+      addEventListener(
+        'pointerover',
+        (e) => {
+          const t = e.target;
+          const a = t && t.closest && t.closest('a[href*="/work/"]');
+          if (!a) return;
+          const m = (a.getAttribute('href') || '').match(/\/work\/([\w-]+)/);
+          const w = m && bySlug.get(m[1]);
+          if (!w) return;
+          grab(w.cover, 'image');
+          grab(w.model);
+        },
+        { passive: true },
+      );
+    })();
+  })();</script>  </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync --> <script type="module">const l=document.getElementById("main-nav");if(l){let s=function(){a=!1;const e=window.scrollY>60,n=d.some(r=>{const u=r.getBoundingClientRect();return u.top<=b&&u.bottom>0});n===c&&e===g||(c=n,g=e,l.classList.toggle("nav-on-light",n),l.classList.toggle("nav-scrolled",e),t&&(n?(t.style.backgroundColor="rgba(255,255,255,0.78)",t.style.backdropFilter="blur(14px) saturate(1.8)",t.style.webkitBackdropFilter="blur(14px) saturate(1.8)",t.style.borderBottomColor="rgba(0,0,0,0.07)",i.forEach(r=>{r.style.color="#1a1a1a"}),o&&(o.style.filter="invert(1)")):(t.style.backgroundColor=e?"rgba(0,0,0,0.45)":"rgba(0,0,0,0)",t.style.backdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.webkitBackdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.borderBottomColor=e?"rgba(255,160,64,0.10)":"transparent",i.forEach(r=>{r.style.color=""}),o&&(o.style.filter=""))))};const t=document.getElementById("nav-bg"),o=l.querySelector("img"),i=Array.from(l.querySelectorAll(".nav-link")),d=Array.from(document.querySelectorAll("[data-nav-light]")),b=69;let a=!1,c=null,g=null;window.addEventListener("scroll",()=>{a||(a=!0,requestAnimationFrame(s))},{passive:!0}),s()}</script> <!-- Nav color switch on light sections.
+         The single owner of the nav's appearance. This used to be two scroll
+         listeners — this one toggling classes, and a second, unguarded one in
+         index.astro writing the inline styles that actually painted the bar.
+         They also disagreed on geometry, so the inline copy (which triggers
+         earlier and releases later) decided every visible flip. The inline
+         copy's thresholds are the ones kept here; the class toggles ride along
+         unchanged. --> <script type="module" src="/_astro/BaseLayout.astro_astro_type_script_index_1_lang.CJX12xpz.js"></script> </body> </html> 
