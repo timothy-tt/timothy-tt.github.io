@@ -1,18 +1,50 @@
 <!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Strane brand system by Zegoe: punk street-art identity for cannabis vapes: acid yellow on black, distressed brick, paint splatter and premium 3D device renders."><!-- Tab icons: the wordmark's own `z`, on the page's near-black so it
-         still reads in a light tab strip. Cut by scripts/build-favicons.mjs —
+         still reads in a light tab strip. Cut by scripts/build-favicons.mjs,
          re-run it if Wordmark_White.png is ever replaced. The .ico is listed
-         too, because that is the file a crawler asks for by name. --><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@400;600;700;800;900&family=Special+Elite&display=swap" rel="stylesheet"><title>Strane — Case Study · Zegoe</title><!-- Cross-document transition, arrival half. A case study fades itself out
+         too, because that is the file a crawler asks for by name. --><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><!-- Fonts are self-hosted (public/fonts + styles/fonts.css): Google's own
+         woff2 files, unchanged, with the same @font-face rules and
+         unicode-ranges. Rendering is identical — which matters because
+         DreamsScript's Caveat glyph centre-lines are screenshot-tuned.
+
+         They used to come from fonts.googleapis.com with display=swap, and
+         that is what made a case-study page jump. The chain was two sequential
+         cross-origin round trips (HTML → CSS on googleapis → woff2 on
+         gstatic), so the text painted in the fallback and reflowed when
+         Montserrat finally landed: measured on /work/avitas, the heading rose
+         18px in two steps starting 49ms after document.fonts.ready, ~0.65s in.
+         Same-origin and preloaded, the file is there for the first paint, so
+         there is no second pass to shift.
+
+         Only the latin subsets are preloaded — the others are real
+         @font-face entries with their unicode-ranges intact, so they still
+         fetch on demand for anything outside latin. --><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>Strane: Case Study · Zegoe</title><!-- Cross-document transition, arrival half. A case study fades itself out
          and leaves this flag before navigating; whichever document loads next
          fades in to meet it, so leaving and arriving read as one move instead
          of a cut. Runs in <head>, before first paint, or the page would flash
          at full opacity first. Only fires when the flag is there, so a cold
          load or a bookmark is untouched. --><style>
       @keyframes zg-arrive { from { opacity: 0; } to { opacity: 1; } }
-      html.zg-arriving body { animation: zg-arrive 0.45s ease-out both; }
+      /* will-change lifts the fade onto the compositor. Without it the
+         animation runs on the main thread, and hydrating the case-study
+         island lands right in its window: the clock keeps counting while no
+         frames render, so the page jumps forward mid-fade when the thread
+         frees up. That skip is the "jerk" on a case-study switch. The exit
+         half already primes the same way (warm() in CaseStudyContent);
+         opacity only, never transform: body has position:fixed descendants
+         (.cs-nav) and a transform hint would become their containing block.
+         Transient by construction: the class is stripped after load. */
+      html.zg-arriving body { animation: zg-arrive 0.45s ease-out both; will-change: opacity; }
       /* The incoming page slides in from the side it was travelling from, so
-         it can sit outside the viewport for a frame; clip that, or the slide
-         gives the document a horizontal scrollbar. */
-      html.zg-arriving-next, html.zg-arriving-prev { overflow-x: clip; }
+         it can sit outside the viewport for a frame and something has to clip
+         it. NOT the <html> element: body already carries overflow-x:hidden,
+         and that only reaches the viewport because html's overflow is
+         `visible`: the moment html is anything else the propagation stops,
+         body becomes a scroll container in its own right, and every
+         position:sticky pin inside it (the pager bar, the page-art layer)
+         loses its scrollport and drops to the foot of the document. The
+         clip now lives on .cs-page, which wraps the sliding <main> and is
+         not itself scrollable, so sticky still resolves against the
+         viewport. See CaseStudyContent's slide rules. */
       @media (prefers-reduced-motion: reduce) {
         html.zg-arriving body { animation: none; }
       }
@@ -27,9 +59,23 @@
           if (nav === 'next' || nav === 'prev') root.classList.add('zg-arriving-' + nav);
         }
       } catch (e) { /* storage blocked; no transition, no harm */ }
-    </script><link rel="stylesheet" href="/_astro/index.CF0oJHwm.css">
+    </script><script>
+      /* Retire the arrival classes once the animation is over. They are a
+         trigger, not a state: left on, they keep the arriving-page rules
+         (and anything scoped to them) alive for the whole visit, which is
+         how a one-frame transition detail turns into a permanent bug. */
+      (function () {
+        var root = document.documentElement;
+        if (!root.classList.contains('zg-arriving')) return;
+        var done = function () {
+          root.classList.remove('zg-arriving', 'zg-arriving-next', 'zg-arriving-prev');
+        };
+        window.addEventListener('load', function () { window.setTimeout(done, 700); });
+        window.setTimeout(done, 2500); // load never fired (bfcache, blocked asset)
+      })();
+    </script><link rel="stylesheet" href="/_astro/index.DOHdVBef.css">
 <style>html,body{overscroll-behavior-x:contain}
-</style></head> <body> <div id="page-content">  <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z4qdB2" prefix="r1" component-url="/_astro/CaseStudyContent.DhPTOa3U.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{&quot;slug&quot;:[0,&quot;strane&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;CaseStudyContent&quot;,&quot;value&quot;:true}" await-children><link rel="preload" as="image" href="/Wordmark_White.png"/><link rel="preload" as="image" href="/portfolio/strane/hero/shadow.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/pouch-brick.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/scribble.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/stars-yellow.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/pouch-alien.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/device.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/splat.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/wordmark.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/wing.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/eye-bottom.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/eye-top.webp"/><link rel="preload" as="image" href="/brand-logo/strane.png"/><link rel="preload" as="image" href="/brand-logo/holistic-industries.png"/><link rel="preload" as="image" href="/brand-logo/avitas-trim.png"/><div class="cs-page" style="--cs-bg:#0b0b06;--cs-accent:#e5ff00;--cs-accent-text:#0a0a0a;--cs-glow:rgba(229,255,0,0.30);--cs-bg-src:url(&quot;/portfolio/strane/strane_brick_bg_yellow.webp&quot;);--cs-bg-op:0.12;--cs-bg-filter:grayscale(1) brightness(0.75) contrast(1.2);--cs-bg-size:760px;--cs-bg-repeat:repeat;--cs-bg-pos:50% 50%;--cs-bg-scrim:linear-gradient(180deg, rgba(11,11,6,0.55) 0%, rgba(11,11,6,0.28) 40%, rgba(11,11,6,0.5) 100%);--cs-bg-bleed:10"><div class="cs-bgpin" aria-hidden="true"><div class="cs-bglayer"><div class="cs-bgart"><div class="cs-bgart-img"></div></div><div class="cs-bgscrim"></div></div></div><div class="cs-topbar" aria-hidden="true"></div><nav class="cs-nav" aria-label="Case study"><a href="/" class="cs-nav-logo"><img src="/Wordmark_White.png" alt="Zegoe"/></a><a href="/#work" class="cs-nav-back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12l6-6M5 12l6 6"></path></svg><span>All Work</span></a></nav><main><header class="cs-hero cs-hero-arted"><div class="cs-hero-art cs-hero-art-live"><div class="cs-hero-stage" role="img" aria-label="Strane hero collage: the yellow-to-black device beside the Alien Mints cartridge pouch and Landfill Haze brick-wall pouch, with torn eye stickers, a scrawled star and the taped wordmark" style="--cs-art-w:1920;--cs-art-h:1080"><img class="cs-hero-piece" src="/portfolio/strane/hero/shadow.webp" alt="" aria-hidden="true" draggable="false" style="left:38.385416666666664%;top:69.44444444444444%;width:27.135416666666668%;z-index:1;animation:cs-drift 11s 0s ease-in-out infinite;--dx:0.5208333333333333%;--dy:0%;--rot:0deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/pouch-brick.webp" alt="" aria-hidden="true" draggable="false" style="left:52.96875%;top:3.148148148148148%;width:21.822916666666668%;z-index:2;animation:cs-drift 9s 1.2s ease-in-out infinite;--dx:1.1458333333333333%;--dy:3.148148148148148%;--rot:-3.5deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/scribble.webp" alt="" aria-hidden="true" draggable="false" style="left:63.645833333333336%;top:43.611111111111114%;width:7.34375%;z-index:3;animation:cs-drift 5.5s 0.5s ease-in-out infinite;--dx:-1.4583333333333333%;--dy:-2.9629629629629632%;--rot:8deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/stars-yellow.webp" alt="" aria-hidden="true" draggable="false" style="left:76.82291666666666%;top:13.61111111111111%;width:5.052083333333333%;z-index:4;animation:cs-drift 5s 1.8s ease-in-out infinite;--dx:1.1458333333333333%;--dy:-2.9629629629629632%;--rot:9deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/pouch-alien.webp" alt="" aria-hidden="true" draggable="false" style="left:40.833333333333336%;top:28.703703703703702%;width:33.125%;z-index:5;animation:cs-drift 8.5s 0.8s ease-in-out infinite;--dx:-1.25%;--dy:3.7037037037037033%;--rot:3deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/device.webp" alt="" aria-hidden="true" draggable="false" style="left:52.1875%;top:19.074074074074073%;width:47.8125%;z-index:6;animation:cs-drift 10.5s 0s ease-in-out infinite;--dx:0.4166666666666667%;--dy:-3.148148148148148%;--rot:0.6deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/splat.webp" alt="" aria-hidden="true" draggable="false" style="left:35.729166666666664%;top:49.72222222222222%;width:6.71875%;z-index:7;animation:cs-drift 6.5s 2.1s ease-in-out infinite;--dx:-1.0416666666666665%;--dy:2.4074074074074074%;--rot:-7deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/wordmark.webp" alt="" aria-hidden="true" draggable="false" style="left:56.09375%;top:82.96296296296296%;width:17.8125%;z-index:8;animation:cs-drift 8s 1.4s ease-in-out infinite;--dx:-0.9375%;--dy:-2.4074074074074074%;--rot:2.5deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/wing.webp" alt="" aria-hidden="true" draggable="false" style="left:86.875%;top:1.8518518518518516%;width:12.552083333333334%;z-index:9;animation:cs-drift 6s 1.6s ease-in-out infinite;--dx:-0.625%;--dy:2.7777777777777777%;--rot:-2.5deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/eye-bottom.webp" alt="" aria-hidden="true" draggable="false" style="left:33.75%;top:75.0925925925926%;width:16.25%;z-index:10;animation:cs-drift 7s 0.9s ease-in-out infinite;--dx:1.3541666666666667%;--dy:-2.9629629629629632%;--rot:5deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/eye-top.webp" alt="" aria-hidden="true" draggable="false" style="left:33.75%;top:12.5%;width:13.854166666666668%;z-index:11;animation:cs-drift 6.5s 0.3s ease-in-out infinite;--dx:-1.25%;--dy:3.148148148148148%;--rot:-5.5deg"/></div></div><div class="cs-hero-inner"><p class="cs-hero-eyebrow">Case Study<span class="cs-hero-count"><b>02</b><i>/</i>06</span></p><h1 class="cs-hero-name cs-hero-name-logo"><img src="/brand-logo/strane.png" alt="Strane" draggable="false"/></h1><p class="cs-hero-pos">Cannabis vapes with a punk streak: street-art grit meets clean device renders.</p><div class="cs-hero-chips"><span class="cs-chip">Branding</span><span class="cs-chip">Disposable Vapes</span><span class="cs-chip">Cartridges</span><span class="cs-chip">Flower</span></div><p class="cs-hero-client"><span class="cs-hero-client-label">Client —</span><img class="cs-hero-clientlogo" src="/brand-logo/holistic-industries.png" alt="Holistic Industries" draggable="false"/></p></div><div class="cs-hero-scroll" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M12 19l-6-6M12 19l6-6"></path></svg></div></header><section class="cs-stage-section" aria-label="Interactive product model"><div class="cs-section-head"><p class="cs-eyebrow">The Product</p><p class="cs-stage-note">Ripstick 1G, the disposable that fronts the line.</p></div><div class="cs-stage-frame"><div class="cs-stage" style="cursor:default"><div class="cs-stage-mount" aria-hidden="true"></div><img src="/portfolio/strane/hi/strane-ma-ripstick-1g-generic.webp" alt="Strane Ripstick 1G disposable device render" draggable="false" class="cs-stage-poster" style="opacity:1" loading="lazy"/><style>
+</style></head> <body> <div id="page-content">  <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="ZBV1wc" prefix="r1" component-url="/_astro/CaseStudyContent.kLirX8gg.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{&quot;slug&quot;:[0,&quot;strane&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;CaseStudyContent&quot;,&quot;value&quot;:true}" await-children><link rel="preload" as="image" href="/Wordmark_White.png"/><link rel="preload" as="image" href="/portfolio/strane/hero/shadow.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/pouch-brick.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/scribble.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/stars-yellow.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/pouch-alien.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/device.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/splat.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/wordmark.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/wing.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/eye-bottom.webp"/><link rel="preload" as="image" href="/portfolio/strane/hero/eye-top.webp"/><link rel="preload" as="image" href="/brand-logo/strane.png"/><link rel="preload" as="image" href="/brand-logo/holistic-industries.png"/><link rel="preload" as="image" href="/brand-logo/avitas-trim.png"/><div class="cs-page" style="--cs-bg:#0b0b06;--cs-accent:#e5ff00;--cs-accent-text:#0a0a0a;--cs-glow:rgba(229,255,0,0.30);--cs-bg-src:url(&quot;/portfolio/strane/strane_brick_bg_yellow.webp&quot;);--cs-bg-op:0.12;--cs-bg-filter:grayscale(1) brightness(0.75) contrast(1.2);--cs-bg-size:760px;--cs-bg-repeat:repeat;--cs-bg-pos:50% 50%;--cs-bg-scrim:linear-gradient(180deg, rgba(11,11,6,0.55) 0%, rgba(11,11,6,0.28) 40%, rgba(11,11,6,0.5) 100%);--cs-bg-bleed:10"><div class="cs-bgpin" aria-hidden="true"><div class="cs-bglayer"><div class="cs-bgart"><div class="cs-bgart-img"></div></div><div class="cs-bgscrim"></div></div></div><div class="cs-topbar" aria-hidden="true"></div><nav class="cs-nav" aria-label="Case study"><a href="/" class="cs-nav-logo"><img src="/Wordmark_White.png" alt="Zegoe"/></a><a href="/#work" class="cs-nav-back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12l6-6M5 12l6 6"></path></svg><span>All Work</span></a></nav><main><header class="cs-hero cs-hero-arted"><div class="cs-hero-art cs-hero-art-live"><div class="cs-hero-stage" role="img" aria-label="Strane hero collage: the yellow-to-black device beside the Alien Mints cartridge pouch and Landfill Haze brick-wall pouch, with torn eye stickers, a scrawled star and the taped wordmark" style="--cs-art-w:1920;--cs-art-h:1080"><img class="cs-hero-piece" src="/portfolio/strane/hero/shadow.webp" alt="" aria-hidden="true" draggable="false" style="left:38.385416666666664%;top:69.44444444444444%;width:27.135416666666668%;z-index:1;animation:cs-drift 11s 0s ease-in-out infinite;--dx:0.16666666666666669%;--dy:0%;--rot:0deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/pouch-brick.webp" alt="" aria-hidden="true" draggable="false" style="left:52.96875%;top:3.148148148148148%;width:21.822916666666668%;z-index:2;animation:cs-drift 9s 1.2s ease-in-out infinite;--dx:0.36666666666666664%;--dy:1.0074074074074075%;--rot:-0.35000000000000003deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/scribble.webp" alt="" aria-hidden="true" draggable="false" style="left:63.645833333333336%;top:43.611111111111114%;width:7.34375%;z-index:3;animation:cs-drift 5.5s 0.5s ease-in-out infinite;--dx:-0.46666666666666673%;--dy:-0.9481481481481482%;--rot:0.8deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/stars-yellow.webp" alt="" aria-hidden="true" draggable="false" style="left:76.82291666666666%;top:13.61111111111111%;width:5.052083333333333%;z-index:4;animation:cs-drift 5s 1.8s ease-in-out infinite;--dx:0.36666666666666664%;--dy:-0.9481481481481482%;--rot:0.9deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/pouch-alien.webp" alt="" aria-hidden="true" draggable="false" style="left:40.833333333333336%;top:28.703703703703702%;width:33.125%;z-index:5;animation:cs-drift 8.5s 0.8s ease-in-out infinite;--dx:-0.4%;--dy:1.1851851851851853%;--rot:0.30000000000000004deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/device.webp" alt="" aria-hidden="true" draggable="false" style="left:52.1875%;top:19.074074074074073%;width:47.8125%;z-index:6;animation:cs-drift 10.5s 0s ease-in-out infinite;--dx:0.13333333333333333%;--dy:-1.0074074074074075%;--rot:0.06deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/splat.webp" alt="" aria-hidden="true" draggable="false" style="left:35.729166666666664%;top:49.72222222222222%;width:6.71875%;z-index:7;animation:cs-drift 6.5s 2.1s ease-in-out infinite;--dx:-0.33333333333333337%;--dy:0.7703703703703704%;--rot:-0.7000000000000001deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/wordmark.webp" alt="" aria-hidden="true" draggable="false" style="left:56.09375%;top:82.96296296296296%;width:17.8125%;z-index:8;animation:cs-drift 8s 1.4s ease-in-out infinite;--dx:-0.3%;--dy:-0.7703703703703704%;--rot:0.25deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/wing.webp" alt="" aria-hidden="true" draggable="false" style="left:86.875%;top:1.8518518518518516%;width:12.552083333333334%;z-index:9;animation:cs-drift 6s 1.6s ease-in-out infinite;--dx:-0.2%;--dy:0.8888888888888888%;--rot:-0.25deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/eye-bottom.webp" alt="" aria-hidden="true" draggable="false" style="left:33.75%;top:75.0925925925926%;width:16.25%;z-index:10;animation:cs-drift 7s 0.9s ease-in-out infinite;--dx:0.4333333333333333%;--dy:-0.9481481481481482%;--rot:0.5deg"/><img class="cs-hero-piece" src="/portfolio/strane/hero/eye-top.webp" alt="" aria-hidden="true" draggable="false" style="left:33.75%;top:12.5%;width:13.854166666666668%;z-index:11;animation:cs-drift 6.5s 0.3s ease-in-out infinite;--dx:-0.4%;--dy:1.0074074074074075%;--rot:-0.55deg"/></div></div><div class="cs-hero-inner"><p class="cs-hero-eyebrow">Case Study<span class="cs-hero-count"><b>02</b><i>/</i>06</span></p><h1 class="cs-hero-name cs-hero-name-logo"><img src="/brand-logo/strane.png" alt="Strane" draggable="false"/></h1><p class="cs-hero-pos">Cannabis vapes with a punk streak: street-art grit meets clean device renders.</p><div class="cs-hero-chips"><span class="cs-chip">Branding</span><span class="cs-chip">Disposable Vapes</span><span class="cs-chip">Cartridges</span><span class="cs-chip">Flower</span></div><p class="cs-hero-client"><span class="cs-hero-client-label">Client</span><img class="cs-hero-clientlogo" src="/brand-logo/holistic-industries.png" alt="Holistic Industries" draggable="false"/></p></div><div class="cs-hero-scroll" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M12 19l-6-6M12 19l6-6"></path></svg></div></header><section class="cs-stage-section" aria-label="Interactive product model"><div class="cs-section-head"><p class="cs-eyebrow">The Product</p><p class="cs-stage-note">Ripstick 1G, the disposable that fronts the line.</p></div><div class="cs-stage-frame"><div class="cs-stage" style="cursor:default"><div class="cs-stage-mount" aria-hidden="true"></div><img src="/portfolio/strane/hi/strane-ma-ripstick-1g-generic.webp" alt="Strane Ripstick 1G disposable device render" draggable="false" class="cs-stage-poster" style="opacity:1" loading="lazy"/><style>
         .cs-stage {
           position: relative;
           width: 100%;
@@ -68,7 +114,7 @@
           pointer-events: none;
           user-select: none;
         }
-      </style></div></div></section><section class="cs-story"><blockquote class="cs-quote"><span class="cs-quote-bar" aria-hidden="true"></span>Cannabis vapes with a punk streak: street-art grit meets clean device renders.</blockquote><p class="cs-blurb">Strane runs a distinctly punk visual system: distressed brick textures, paint splatters and retro collage against a hard acid-yellow-and-black palette, differentiating across strains while premium 3D device renders keep it product-forward.</p><div class="cs-story-grid"><div class="cs-story-col"><h2 class="cs-eyebrow">Deliverables</h2><ul class="cs-deliverables"><li class="cs-chip cs-chip-dim">Strain-specific cartridge labels</li><li class="cs-chip cs-chip-dim">Ripstick device mockups, pod &amp; bottle forms</li><li class="cs-chip cs-chip-dim">Logo &amp; angular wordmark</li><li class="cs-chip cs-chip-dim">Brick, splatter &amp; graffiti texture library</li><li class="cs-chip cs-chip-dim">Type variants</li><li class="cs-chip cs-chip-dim">Retail display design</li></ul></div><div class="cs-story-col"><h2 class="cs-eyebrow">Visual Identity</h2><p class="cs-vi">Acid yellow on black. Distressed brick walls, paint splatter and collage set the street-art register; a bold angular wordmark and curated black-and-white product photography keep the devices premium and product-forward.</p></div></div></section><section class="cs-gallery" aria-label="Project gallery"><div class="cs-section-head"><p class="cs-eyebrow">The Work</p></div><div class="cs-grid"><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:4;--r:5;--cm:2;--rm:4"><img src="/portfolio/strane/hi/strane-display-side-4.webp" alt="Strane neon retail display: black brick tower with acid-yellow shelving" loading="lazy" decoding="async"/><figcaption class="cs-cap">Retail display concept: neon over black brick.</figcaption></figure><figure class="cs-tile cs-tile-framed cs-pad-std cs-fit-contain" style="--c:2;--r:5;--cm:1;--rm:4"><img src="/portfolio/strane/hi/strane-shelf-display-3.webp" alt="The built Strane retail fixture, photographed in the shop" loading="lazy" decoding="async"/><figcaption class="cs-cap">Built. The fixture, off the renderer and on the floor.</figcaption></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:3;--r:4;--cm:2;--rm:3"><img src="/portfolio/strane/hi/strane-shelf-side-2.webp" alt="Strane shelf display side view with stocked pouches" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-roomy cs-fit-contain" style="--c:3;--r:4;--cm:2;--rm:3"><img src="/portfolio/strane/hi/strane-mi-flower-28g-front.webp" alt="Strane 28g blackout mylar bag" loading="lazy" decoding="async"/><figcaption class="cs-cap">28g blackout mylar.</figcaption></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:3;--cm:1;--rm:2"><img src="/portfolio/strane/hi/strane-flower-3-5g-mockup-indica-silver.webp" alt="Strane 3.5g flower mockup: indica, silver foil" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-tint cs-pad-std cs-fit-contain" style="--c:4;--r:3;--cm:2;--rm:2"><img src="/portfolio/strane/hi/strane-ma-flower-8th-mockup.webp" alt="Strane Reserve eighth: the cyan colour-break in the system" loading="lazy" decoding="async"/><figcaption class="cs-cap">Reserve tier: cyan cuts the acid yellow.</figcaption></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:5;--cm:1;--rm:4"><img src="/portfolio/strane/hi/strane-display-4.webp" alt="Tall Strane counter display" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:3;--cm:1;--rm:2"><img src="/portfolio/strane/hi/strane-md-flower-7g-pouch.webp" alt="Strane 7g flower pouch, Maryland market" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:3;--cm:1;--rm:2"><img src="/portfolio/strane/hi/strane-mi-flower-3-5g-front.webp" alt="Strane 3.5g flower front, Michigan market" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:4;--r:3;--cm:2;--rm:2"><img src="/portfolio/strane/hi/strane-7g-flower-ma-pa.webp" alt="Strane 7g flower pouches for MA and PA markets" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-roomy cs-fit-contain" style="--c:3;--r:4;--cm:2;--rm:3"><img src="/portfolio/strane/hi/strane-ma-ripstick-1g-generic.webp" alt="Strane Ripstick 1G: generic device" loading="lazy" decoding="async"/></figure><figure class="cs-tile cs-tile-plain cs-pad-roomy cs-fit-contain" style="--c:3;--r:4;--cm:2;--rm:3"><img src="/portfolio/strane/hi/strane-ma-ripstick-1g-grape-gg.webp" alt="Strane Ripstick 1G: Grape GG strain" loading="lazy" decoding="async"/><figcaption class="cs-cap">Ripstick, generic and strain-dressed.</figcaption></figure></div></section><footer class="cs-next"><a href="/work/avitas" class="cs-next-link" data-dir="next" style="--nx-bg:#04141c;--nx-accent:#e8c87a;--nx-glow:rgba(64,200,210,0.30);--nx-art:url(&quot;/portfolio/avitas/avitas-wood-pattern.webp&quot;);--nx-art-op:0.384;--nx-art-filter:brightness(0.8);--nx-art-size:cover;--nx-art-repeat:no-repeat;--nx-art-pos:50% 50%"><span class="cs-next-art" aria-hidden="true"></span><span class="cs-next-scrim" aria-hidden="true"></span><span class="cs-eyebrow">Next Project</span><span class="cs-next-name"><span class="cs-next-index">03</span><img class="cs-next-logo" src="/brand-logo/avitas-trim.png" alt="AVITAS" draggable="false" style="--nx-logo-scale:1.7"/><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg></span></a><a href="/#work" class="cs-all-work">All Work</a></footer></main><div class="cs-pagerpin"><nav class="cs-pagerbar" aria-label="Case studies"><a href="/work/garcia" class="cs-pagerbar-link" data-dir="prev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12l6-6M5 12l6 6"></path></svg><span><i>Previous</i><b>Garcia HandPicked</b></span></a><span class="cs-pagerbar-here"><span class="cs-pagerbar-count" aria-hidden="true"><b>02</b><i>/</i>06</span><em>Strane</em></span><a href="/work/avitas" class="cs-pagerbar-link cs-pagerbar-next" data-dir="next"><span><i>Next</i><b>AVITAS</b></span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M19 12l-6-6M19 12l-6 6"></path></svg></a></nav></div><style>
+      </style></div></div></section><section class="cs-story"><blockquote class="cs-quote"><span class="cs-quote-bar" aria-hidden="true"></span>Cannabis vapes with a punk streak: street-art grit meets clean device renders.</blockquote><p class="cs-blurb">Strane runs a distinctly punk visual system: distressed brick textures, paint splatters and retro collage against a hard acid-yellow-and-black palette, differentiating across strains while premium 3D device renders keep it product-forward.</p><div class="cs-story-grid"><div class="cs-story-col"><h2 class="cs-eyebrow">Deliverables</h2><ul class="cs-deliverables"><li class="cs-chip cs-chip-dim">Strain-specific cartridge labels</li><li class="cs-chip cs-chip-dim">Ripstick device mockups, pod &amp; bottle forms</li><li class="cs-chip cs-chip-dim">Logo &amp; angular wordmark</li><li class="cs-chip cs-chip-dim">Brick, splatter &amp; graffiti texture library</li><li class="cs-chip cs-chip-dim">Type variants</li><li class="cs-chip cs-chip-dim">Retail display design</li></ul></div><div class="cs-story-col"><h2 class="cs-eyebrow">Visual Identity</h2><p class="cs-vi">Acid yellow on black. Distressed brick walls, paint splatter and collage set the street-art register; a bold angular wordmark and curated black-and-white product photography keep the devices premium and product-forward.</p></div></div></section><section class="cs-gallery" aria-label="Project gallery"><div class="cs-section-head"><p class="cs-eyebrow">The Work</p></div><div class="cs-grid"><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:4;--r:5;--cm:2;--rm:4"><button type="button" class="cs-tile-open"><img src="/portfolio/strane/hi/strane-display-side-4.webp" alt="Strane neon retail display: black brick tower with acid-yellow shelving" loading="lazy" decoding="async"/></button><figcaption class="cs-cap">Retail display concept: neon over black brick.</figcaption></figure><figure class="cs-tile cs-tile-framed cs-pad-std cs-fit-contain" style="--c:2;--r:5;--cm:1;--rm:4"><button type="button" class="cs-tile-open"><img src="/portfolio/strane/hi/strane-shelf-display-3.webp" alt="The built Strane retail fixture, photographed in the shop" loading="lazy" decoding="async"/></button><figcaption class="cs-cap">Built. The fixture, off the renderer and on the floor.</figcaption></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:3;--r:4;--cm:2;--rm:3"><button type="button" class="cs-tile-open"><img src="/portfolio/strane/hi/strane-shelf-side-2.webp" alt="Strane shelf display side view with stocked pouches" loading="lazy" decoding="async"/></button></figure><figure class="cs-tile cs-tile-plain cs-pad-roomy cs-fit-contain" style="--c:3;--r:4;--cm:2;--rm:3"><button type="button" class="cs-tile-open"><img src="/portfolio/strane/hi/strane-mi-flower-28g-front.webp" alt="Strane 28g blackout mylar bag" loading="lazy" decoding="async"/></button><figcaption class="cs-cap">28g blackout mylar.</figcaption></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:3;--cm:1;--rm:2"><button type="button" class="cs-tile-open"><img src="/portfolio/strane/hi/strane-flower-3-5g-mockup-indica-silver.webp" alt="Strane 3.5g flower mockup: indica, silver foil" loading="lazy" decoding="async"/></button></figure><figure class="cs-tile cs-tile-tint cs-pad-std cs-fit-contain" style="--c:4;--r:3;--cm:2;--rm:2"><button type="button" class="cs-tile-open"><img src="/portfolio/strane/hi/strane-ma-flower-8th-mockup.webp" alt="Strane Reserve eighth: the cyan colour-break in the system" loading="lazy" decoding="async"/></button><figcaption class="cs-cap">Reserve tier: cyan cuts the acid yellow.</figcaption></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:5;--cm:1;--rm:4"><button type="button" class="cs-tile-open"><img src="/portfolio/strane/hi/strane-display-4.webp" alt="Tall Strane counter display" loading="lazy" decoding="async"/></button></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:3;--cm:1;--rm:2"><button type="button" class="cs-tile-open"><img src="/portfolio/strane/hi/strane-md-flower-7g-pouch.webp" alt="Strane 7g flower pouch, Maryland market" loading="lazy" decoding="async"/></button></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:2;--r:3;--cm:1;--rm:2"><button type="button" class="cs-tile-open"><img src="/portfolio/strane/hi/strane-mi-flower-3-5g-front.webp" alt="Strane 3.5g flower front, Michigan market" loading="lazy" decoding="async"/></button></figure><figure class="cs-tile cs-tile-plain cs-pad-std cs-fit-contain" style="--c:4;--r:3;--cm:2;--rm:2"><button type="button" class="cs-tile-open"><img src="/portfolio/strane/hi/strane-7g-flower-ma-pa.webp" alt="Strane 7g flower pouches for MA and PA markets" loading="lazy" decoding="async"/></button></figure><figure class="cs-tile cs-tile-plain cs-pad-roomy cs-fit-contain" style="--c:3;--r:4;--cm:2;--rm:3"><button type="button" class="cs-tile-open"><img src="/portfolio/strane/hi/strane-ma-ripstick-1g-generic.webp" alt="Strane Ripstick 1G: generic device" loading="lazy" decoding="async"/></button></figure><figure class="cs-tile cs-tile-plain cs-pad-roomy cs-fit-contain" style="--c:3;--r:4;--cm:2;--rm:3"><button type="button" class="cs-tile-open"><img src="/portfolio/strane/hi/strane-ma-ripstick-1g-grape-gg.webp" alt="Strane Ripstick 1G: Grape GG strain" loading="lazy" decoding="async"/></button><figcaption class="cs-cap">Ripstick, generic and strain-dressed.</figcaption></figure></div></section><footer class="cs-next"><a href="/work/avitas" class="cs-next-link" data-dir="next" style="--nx-bg:#04141c;--nx-accent:#e8c87a;--nx-glow:rgba(64,200,210,0.30);--nx-art:url(&quot;/portfolio/avitas/avitas-wood-pattern.webp&quot;);--nx-art-op:0.384;--nx-art-filter:brightness(0.8);--nx-art-size:cover;--nx-art-repeat:no-repeat;--nx-art-pos:50% 50%"><span class="cs-next-art" aria-hidden="true"></span><span class="cs-next-scrim" aria-hidden="true"></span><span class="cs-eyebrow">Next Project</span><span class="cs-next-name"><span class="cs-next-index">03</span><img class="cs-next-logo" src="/brand-logo/avitas-trim.png" alt="AVITAS" draggable="false" style="--nx-logo-scale:1.7"/><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"></path></svg></span></a><a href="/#work" class="cs-all-work">All Work</a></footer></main><div class="cs-pagerpin"><nav class="cs-pagerbar" aria-label="Case studies"><a href="/work/garcia" class="cs-pagerbar-link" data-dir="prev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12l6-6M5 12l6 6"></path></svg><span><i>Previous</i><b>Garcia HandPicked</b></span></a><span class="cs-pagerbar-here"><span class="cs-pagerbar-count" aria-hidden="true"><b>02</b><i>/</i>06</span><em>Strane</em></span><a href="/work/avitas" class="cs-pagerbar-link cs-pagerbar-next" data-dir="next"><span><i>Next</i><b>AVITAS</b></span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M19 12l-6-6M19 12l-6 6"></path></svg></a></nav></div><style>
         /* ═══ Page frame ═══ */
         .cs-page {
           position: relative;
@@ -77,7 +123,7 @@
           min-height: 100vh;
           animation: cs-page-in 0.5s ease-out both;
         }
-        /* Opacity on the page, the rise on <main> — a transform on .cs-page
+        /* Opacity on the page, the rise on <main>: a transform on .cs-page
            would make it the containing block for the sticky pins it holds. */
         .cs-page > main { animation: cs-main-in 0.6s ease-out both; }
         @keyframes cs-page-in { from { opacity: 0; } to { opacity: 1; } }
@@ -92,7 +138,7 @@
         @keyframes cs-page-out { to { opacity: 0; } }
         @keyframes cs-main-out { to { transform: translate3d(0, -12px, 0); } }
         /* Moving forward, the page you are leaving exits to the left and the
-           one you are opening arrives from the right — the set reads as a
+           one you are opening arrives from the right: the set reads as a
            strip you travel along. Backwards is the mirror. */
         .cs-page.cs-leaving-next > main { animation: cs-slide-out-left 0.26s ease-in forwards; }
         .cs-page.cs-leaving-prev > main { animation: cs-slide-out-right 0.26s ease-in forwards; }
@@ -100,6 +146,25 @@
         @keyframes cs-slide-out-right { to { transform: translate3d(7vw, 0, 0); } }
         html.zg-arriving-next .cs-page > main { animation: cs-slide-in-right 0.55s cubic-bezier(.16,.84,.34,1) both; }
         html.zg-arriving-prev .cs-page > main { animation: cs-slide-in-left 0.55s cubic-bezier(.16,.84,.34,1) both; }
+        /* Contain the slide here rather than on <html>: main starts 7vw off
+           the side, and clipping the root stops body's overflow-x from
+           propagating to the viewport, which turns body into a scroll
+           container and strands every sticky pin (the pager bar included)
+           at the bottom of the document. overflow-x:clip does not create a
+           scroll container, so the pins keep the viewport as their
+           scrollport. */
+        html.zg-arriving-next .cs-page,
+        html.zg-arriving-prev .cs-page { overflow-x: clip; }
+        /* Arrival mirror of warm(): promote the layers before the entrance
+           plays, so the fade and slide stay on the compositor while
+           hydration blocks the main thread (see BaseLayout's zg-arrive
+           note). Same split as warm(), for the same reason: opacity only on
+           .cs-page (it holds the fixed .cs-nav), the transform hint only on
+           <main>, which is the one thing that moves. Scoped to zg-arriving,
+           which is stripped after load, so neither layer outlives the
+           entrance. */
+        html.zg-arriving .cs-page { will-change: opacity; }
+        html.zg-arriving .cs-page > main { will-change: transform; }
         @keyframes cs-slide-in-right { from { transform: translate3d(7vw, 0, 0); } to { transform: translate3d(0, 0, 0); } }
         @keyframes cs-slide-in-left  { from { transform: translate3d(-7vw, 0, 0); } to { transform: translate3d(0, 0, 0); } }
         /* Everything in the flow sits above the art layer. */
@@ -176,9 +241,41 @@
              pager bar's fade at the other end of the page. */
           background: linear-gradient(180deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 55%, transparent 100%);
         }
-        .cs-nav-logo img { height: 1.25rem; width: auto; display: block; }
-        .cs-nav-logo { transition: opacity 0.2s ease; }
-        .cs-nav-logo:hover { opacity: 0.8; }
+
+        /* Two pads, not a bar. A blurred band across the whole top read as a
+           painted header; the problem was only ever the two marks sitting on
+           live artwork, so the blur is local to each of them.
+
+           Attached to the links rather than positioned by hand on .cs-nav, so
+           each pad stays centred on its own mark whatever the viewport does to
+           the nav's clamp() padding or to the width of the text.
+
+           The radial mask fades the wash and the blur together, in step, and
+           reaches transparent before the box edges: there is no rectangle to
+           see, at any corner. */
+        .cs-nav-logo::before,
+        .cs-nav-back::before {
+          content: '';
+          position: absolute;
+          inset: -30px -44px;
+          z-index: -1;
+          pointer-events: none;
+          backdrop-filter: blur(13px) saturate(0.85);
+          -webkit-backdrop-filter: blur(13px) saturate(0.85);
+          background: rgba(0, 0, 0, 0.42);
+          -webkit-mask-image: radial-gradient(closest-side ellipse at 50% 50%, #000 0%, #000 40%, transparent 100%);
+          mask-image: radial-gradient(closest-side ellipse at 50% 50%, #000 0%, #000 40%, transparent 100%);
+        }
+
+        .cs-nav-logo img { height: 1.25rem; width: auto; display: block; transition: opacity 0.2s ease; }
+        /* The fade is on the img, never on the link: opacity below 1 makes an
+           element a backdrop root, which would blank the pad's blur on hover. */
+        .cs-nav-logo:hover img { opacity: 0.8; }
+        .cs-nav-logo,
+        .cs-nav-back {
+          position: relative;
+          z-index: 1;
+        }
         .cs-nav-back {
           display: inline-flex;
           align-items: center;
@@ -226,7 +323,7 @@
           align-items: center;
           overflow: hidden;
           padding: 7rem clamp(1.5rem, 6vw, 6rem) 4rem;
-          /* Glow only — no flat fill, or it would occlude the art layer.
+          /* Glow only: no flat fill, or it would occlude the art layer.
              .cs-page already paints the base color beneath the art. */
           background: radial-gradient(110% 110% at 85% 0%, var(--cs-glow) 0%, transparent 50%);
         }
@@ -260,14 +357,22 @@
           left: 0;
           right: 0;
           height: 5rem;
-          display: flex;
-          align-items: flex-end;
-          justify-content: space-between;
+          /* Grid, not space-between. With three flex children the count sat
+             wherever the two labels left it, so it slid left or right by
+             however much the names differed — 06/06 between "Lootbar" and
+             "Garcia HandPicked" was visibly off-centre. Two equal side tracks
+             put the middle track dead centre no matter what is in them, so
+             the count holds the same spot on every project. minmax(0,1fr)
+             rather than 1fr so the tracks can shrink under their content and
+             the labels keep their own ellipsis as a last resort. */
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+          align-items: end;
           gap: 1rem;
           padding: 0 clamp(1rem, 4vw, 3rem) 0.95rem;
           /* Neutral dark rather than the brand colour: this bar sits over
              every section of the page, including the light gallery plates.
-             No border, no flat panel — it fades up out of the page. */
+             No border, no flat panel: it fades up out of the page. */
           background: linear-gradient(
             to top,
             rgba(0,0,0,0.90) 0%,
@@ -278,6 +383,9 @@
           pointer-events: none;
         }
         .cs-pagerbar > * { pointer-events: auto; }
+        .cs-pagerbar-link[data-dir='prev'] { justify-self: start; }
+        .cs-pagerbar-here { justify-self: center; }
+        .cs-pagerbar-next { justify-self: end; }
         /* backdrop-filter clips hard at the element box, which is what put a
            visible horizontal seam across the page. Masking the blur layer to
            the same ramp as the tint lets the blur die out instead of stopping. */
@@ -371,7 +479,7 @@
         .cs-pagerbar-count b { color: var(--cs-accent); font-weight: 900; }
         .cs-pagerbar-count i { font-style: normal; opacity: 0.5; font-weight: 600; }
         /* Clear the bar so the last of the page is never trapped behind it.
-           The space goes on <main>, ABOVE the pin — put it on .cs-page and the
+           The space goes on <main>, ABOVE the pin: put it on .cs-page and the
            pin's natural resting place ends up a bar-height off the page floor,
            so the bar visibly lifts when you hit the bottom. */
         .cs-page > main { padding-bottom: 3.5rem; }
@@ -393,7 +501,7 @@
           font-size: clamp(2.4rem, 5.5vw, 4.5rem);
           color: #fff;
         }
-        /* Logo titles run taller than the type they replace — a wordmark has
+        /* Logo titles run taller than the type they replace: a wordmark has
            no ascenders and descenders inflating its box, so matching the h1's
            cap height means overshooting its font-size. */
         .cs-hero-name-logo { line-height: 0; }
@@ -433,13 +541,13 @@
           color: rgba(255,255,255,0.4);
         }
         /* The label keeps the small-caps treatment and gives up the line: a
-           mark set inline after "CLIENT —" reads as the end of a sentence, and
+           mark set inline after "CLIENT" reads as the end of a sentence, and
            its baseline never agrees with the letterspaced caps beside it. On
            its own row it reads as what it is, a credited party under a
            heading. Same shape whether the client is a mark or a name. */
         .cs-hero-client-label { display: block; margin-bottom: 0.6rem; }
         .cs-hero-client-name { color: rgba(255,255,255,0.85); }
-        /* Sized off the label, not the h1 — this is a credit, so the mark
+        /* Sized off the label, not the h1: this is a credit, so the mark
            stays near the caps' own height and must not read as a subtitle. */
         .cs-hero-clientlogo {
           display: block;
@@ -478,28 +586,28 @@
           top: 50%;
           bottom: auto;
           transform: translateY(-50%);
-          /* Width leads and height follows from 4:5 — never the other way
+          /* Width leads and height follows from 4:5, never the other way
              round. Height-leads plus a max-width cap silently broke the
              ratio on any window under ~1.42:1 (the cap bound, the box went
-             narrow, and object-fit: cover shaved up to 9.7% off the sides —
+             narrow, and object-fit: cover shaved up to 9.7% off the sides:
              at 1280x1000 the covers lost their left and right frame). 68vh is
              the same width height:85% used to produce, so wide windows are
              unchanged; narrow ones now lose a little height instead of art. */
           width: min(48vw, 68vh);
           height: auto;
           aspect-ratio: 4 / 5;
-          /* No frame, no mat, no hairline — this box is only a layout slot;
+          /* No frame, no mat, no hairline: this box is only a layout slot;
              the artwork is the object and it floats inside it. */
           overflow: visible;
         }
-        /* Keep the copy clear of the plate — the h1 used to run onto it.
+        /* Keep the copy clear of the plate: the h1 used to run onto it.
            68vh is the plate's width when height is 85% of a 100vh hero. */
         .cs-hero-plated {
           padding-right: calc(
             min(48vw, 68vh) + clamp(0.75rem, 2.5vw, 2.5rem) + clamp(2rem, 5vw, 5rem)
           );
         }
-        /* Bloom under the art, in the brand accent — what lifts it off the
+        /* Bloom under the art, in the brand accent: what lifts it off the
            page. Sits behind the image, inside the slot. */
         .cs-hero-plate::before {
           content: '';
@@ -516,13 +624,13 @@
           height: 100%;
           object-fit: cover;
           transform-origin: 50% 50%;
-          /* The cast shadow is the ONLY floating cue — no bob. Long and soft,
+          /* The cast shadow is the ONLY floating cue: no bob. Long and soft,
              so it reads as height off the page rather than a card border. */
           box-shadow:
             0 2.5rem 4.5rem rgba(0,0,0,0.55),
             0 0.75rem 1.5rem rgba(0,0,0,0.35);
         }
-        /* Art that isn't 4:5 — the flavor key arts are square, and their HUD
+        /* Art that isn't 4:5. The flavor key arts are square, and their HUD
            frame runs nearly edge to edge so cropping to fill would cut it off
            both sides. It keeps its own aspect and floats in the slot; there's
            no mat behind it any more, so the slot is invisible. */
@@ -544,7 +652,7 @@
         /* ═══ Hero collage ═══
            A 16:9 cutout composed for this frame, with its left half left empty
            for the copy. So it is laid over the whole hero and left to land
-           where the artwork was drawn to land — no crop, no box, no cast
+           where the artwork was drawn to land. No crop, no box, no cast
            shadow: the elements already carry their own. Contain keeps the
            composition intact at every window; anchoring it right means a wide
            window spends its extra pixels on the gap between copy and artwork
@@ -555,7 +663,7 @@
           z-index: 1;
           pointer-events: none;
         }
-        /* Direct child only — the exploded variant nests its pieces inside a
+        /* Direct child only: the exploded variant nests its pieces inside a
            stage, and object-fit on those would fight their placement. */
         .cs-hero-art > img {
           display: block;
@@ -565,14 +673,14 @@
           object-position: 100% 50%;
         }
         /* The copy stops where the artwork starts. Both collages open their
-           dense half — the pouches, the device, the shadows they cast — at
+           dense half (the pouches, the device, the shadows they cast) at
            about 44% of the frame, so the gutter is the remaining 56% of the
            RENDERED width: 56vw while the art is fitting to the window's width,
            97vh once it is fitting to its height (16:9 makes that 0.56 × 16/9).
            Measured from the artwork rather than from the box, or the longest
            line of the position lands on a pouch. The loose sparkles and torn
            stickers that drift further left are meant to pass behind the type,
-           and do — the collage sits a layer under it. */
+           and do: the collage sits a layer under it. */
         .cs-hero-arted {
           padding-right: calc(min(56vw, 99.5vh) + clamp(1rem, 2vw, 2rem));
           background: radial-gradient(85% 95% at 74% 45%, var(--cs-glow) 0%, transparent 45%);
@@ -580,7 +688,7 @@
 
         /* ── The exploded collage ──
            The stage reproduces the rect a contain-fit gives the flat
-           image — 16:9, as wide as the hero or as tall, whichever binds — so
+           image (16:9, as wide as the hero or as tall, whichever binds), so
            the pieces land where the single file used to. Right-anchored and
            centred for the same reason the flat one is. */
         .cs-hero-art-live { overflow: hidden; }
@@ -600,7 +708,7 @@
              otherwise be re-rasterised as they move. */
           will-change: transform;
         }
-        /* One keyframe for every piece — the travel is per-element custom
+        /* One keyframe for every piece: the travel is per-element custom
            properties, so fourteen drifts cost one animation definition.
            Three stops, not two: a two-stop drift retraces its own path and
            reads as a slide, where an uneven third stop makes each piece
@@ -628,12 +736,12 @@
           .cs-hero-piece { animation: none !important; opacity: 1 !important; }
         }
 
-        /* ═══ Unplated hero — a case study with no cover ═══
+        /* ═══ Unplated hero: a case study with no cover ═══
            The copy column is sized to leave the plate its half of the screen.
            With no plate there is nothing in that half, so left-aligned copy
            hangs off the edge of a large empty area. Centred, the copy is the
            composition instead of the leftover of one. Written as :not() rather
-           than a modifier class so none of it can reach the plated heroes —
+           than a modifier class so none of it can reach the plated heroes:
            they are excluded by the selector, not by ordering. No breakpoint
            undoes it: the stacked layout exists to get the copy out from under
            the plate, and an unplated hero never had one at any width. A hero
@@ -648,7 +756,7 @@
         }
         .cs-hero:not(.cs-hero-plated):not(.cs-hero-arted) .cs-hero-pos { margin-inline: auto; }
         .cs-hero:not(.cs-hero-plated):not(.cs-hero-arted) .cs-hero-chips { justify-content: center; }
-        /* Both marks are display:block boxes with object-position: left — the
+        /* Both marks are display:block boxes with object-position: left. The
            rule that keeps a width-clamped logo pinned to the copy's left edge
            is exactly what fights a centred column, so it inverts here. */
         .cs-hero:not(.cs-hero-plated):not(.cs-hero-arted) .cs-hero-name-logo img,
@@ -665,7 +773,7 @@
             align-items: flex-start;
             justify-content: center;
             min-height: 0;
-            /* Undo the gutter that reserves the plate's column on desktop —
+            /* Undo the gutter that reserves the plate's column on desktop:
                stacked there is no column to reserve, and leaving it in
                squeezed the hero to a 135px-wide sliver. */
             padding-right: clamp(1.5rem, 6vw, 6rem);
@@ -676,14 +784,14 @@
             order: 2;
             /* relative, not static: the matted art is absolutely positioned
                against the plate, and a static plate hands that job to the
-               hero — the art then covers the copy. */
+               hero: the art then covers the copy. */
             position: relative;
             top: auto;
             right: auto;
             bottom: auto;
             max-width: none;
             transform: none;
-            /* Capped, or at ~1100px the stacked plate becomes a billboard —
+            /* Capped, or at ~1100px the stacked plate becomes a billboard:
                it has to stay an object you could pick up. */
             width: min(100%, 32rem);
             height: auto;
@@ -691,7 +799,7 @@
             margin-top: 2.75rem;
           }
           /* The collage stacks under the copy on the same terms as the plate.
-             Its empty left half only earns its keep next to type — stacked
+             Its empty left half only earns its keep next to type: stacked
              there is no type beside it, so that half is cropped away and the
              artwork gets the whole width instead of a third of it. 5:4 keeps
              the frame from about 30% in, which is past the dead margin and
@@ -847,6 +955,27 @@
           align-items: center;
           justify-content: center;
         }
+        /* The whole image area is the control. Reset rather than restyle: the
+           button exists for semantics and hit area, and every visual the tile
+           already had (plate, frame, padding, hover zoom) is keyed off
+           .cs-tile and the img, both of which still apply through it. */
+        .cs-tile-open {
+          display: block;
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          border: 0;
+          background: none;
+          font: inherit;
+          color: inherit;
+          cursor: zoom-in;
+        }
+        .cs-tile-open:focus-visible {
+          outline: 2px solid var(--cs-accent);
+          outline-offset: -4px;
+          border-radius: inherit;
+        }
         .cs-tile img {
           width: 100%;
           height: 100%;
@@ -924,7 +1053,7 @@
           transition: filter 0.3s ease;
         }
         .cs-next-link:hover { filter: brightness(1.18); }
-        /* Art layer, then scrim, then copy — the eyebrow and mark are flow
+        /* Art layer, then scrim, then copy: the eyebrow and mark are flow
            children, so they need lifting above both absolute layers. */
         .cs-next-link > .cs-eyebrow,
         .cs-next-name { position: relative; z-index: 2; }
@@ -964,7 +1093,7 @@
           line-height: 1;
           color: #fff;
         }
-        /* Smaller than the hero's mark — this is a teaser, not the title — but
+        /* Smaller than the hero's mark (this is a teaser, not the title), but
            it carries the same per-mark correction so a stacked lockup doesn't
            come in at a fraction of a wordmark's optical mass. */
         .cs-next-logo {
@@ -1002,24 +1131,80 @@
         @media (max-width: 767px) {
           .cs-hero { min-height: 88vh; padding-top: 6rem; }
           .cs-hero-count { font-size: 1.15rem; }
-          .cs-pagerbar { height: 4.25rem; padding-bottom: 0.8rem; }
-          .cs-pagerbar-link b { font-size: 0.78rem; max-width: 6.5rem; }
+          /* A phone keeps the desktop's three-across arrangement; what gives
+             is the name, which wraps instead of being cut. "Garcia
+             HandPicked" sets as "Garcia / HandPicked" and the bar is two
+             lines tall because the name is, not because the count was moved
+             out of the way — so the count stays on the same line as the
+             names, centred vertically against them.
+
+             min-height holds that two-line box on every project. Only one
+             name in the set is two words, so without it the bar would be
+             taller on the two pages that sit next to Garcia and shorter
+             everywhere else, and paging would step it up and down. */
+          .cs-pagerbar {
+            height: auto;
+            min-height: 4.6rem;
+            align-items: center;
+            column-gap: 0.6rem;
+            padding-top: 2rem;
+            padding-bottom: 0.85rem;
+            /* Both ramps are re-cut for the taller box. They are written as a
+               fraction of the element, so simply growing the bar stretched the
+               fade over two rows and left the count sitting in the sheer part
+               of it — page copy read straight through the digits. These reach
+               full strength lower and hold it further up, so the count gets
+               the same backing the links have, and the fade still dies out
+               before the top edge rather than ending on a seam. */
+            background: linear-gradient(
+              to top,
+              rgba(0,0,0,0.93) 0%,
+              rgba(0,0,0,0.90) 48%,
+              rgba(0,0,0,0.70) 74%,
+              rgba(0,0,0,0) 100%
+            );
+          }
+          .cs-pagerbar::before {
+            -webkit-mask-image: linear-gradient(to top, #000 0%, #000 62%, rgba(0,0,0,0.4) 84%, transparent 100%);
+            mask-image: linear-gradient(to top, #000 0%, #000 62%, rgba(0,0,0,0.4) 84%, transparent 100%);
+          }
+          /* The cap was the ellipsis, and nowrap was what made a cap the only
+             option. Let the name break at its own space and the track becomes
+             the constraint instead. Names of one word are unaffected — there
+             is nowhere for them to break. */
+          .cs-pagerbar-link b {
+            font-size: 0.78rem;
+            max-width: none;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            line-height: 1.18;
+          }
+          /* Wrapped text is two lines; the arrow belongs beside the block of
+             them, not on the first line's baseline. */
+          .cs-pagerbar-link { align-items: center; gap: 0.5rem; }
+          .cs-pagerbar-link span { align-items: center; }
+          /* Each name sets away from its own arrow, so a wrapped second line
+             stays against the edge the link points to. */
+          .cs-pagerbar-next b { text-align: right; }
           .cs-pagerbar-here em { display: none; }
-          .cs-page > main { padding-bottom: 3rem; }
+          /* Was 3rem against a 4.25rem bar; the two-row bar is about 5rem, so
+             the clearance follows it or the last plate sits under the links. */
+          .cs-page > main { padding-bottom: 4rem; }
           .cs-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 82px; gap: 0.7rem; }
           .cs-tile { grid-column: span var(--cm); grid-row: span var(--rm); }
           .cs-pad-roomy img { padding: 1.25rem; }
           .cs-pad-std img { padding: 0.9rem; }
           .cs-story-grid { grid-template-columns: 1fr; gap: 2.25rem; }
           .cs-band { height: 180px; margin: 1.5rem calc(50% - 50vw); }
-          /* 0.55rem was 8.8px of letterspaced caps over artwork — under the
+          /* 0.55rem was 8.8px of letterspaced caps over artwork, under the
              readable floor on a phone. The tracking comes in a little to pay
              for the extra width so the captions still hold one or two lines. */
           .cs-cap { font-size: 0.75rem; letter-spacing: 0.1em; left: 0.7rem; right: 0.7rem; bottom: 0.6rem; }
 
           /* A phone column is narrow enough that body copy and section
              eyebrows run the full width, and the desktop scrim is out of
-             ramp by the bar's own 4rem — so mid-scroll a paragraph would
+             ramp by the bar's own 4rem, so mid-scroll a paragraph would
              slide clean through the logo and ALL WORK with nothing between
              them. Deeper at the top, and a second ramp carried below the bar
              (::after, outside the flex row, so the row's layout is
@@ -1068,9 +1253,9 @@
       if (document.readyState === 'complete') idle();
       else addEventListener('load', idle, { once: true });
     })();
-  })();</script>  </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync --> <script type="module">const l=document.getElementById("main-nav");if(l){let s=function(){a=!1;const e=window.scrollY>60,n=d.some(r=>{const u=r.getBoundingClientRect();return u.top<=b&&u.bottom>0});n===c&&e===g||(c=n,g=e,l.classList.toggle("nav-on-light",n),l.classList.toggle("nav-scrolled",e),t&&(n?(t.style.backgroundColor="rgba(255,255,255,0.78)",t.style.backdropFilter="blur(14px) saturate(1.8)",t.style.webkitBackdropFilter="blur(14px) saturate(1.8)",t.style.borderBottomColor="rgba(0,0,0,0.07)",i.forEach(r=>{r.style.color="#1a1a1a"}),o&&(o.style.filter="invert(1)")):(t.style.backgroundColor=e?"rgba(0,0,0,0.45)":"rgba(0,0,0,0)",t.style.backdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.webkitBackdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.borderBottomColor=e?"rgba(255,160,64,0.10)":"transparent",i.forEach(r=>{r.style.color=""}),o&&(o.style.filter=""))))};const t=document.getElementById("nav-bg"),o=l.querySelector("img"),i=Array.from(l.querySelectorAll(".nav-link")),d=Array.from(document.querySelectorAll("[data-nav-light]")),b=69;let a=!1,c=null,g=null;window.addEventListener("scroll",()=>{a||(a=!0,requestAnimationFrame(s))},{passive:!0}),s()}</script> <!-- Nav color switch on light sections.
+  })();</script>  </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync --> <script type="module">const s=document.getElementById("main-nav");if(s){let m=function(){g=!1;const e=window.scrollY>60,o=k.some(n=>{const c=n.getBoundingClientRect();return c.top<=b&&c.bottom>0});o===v&&e===p||(v=o,p=e,s.classList.toggle("nav-on-light",o),s.classList.toggle("nav-scrolled",e),t&&(o?(t.style.backgroundColor="rgba(255,255,255,0.78)",t.style.backdropFilter="blur(14px) saturate(1.8)",t.style.webkitBackdropFilter="blur(14px) saturate(1.8)",t.style.borderBottomColor="rgba(0,0,0,0.07)",u.forEach(n=>{n.style.color="#1a1a1a"}),a&&(a.style.filter="invert(1)")):(t.style.backgroundColor=e?"rgba(0,0,0,0.45)":"rgba(0,0,0,0)",t.style.backdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.webkitBackdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.borderBottomColor=e?"rgba(255,160,64,0.10)":"transparent",u.forEach(n=>{n.style.color=""}),a&&(a.style.filter=""))))};const t=document.getElementById("nav-bg"),a=s.querySelector("img"),u=Array.from(s.querySelectorAll(".nav-link")),k=Array.from(document.querySelectorAll("[data-nav-light]")),b=69;let g=!1,v=null,p=null;window.addEventListener("scroll",()=>{g||(g=!0,requestAnimationFrame(m))},{passive:!0}),m();const i=u.filter(l=>l.dataset.section);if(i.length){let l=0;const e=()=>{l=0;let f=null,d=-1/0;for(const r of i){const w=document.getElementById(r.dataset.section);if(!w)continue;const y=w.getBoundingClientRect().top-b;y<=0&&y>d&&(d=y,f=r)}for(const r of i)r.classList.toggle("is-active",r===f)},o=()=>{l||(l=requestAnimationFrame(e))};window.addEventListener("scroll",o,{passive:!0}),window.addEventListener("resize",o,{passive:!0});let n=0;const c=window.setInterval(()=>{o(),(i.every(d=>document.getElementById(d.dataset.section))||++n>40)&&window.clearInterval(c)},250)}}</script> <!-- Nav color switch on light sections.
          The single owner of the nav's appearance. This used to be two scroll
-         listeners — this one toggling classes, and a second, unguarded one in
+         listeners: this one toggling classes, and a second, unguarded one in
          index.astro writing the inline styles that actually painted the bar.
          They also disagreed on geometry, so the inline copy (which triggers
          earlier and releases later) decided every visible flip. The inline

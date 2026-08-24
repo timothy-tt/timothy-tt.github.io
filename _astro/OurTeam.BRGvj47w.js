@@ -1,11 +1,11 @@
-import{j as t}from"./jsx-runtime.D_zvdyIk.js";import{r as o}from"./index.DiEladB3.js";const x=[{index:"01",name:"Lenore Hensley",role:"Artistic Head",meta:"Atlanta Metro",bio:"The taste behind the brands. Lenore sets the creative direction and pushes every concept past safe. If a piece has a signature, it's hers.",accent:"#FFA040",accentSoft:"rgba(255,160,64,0.14)"},{index:"02",name:"Timothy Ton-That",role:"Technical Head",meta:"HCM Metro",bio:"If it renders, animates, deploys, or has to survive contact with a real browser, it crosses Tim's desk first.",accent:"#FF7A2F",accentSoft:"rgba(255,122,47,0.14)"},{index:"03",name:"Van Luu",role:"3D Specialist",meta:"HCM Metro",bio:"Renders, mockups, motion. Van builds the photoreal 3D that makes packaging feel shelf-ready before it exists.",accent:"#FF5A1F",accentSoft:"rgba(255,90,31,0.14)"},{index:"04",name:"Quynh Nguyen",role:"Designer",meta:"HCM Metro",bio:"Layout, packaging systems, production design. Quynh turns direction into files that actually ship.",accent:"#E64500",accentSoft:"rgba(230,69,0,0.16)"}],v="#FF5A1F";function C(){const w=o.useRef(null),h=o.useRef(null),g=o.useRef(null),y=o.useRef(1),f=o.useRef(()=>{}),[k,j]=o.useState(1),[L,N]=o.useState(!0),[E,F]=o.useState(!1);o.useEffect(()=>{const e=w.current;if(!e)return;const n=new IntersectionObserver(([r])=>{r.isIntersecting&&(e.classList.add("in-view"),n.disconnect())},{threshold:.12});return n.observe(e),()=>n.disconnect()},[]);const M=e=>{const n=e.querySelector(".tm-strip-item");if(!n)return e.clientWidth||1;const r=parseFloat(getComputedStyle(e).columnGap||"0")||0;return n.getBoundingClientRect().width+r};o.useEffect(()=>{const e=h.current;if(!e)return;let n=-1,r=null,i=null;const d=()=>{y.current=M(e)||1},c=()=>{const a=e.scrollWidth-e.clientWidth,l=e.scrollLeft;if(g.current){const A=a>0?l/a:0;g.current.style.transform=`scaleX(${Math.min(1,Math.max(0,A))})`}const s=a>0?1+Math.round(Math.min(1,Math.max(0,l/a))*(x.length-1)):1;s!==n&&(n=s,j(s));const p=l<=1;p!==r&&(r=p,N(p));const b=l>=a-1;b!==i&&(i=b,F(b))};d(),c(),e.addEventListener("scroll",c,{passive:!0});const m=()=>{d(),c()};return window.addEventListener("resize",m),()=>{e.removeEventListener("scroll",c),window.removeEventListener("resize",m)}},[]),o.useEffect(()=>{const e=h.current;if(!e)return;let n=!1,r=!1,i=0,d=0;const c=s=>{s.pointerType==="touch"||s.button!==0||(f.current(),n=!0,r=!1,i=s.clientX,d=e.scrollLeft)},m=s=>{if(!n)return;const p=s.clientX-i;!r&&Math.abs(p)>4&&(r=!0,e.classList.add("tm-dragging"),e.setPointerCapture?.(s.pointerId),window.getSelection()?.removeAllRanges()),r&&(e.scrollLeft=d-p,s.preventDefault())},a=()=>{n=!1,e.classList.remove("tm-dragging")},l=s=>{r&&(s.preventDefault(),s.stopPropagation(),r=!1)};return e.addEventListener("pointerdown",c),e.addEventListener("pointermove",m),window.addEventListener("pointerup",a),window.addEventListener("pointercancel",a),e.addEventListener("click",l,!0),()=>{e.removeEventListener("pointerdown",c),e.removeEventListener("pointermove",m),window.removeEventListener("pointerup",a),window.removeEventListener("pointercancel",a),e.removeEventListener("click",l,!0)}},[]),o.useEffect(()=>{const e=h.current;if(!e)return;const n=window.matchMedia("(prefers-reduced-motion: reduce)").matches;let r=e.scrollLeft,i=0;const d=()=>{i&&cancelAnimationFrame(i),i=0,r=e.scrollLeft};f.current=d;const c=()=>{const a=e.scrollWidth-e.clientWidth;r=Math.max(0,Math.min(a,r));const l=e.scrollLeft,s=r-l;if(Math.abs(s)<1){e.scrollLeft=r,i=0;return}if(e.scrollLeft=l+s*.18,e.scrollLeft===l){i=0;return}i=requestAnimationFrame(c)},m=a=>{if(!(Math.abs(a.deltaX)<=Math.abs(a.deltaY))){if(a.preventDefault(),a.stopPropagation(),n){e.scrollLeft+=a.deltaX;return}i||(r=e.scrollLeft),r+=a.deltaX,i||(i=requestAnimationFrame(c))}};return e.addEventListener("wheel",m,{passive:!1}),()=>{e.removeEventListener("wheel",m),i&&cancelAnimationFrame(i),f.current=()=>{}}},[]);const u=e=>{const n=h.current;n&&(f.current(),n.scrollBy({left:e*y.current,behavior:"smooth"}))},z=e=>{e.key==="ArrowRight"?(e.preventDefault(),u(1)):e.key==="ArrowLeft"&&(e.preventDefault(),u(-1))};return t.jsxs("section",{id:"team",ref:w,className:"tm-section","aria-labelledby":"tm-heading",children:[t.jsx("div",{className:"tm-seam","aria-hidden":"true"}),t.jsx("div",{className:"tm-container",children:t.jsxs("div",{className:"tm-header",children:[t.jsxs("div",{className:"tm-header-left",children:[t.jsxs("p",{className:"tm-label",children:[t.jsx("span",{"aria-hidden":"true",children:"[  "}),"Our Team",t.jsx("span",{"aria-hidden":"true",children:"  ]"})]}),t.jsxs("h2",{id:"tm-heading",className:"tm-heading",children:["Small crew.",t.jsx("br",{}),t.jsx("span",{className:"tm-heading-accent",children:"Full stack."})]})]}),t.jsx("div",{className:"tm-header-right",children:t.jsx("p",{className:"tm-intro",children:"Zegoe is four people: art direction, engineering, 3D, and design under one roof. No account layers, no handoffs: the people on this page are the people on your project."})})]})}),t.jsx("div",{className:"tm-strip-clip",children:t.jsx("div",{ref:h,className:"tm-strip",role:"group","aria-roledescription":"carousel","aria-label":"Our team",tabIndex:0,onKeyDown:z,children:x.map((e,n)=>t.jsx("div",{className:"tm-strip-item",style:{"--tm-delay":`${n*90}ms`},children:t.jsxs("article",{className:"tm-panel",tabIndex:0,"aria-label":`${e.name} — ${e.role}`,style:{"--tm-accent":e.accent,"--tm-accent-soft":e.accentSoft},children:[t.jsx("span",{className:"tm-index","aria-hidden":"true",children:e.index}),t.jsxs("div",{className:"tm-panel-body",children:[t.jsx("h3",{className:"tm-name",children:e.name}),t.jsxs("p",{className:"tm-credits",children:[t.jsx("span",{className:"tm-role",children:e.role}),t.jsx("span",{className:"tm-sep","aria-hidden":"true"}),t.jsx("span",{className:"tm-meta",children:e.meta})]}),t.jsx("div",{className:"tm-bio-wrap",children:t.jsx("p",{className:"tm-bio",children:e.bio})})]}),t.jsx("span",{className:"tm-rule","aria-hidden":"true"})]})},e.name))})}),t.jsxs("div",{className:"tm-foot",children:[t.jsxs("div",{className:"tm-count",children:[t.jsx("span",{style:{color:v},children:String(k).padStart(2,"0")}),t.jsx("span",{className:"tm-count-sep",children:"/"}),t.jsx("span",{children:String(x.length).padStart(2,"0")})]}),t.jsx("div",{className:"tm-progress-track",children:t.jsx("div",{ref:g,className:"tm-progress-bar",style:{background:`linear-gradient(90deg, ${v}, #FFA040)`}})}),t.jsxs("div",{className:"tm-arrows",children:[t.jsx("button",{type:"button",className:"tm-arrow","aria-label":"Previous team member",onClick:()=>u(-1),disabled:L,children:t.jsx("svg",{width:"18",height:"18",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:t.jsx("path",{d:"M15 18l-6-6 6-6"})})}),t.jsx("button",{type:"button",className:"tm-arrow","aria-label":"Next team member",onClick:()=>u(1),disabled:E,children:t.jsx("svg",{width:"18",height:"18",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:t.jsx("path",{d:"M9 6l6 6-6 6"})})})]})]}),t.jsx("style",{children:`
+import{j as t}from"./jsx-runtime.D_zvdyIk.js";import{r as o}from"./index.DiEladB3.js";const x=[{index:"01",name:"Lenore Hensley",role:"Artistic Head",meta:"Atlanta Metro",bio:"The taste behind the brands. Lenore sets the creative direction and pushes every concept past safe. If a piece has a signature, it's hers.",accent:"#FFA040",accentSoft:"rgba(255,160,64,0.14)"},{index:"02",name:"Timothy Ton-That",role:"Technical Head",meta:"HCM Metro",bio:"If it renders, animates, deploys, or has to survive contact with a real browser, it crosses Tim's desk first.",accent:"#FF7A2F",accentSoft:"rgba(255,122,47,0.14)"},{index:"03",name:"Van Luu",role:"3D Specialist",meta:"HCM Metro",bio:"Renders, mockups, motion. Van builds the photoreal 3D that makes packaging feel shelf-ready before it exists.",accent:"#FF5A1F",accentSoft:"rgba(255,90,31,0.14)"},{index:"04",name:"Quynh Nguyen",role:"Designer",meta:"HCM Metro",bio:"Layout, packaging systems, production design. Quynh turns direction into files that actually ship.",accent:"#E64500",accentSoft:"rgba(230,69,0,0.16)"}],v="#FF5A1F";function C(){const w=o.useRef(null),h=o.useRef(null),g=o.useRef(null),y=o.useRef(1),f=o.useRef(()=>{}),[k,j]=o.useState(1),[L,N]=o.useState(!0),[z,E]=o.useState(!1);o.useEffect(()=>{const e=w.current;if(!e)return;const a=new IntersectionObserver(([r])=>{r.isIntersecting&&(e.classList.add("in-view"),a.disconnect())},{threshold:.12});return a.observe(e),()=>a.disconnect()},[]);const F=e=>{const a=e.querySelector(".tm-strip-item");if(!a)return e.clientWidth||1;const r=parseFloat(getComputedStyle(e).columnGap||"0")||0;return a.getBoundingClientRect().width+r};o.useEffect(()=>{const e=h.current;if(!e)return;let a=-1,r=null,i=null;const m=()=>{y.current=F(e)||1},c=()=>{const n=e.scrollWidth-e.clientWidth,l=e.scrollLeft;if(g.current){const S=n>0?l/n:0;g.current.style.transform=`scaleX(${Math.min(1,Math.max(0,S))})`}const s=n>0?1+Math.round(Math.min(1,Math.max(0,l/n))*(x.length-1)):1;s!==a&&(a=s,j(s));const p=l<=1;p!==r&&(r=p,N(p));const b=l>=n-1;b!==i&&(i=b,E(b))};m(),c(),e.addEventListener("scroll",c,{passive:!0});const d=()=>{m(),c()};return window.addEventListener("resize",d),()=>{e.removeEventListener("scroll",c),window.removeEventListener("resize",d)}},[]),o.useEffect(()=>{const e=h.current;if(!e)return;let a=!1,r=!1,i=0,m=0;const c=s=>{s.pointerType==="touch"||s.button!==0||(f.current(),a=!0,r=!1,i=s.clientX,m=e.scrollLeft)},d=s=>{if(!a)return;const p=s.clientX-i;!r&&Math.abs(p)>4&&(r=!0,e.classList.add("tm-dragging"),e.setPointerCapture?.(s.pointerId),window.getSelection()?.removeAllRanges()),r&&(e.scrollLeft=m-p,s.preventDefault())},n=()=>{a=!1,e.classList.remove("tm-dragging")},l=s=>{r&&(s.preventDefault(),s.stopPropagation(),r=!1)};return e.addEventListener("pointerdown",c),e.addEventListener("pointermove",d),window.addEventListener("pointerup",n),window.addEventListener("pointercancel",n),e.addEventListener("click",l,!0),()=>{e.removeEventListener("pointerdown",c),e.removeEventListener("pointermove",d),window.removeEventListener("pointerup",n),window.removeEventListener("pointercancel",n),e.removeEventListener("click",l,!0)}},[]),o.useEffect(()=>{const e=h.current;if(!e)return;const a=window.matchMedia("(prefers-reduced-motion: reduce)").matches;let r=e.scrollLeft,i=0;const m=()=>{i&&cancelAnimationFrame(i),i=0,r=e.scrollLeft};f.current=m;const c=()=>{const n=e.scrollWidth-e.clientWidth;r=Math.max(0,Math.min(n,r));const l=e.scrollLeft,s=r-l;if(Math.abs(s)<1){e.scrollLeft=r,i=0;return}if(e.scrollLeft=l+s*.18,e.scrollLeft===l){i=0;return}i=requestAnimationFrame(c)},d=n=>{if(!(Math.abs(n.deltaX)<=Math.abs(n.deltaY))){if(n.preventDefault(),n.stopPropagation(),a){e.scrollLeft+=n.deltaX;return}i||(r=e.scrollLeft),r+=n.deltaX,i||(i=requestAnimationFrame(c))}};return e.addEventListener("wheel",d,{passive:!1}),()=>{e.removeEventListener("wheel",d),i&&cancelAnimationFrame(i),f.current=()=>{}}},[]);const u=e=>{const a=h.current;a&&(f.current(),a.scrollBy({left:e*y.current,behavior:"smooth"}))},M=e=>{e.key==="ArrowRight"?(e.preventDefault(),u(1)):e.key==="ArrowLeft"&&(e.preventDefault(),u(-1))};return t.jsxs("section",{id:"team",ref:w,className:"tm-section","aria-labelledby":"tm-heading",children:[t.jsx("div",{className:"tm-seam","aria-hidden":"true"}),t.jsx("div",{className:"tm-container",children:t.jsxs("div",{className:"tm-header",children:[t.jsxs("div",{className:"tm-header-left",children:[t.jsxs("p",{className:"tm-label",children:[t.jsx("span",{"aria-hidden":"true",children:"[  "}),"Our Team",t.jsx("span",{"aria-hidden":"true",children:"  ]"})]}),t.jsxs("h2",{id:"tm-heading",className:"tm-heading",children:["Small crew.",t.jsx("br",{}),t.jsx("span",{className:"tm-heading-accent",children:"Full stack."})]})]}),t.jsx("div",{className:"tm-header-right",children:t.jsx("p",{className:"tm-intro",children:"Zegoe is four people: art direction, engineering, 3D, and design under one roof. Every project runs direct: the people on this page are the people on your project."})})]})}),t.jsx("div",{className:"tm-strip-clip",children:t.jsx("div",{ref:h,className:"tm-strip",role:"group","aria-roledescription":"carousel","aria-label":"Our team",tabIndex:0,onKeyDown:M,children:x.map((e,a)=>t.jsx("div",{className:"tm-strip-item",style:{"--tm-delay":`${a*90}ms`},children:t.jsxs("article",{className:"tm-panel",tabIndex:0,"aria-label":`${e.name}, ${e.role}`,style:{"--tm-accent":e.accent,"--tm-accent-soft":e.accentSoft},children:[t.jsx("span",{className:"tm-index","aria-hidden":"true",children:e.index}),t.jsxs("div",{className:"tm-panel-body",children:[t.jsx("h3",{className:"tm-name",children:e.name}),t.jsxs("p",{className:"tm-credits",children:[t.jsx("span",{className:"tm-role",children:e.role}),t.jsx("span",{className:"tm-sep","aria-hidden":"true"}),t.jsx("span",{className:"tm-meta",children:e.meta})]}),t.jsx("div",{className:"tm-bio-wrap",children:t.jsx("p",{className:"tm-bio",children:e.bio})})]}),t.jsx("span",{className:"tm-rule","aria-hidden":"true"})]})},e.name))})}),t.jsxs("div",{className:"tm-foot",children:[t.jsxs("div",{className:"tm-count",children:[t.jsx("span",{style:{color:v},children:String(k).padStart(2,"0")}),t.jsx("span",{className:"tm-count-sep",children:"/"}),t.jsx("span",{children:String(x.length).padStart(2,"0")})]}),t.jsx("div",{className:"tm-progress-track",children:t.jsx("div",{ref:g,className:"tm-progress-bar",style:{background:`linear-gradient(90deg, ${v}, #FFA040)`}})}),t.jsxs("div",{className:"tm-arrows",children:[t.jsx("button",{type:"button",className:"tm-arrow","aria-label":"Previous team member",onClick:()=>u(-1),disabled:L,children:t.jsx("svg",{width:"18",height:"18",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:t.jsx("path",{d:"M15 18l-6-6 6-6"})})}),t.jsx("button",{type:"button",className:"tm-arrow","aria-label":"Next team member",onClick:()=>u(1),disabled:z,children:t.jsx("svg",{width:"18",height:"18",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:t.jsx("path",{d:"M9 6l6 6-6 6"})})})]})]}),t.jsx("style",{children:`
         .tm-section {
           position: relative;
           background: #0a0a0a;
-          padding: clamp(72px, 9vw, 130px) 0 clamp(88px, 11vw, 150px);
+          padding: var(--zg-section-lead) 0 clamp(88px, 11vw, 150px);
           overflow: hidden;
           /* Gutter that lines the strip and footer up with the header column. */
-          --tm-gutter: calc(max(0px, (100vw - 1200px) / 2) + clamp(16px, 4vw, 40px));
+          --tm-gutter: calc(max(0px, (100vw - var(--zg-content)) / 2) + var(--zg-gutter));
         }
 
         .tm-seam {
@@ -18,15 +18,17 @@ import{j as t}from"./jsx-runtime.D_zvdyIk.js";import{r as o}from"./index.DiEladB
           background: linear-gradient(to bottom, rgba(10, 10, 10, 1), transparent);
         }
 
+        /* Shared page grid: see --zg-content in global.css. */
         .tm-container {
           position: relative;
           z-index: 1;
-          max-width: 1200px;
+          width: 100%;
+          max-width: var(--zg-content);
           margin: 0 auto;
-          padding: 0 clamp(16px, 4vw, 40px);
+          padding: 0 var(--zg-gutter);
         }
 
-        /* ── Header — split ── */
+        /* ── Header: split ── */
         .tm-header {
           display: flex;
           justify-content: space-between;
@@ -44,12 +46,12 @@ import{j as t}from"./jsx-runtime.D_zvdyIk.js";import{r as o}from"./index.DiEladB
         }
 
         .tm-label {
-          font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 0.3em;
+          font-size: var(--zg-eyebrow-size);
+          font-weight: var(--zg-eyebrow-weight);
+          letter-spacing: var(--zg-eyebrow-track);
           text-transform: uppercase;
-          color: rgba(255, 255, 255, 0.3);
-          margin-bottom: 16px;
+          color: var(--zg-eyebrow-ink);
+          margin-bottom: var(--zg-eyebrow-gap);
         }
 
         .tm-heading {
@@ -121,7 +123,7 @@ import{j as t}from"./jsx-runtime.D_zvdyIk.js";import{r as o}from"./index.DiEladB
         .tm-strip.tm-dragging .tm-panel { pointer-events: none; }
 
         /* height:auto + the strip's align-items:stretch equalises every panel
-           to the tallest (the longest bio) — no dead space above the fold. */
+           to the tallest (the longest bio): no dead space above the fold. */
         .tm-strip-item {
           flex: 0 0 auto;
           width: var(--tm-card);
@@ -165,7 +167,7 @@ import{j as t}from"./jsx-runtime.D_zvdyIk.js";import{r as o}from"./index.DiEladB
           outline-offset: -2px;
         }
 
-        /* Hover/focus wash — sweeps left to right, same idiom as the rows it replaced */
+        /* Hover/focus wash: sweeps left to right, same idiom as the rows it replaced */
         .tm-panel::before {
           content: '';
           position: absolute;
@@ -185,7 +187,7 @@ import{j as t}from"./jsx-runtime.D_zvdyIk.js";import{r as o}from"./index.DiEladB
         .tm-panel:hover::before,
         .tm-panel:focus-visible::before { transform: scaleX(1); }
 
-        /* Outlined numeral — fills with the panel accent on hover.
+        /* Outlined numeral: fills with the panel accent on hover.
            Weight stays at 500: Montserrat's heavier cuts keep overlapping
            contours, which -webkit-text-stroke draws as internal seams. */
         .tm-index {
@@ -210,7 +212,7 @@ import{j as t}from"./jsx-runtime.D_zvdyIk.js";import{r as o}from"./index.DiEladB
         }
 
         /* Top-aligned under the numeral so names and bios line up across the
-           run — a bio one line longer only changes the slack at the foot. */
+           run: a bio one line longer only changes the slack at the foot. */
         .tm-panel-body {
           position: relative;
           min-width: 0;
@@ -256,7 +258,7 @@ import{j as t}from"./jsx-runtime.D_zvdyIk.js";import{r as o}from"./index.DiEladB
 
         .tm-meta { color: rgba(255, 255, 255, 0.34); }
 
-        /* Bio — always visible in a panel you swipe past. The accent tick
+        /* Bio: always visible in a panel you swipe past. The accent tick
            anchors the column and brightens with the rest on hover/focus. */
         .tm-bio-wrap {
           position: relative;
@@ -405,6 +407,26 @@ import{j as t}from"./jsx-runtime.D_zvdyIk.js";import{r as o}from"./index.DiEladB
           .tm-bio { font-size: 13px; }
 
           .tm-rule { transform: scaleX(1); opacity: 0.5; height: 1px; }
+        }
+
+        /* ── Phones: one control grammar per page ──
+           Recent Work drops its prev/next buttons at this same 767px, so the
+           Team strip drops its own rather than leaving two carousels on one
+           screen asking to be driven two different ways. Swipe is native here,
+           the peeking next panel already says the strip moves, and at 390px the
+           two 2.75rem pills were width the progress bar wanted.
+
+           This hides the .tm-arrows wrapper, not the buttons inside it: the
+           footer is a flex row with a 1.5rem gap, so an emptied-but-present
+           wrapper would still count as a flex item and leave that gap as dead
+           trailing space. Scoped to 767px, not the 860px block above, because
+           860 is the layout breakpoint and tablets keep the arrows.
+
+           Nothing else depends on them: atStart/atEnd only feed the buttons'
+           disabled state, and ArrowLeft/ArrowRight stay live on the focused
+           strip, so keyboard users still page by one panel. */
+        @media (max-width: 767px) {
+          .tm-arrows { display: none; }
         }
 
         @media (prefers-reduced-motion: reduce) {
