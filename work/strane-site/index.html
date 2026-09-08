@@ -1,0 +1,135 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="A Strane brand evolution case study: unapologetic punk graphics, Pantone 3955 C yellow, eyecons, packaging, merchandise, and retail. Created with Holistic Industries."><!-- Tab icons: the wordmark's own `z`, on the page's near-black so it
+         still reads in a light tab strip. Cut by scripts/build-favicons.mjs,
+         re-run it if Wordmark_White.png is ever replaced. The .ico is listed
+         too, because that is the file a crawler asks for by name. --><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><!-- Fonts are self-hosted (public/fonts + styles/fonts.css): Google's own
+         woff2 files, unchanged, with the same @font-face rules and
+         unicode-ranges. Rendering is identical — which matters because
+         DreamsScript's Caveat glyph centre-lines are screenshot-tuned.
+
+         They used to come from fonts.googleapis.com with display=swap, and
+         that is what made a case-study page jump. The chain was two sequential
+         cross-origin round trips (HTML → CSS on googleapis → woff2 on
+         gstatic), so the text painted in the fallback and reflowed when
+         Montserrat finally landed: measured on /work/avitas, the heading rose
+         18px in two steps starting 49ms after document.fonts.ready, ~0.65s in.
+         Same-origin and preloaded, the file is there for the first paint, so
+         there is no second pass to shift.
+
+         Only the latin subsets are preloaded — the others are real
+         @font-face entries with their unicode-ranges intact, so they still
+         fetch on demand for anything outside latin. --><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>Strane — Loud. By Design. | Zegoe</title><!-- Cross-document transition, arrival half. A case study fades itself out
+         and leaves this flag before navigating; whichever document loads next
+         fades in to meet it, so leaving and arriving read as one move instead
+         of a cut. Runs in <head>, before first paint, or the page would flash
+         at full opacity first. Only fires when the flag is there, so a cold
+         load or a bookmark is untouched. --><style>
+      @keyframes zg-arrive { from { opacity: 0; } to { opacity: 1; } }
+      /* will-change lifts the fade onto the compositor. Without it the
+         animation runs on the main thread, and hydrating the case-study
+         island lands right in its window: the clock keeps counting while no
+         frames render, so the page jumps forward mid-fade when the thread
+         frees up. That skip is the "jerk" on a case-study switch. The exit
+         half already primes the same way (warm() in CaseStudyContent);
+         opacity only, never transform: body has position:fixed descendants
+         (.cs-nav) and a transform hint would become their containing block.
+         Transient by construction: the class is stripped after load. */
+      html.zg-arriving body { animation: zg-arrive 0.45s ease-out both; will-change: opacity; }
+      /* The incoming page slides in from the side it was travelling from, so
+         it can sit outside the viewport for a frame and something has to clip
+         it. NOT the <html> element: body already carries overflow-x:hidden,
+         and that only reaches the viewport because html's overflow is
+         `visible`: the moment html is anything else the propagation stops,
+         body becomes a scroll container in its own right, and every
+         position:sticky pin inside it (the pager bar, the page-art layer)
+         loses its scrollport and drops to the foot of the document. The
+         clip now lives on .cs-page, which wraps the sliding <main> and is
+         not itself scrollable, so sticky still resolves against the
+         viewport. See CaseStudyContent's slide rules. */
+      @media (prefers-reduced-motion: reduce) {
+        html.zg-arriving body { animation: none; }
+      }
+    </style><script>
+      try {
+        var nav = sessionStorage.getItem('zg-nav');
+        if (nav) {
+          sessionStorage.removeItem('zg-nav');
+          var root = document.documentElement;
+          root.classList.add('zg-arriving');
+          // "next"/"prev" carry the direction of travel; "1" is a plain move.
+          if (nav === 'next' || nav === 'prev') root.classList.add('zg-arriving-' + nav);
+        }
+      } catch (e) { /* storage blocked; no transition, no harm */ }
+    </script><script>
+      /* Retire the arrival classes once the animation is over. They are a
+         trigger, not a state: left on, they keep the arriving-page rules
+         (and anything scoped to them) alive for the whole visit, which is
+         how a one-frame transition detail turns into a permanent bug. */
+      (function () {
+        var root = document.documentElement;
+        if (!root.classList.contains('zg-arriving')) return;
+        var done = function () {
+          root.classList.remove('zg-arriving', 'zg-arriving-next', 'zg-arriving-prev');
+        };
+        window.addEventListener('load', function () { window.setTimeout(done, 700); });
+        window.setTimeout(done, 2500); // load never fired (bfcache, blocked asset)
+      })();
+    </script><link rel="stylesheet" href="/_astro/index.ZH7OUS-B.css">
+<link rel="stylesheet" href="/_astro/strane-site.CQMp0Ie5.css"></head> <body> <div id="page-content">  <a href="#story" class="skip">Skip to case study</a>  <header class="topbar" id="top"> <a class="masthead" href="/#work" aria-label="Strane, Zegoe: back to all work">Strane.</a> <span class="project-type kicker">Brand evolution / Case study</span> <nav aria-label="Case study sections"> <a href="#story">The shift</a> <a href="#identity">Identity</a> <a href="#packaging">Packaging</a> <a href="#in-the-wild">In the wild</a> </nav> </header> <main>  <section class="hero" aria-labelledby="hero-title"> <div class="wrap"> <div class="hero-index kicker"> <span>Strane × Holistic Industries</span> <span>Branding / Packaging / Experience</span> </div> <div class="hero-main"> <div> <h1 id="hero-title">Loud.<br><span>By design.</span></h1> <p class="hero-copy">
+A familiar brand. A louder point of view.<br>Turning Strane's yellow and black
+            into an unapologetic punk statement.
+</p> </div> <div class="hero-art"> <img class="photo" src="/strane-site/juicee-j.webp" alt="Strane Juicee J black pouch with yellow brick and torn collage artwork" fetchpriority="high" loading="eager" decoding="async"> <img class="photo second" src="/strane-site/frosted-jungle.webp" alt="Frosted Jungle packaging photographed among tropical leaves" decoding="async"> <img class="stamp" src="/strane-site/brand-wall.webp" alt="Strane: This Is Next Level, on a yellow brick wall with the three eyecons" decoding="async"> </div> </div> <div class="hero-bottom"> <p>
+Rebrand developed in collaboration with<br> <strong>Holistic Industries' marketing team</strong> </p> <a href="#story">Explore the evolution ↓</a> </div> </div> </section> <div class="ticker" aria-hidden="true"> <div>STRANE ✳ THIS IS NEXT LEVEL ✳ UNAPOLOGETICALLY LOUD ✳ STRANE ✳ THIS IS NEXT LEVEL ✳</div> </div>  <section class="section wrap" id="story"> <div class="section-head"> <span class="kicker">01 / The starting point</span> <h2>Same roots.<br>New attitude.</h2> <p>
+Strane already had a recognizable foundation: yellow, black, and three expressive
+        eyecons. The rebrand kept those familiar cues and gave them a rawer, more
+        confrontational presence.
+</p> </div> <div class="legacy-grid"> <figure> <div class="legacy-stack"> <img src="/strane-site/legacy-logo.webp" alt="Legacy Strane wordmark in white on black" decoding="async"> <img src="/strane-site/legacy-pour.webp" alt="Legacy yellow and black Strane flower pouches" loading="lazy" decoding="async"> </div> <figcaption class="caption"> <span>THE LEGACY IDENTITY</span> <span>Yellow / Black / Eyecons</span> </figcaption> </figure> <figure> <img class="bag" src="/strane-site/legacy-bags.webp" alt="Legacy Strane packaging with simple vertical wordmarks and strain labels" loading="lazy" decoding="async"> <figcaption class="caption">The original packaging system</figcaption> </figure> </div> <p class="section-note">
+Working with Holistic Industries' marketing team, I helped create a punk direction built
+      to make a statement on the shelf—and look unmistakably Strane at a glance.
+</p> </section>  <section class="section wrap" id="identity"> <div class="section-head"> <span class="kicker">02 / The new identity</span> <h2>Turn up<br><span class="yellow-strip">the attitude.</span></h2> <p>
+PANTONE 3955 C yellow leads the charge. Black bags, yellow brick, wheat-paste layers,
+        ripped edges, and halftone imagery bring the energy of a punk collage to the brand.
+</p> </div> <img class="art-wall torn" src="/strane-site/brand-wall.webp" alt="The rebranded Strane identity: yellow brick, ripped-paper wordmark, and expressive eyecons" loading="lazy" decoding="async"> <div class="attitude-grid"> <figure class="paste"> <img src="/strane-site/punk-inspiration.webp" alt="Punk research mood board with photocopied music ephemera and cut-and-paste typography" loading="lazy" decoding="async"> <figcaption class="caption">PUNK REFERENCES / CREATIVE DIRECTION</figcaption> </figure> <div class="attitude-copy"> <span class="kicker">The graphic language</span> <h3 class="display">
+Rip it.<br>Paste it.<br><span class="yellow-strip">Make it Strane.</span> </h3> <p>
+Distressed type and halftone cutouts sit against yellow brick. Wheat-paste layers
+          bring a rough, handmade quality to the surface, while the black bag holds everything
+          together.
+</p> <p class="mono small">Brick / Paper / Halftone / Black ink</p> </div> </div> <div class="color-panel yellow-texture"> <span class="kicker">The color you spot first</span> <strong class="display">That yellow.</strong> <div> <span class="pantone">PANTONE<br><b>3955 C</b></span> <p>
+A striking point of recognition across packaging, merchandise, and the retail
+          environment.
+</p> </div> <span class="color-note">Digital color shown as a screen approximation.</span> </div> </section>  <section class="eye-section section" id="eyecons"> <div class="wrap"> <div class="section-head"> <span class="kicker">03 / Meet the eyecons</span> <h2>Three eyes.<br>All Strane.</h2> <p>
+The rebrand carries forward the three familiar eyecons. Each expression identifies a
+          product type, keeping a recognizable part of Strane at the heart of the new look.
+</p> </div> <div class="eye-grid"> <figure class="eye-card eye-0"> <span class="kicker">01 / EYECON</span> <img src="/strane-site/eye-hybrid.webp" alt="Hybrid eyecon: half open" loading="lazy" decoding="async"> <figcaption> <h3 class="display">Hybrid</h3> <span class="mono">Half open</span> </figcaption> </figure> <figure class="eye-card eye-1"> <span class="kicker">02 / EYECON</span> <img src="/strane-site/eye-indica.webp" alt="Indica eyecon: closed" loading="lazy" decoding="async"> <figcaption> <h3 class="display">Indica</h3> <span class="mono">Closed</span> </figcaption> </figure> <figure class="eye-card eye-2"> <span class="kicker">03 / EYECON</span> <img src="/strane-site/eye-sativa.webp" alt="Sativa eyecon: wide open" loading="lazy" decoding="async"> <figcaption> <h3 class="display">Sativa</h3> <span class="mono">Wide open</span> </figcaption> </figure> </div> </div> </section>  <section class="section wrap" id="packaging"> <div class="section-head"> <span class="kicker">04 / Packaging</span> <h2>Built for<br>the shelf.</h2> <p>
+The same yellow-and-black framework connects flower, vapes, pre-rolls, and gummies,
+        while each strain gets its own cut-and-paste personality.
+</p> </div> <div class="product-trio"> <figure> <img src="/strane-site/frosted-jungle.webp" alt="Strane Frosted Jungle packaging and lifestyle photography" loading="lazy" decoding="async"> <figcaption> <h3>Frosted Jungle</h3> <p>Tropical color meets torn-paper graphics.</p> </figcaption> </figure> <figure> <img src="/strane-site/juicee-j.webp" alt="Strane Juicee J packaging and lifestyle photography" loading="lazy" decoding="async"> <figcaption> <h3>Juicee J</h3> <p>Yellow brick anchors the collage.</p> </figcaption> </figure> <figure> <img src="/strane-site/lemon-maraschino.webp" alt="Strane Lemon Maraschino packaging and lifestyle photography" loading="lazy" decoding="async"> <figcaption> <h3>Lemon Maraschino</h3> <p>A distinct strain treatment within the same system.</p> </figcaption> </figure> </div> <div class="format-grid"> <figure> <img src="/strane-site/vape-detail.webp" alt="Yellow-to-black Strane vape with Lemon Maraschino collage graphics" loading="lazy" decoding="async"> <figcaption class="caption">VAPE / The color moves onto the device</figcaption> </figure> <figure> <img src="/strane-site/gummies.webp" alt="Dragon Fruit Strane gummies in a round black container with yellow collage label" loading="lazy" decoding="async"> <figcaption class="caption">GUMMIES / A new format, the same visual cues</figcaption> </figure> <figure> <img src="/strane-site/lemon-family.webp" alt="Lemon Maraschino pouch, vape and pre-roll tube photographed together" loading="lazy" decoding="async"> <figcaption class="caption">ACROSS FORMATS / A connected strain identity</figcaption> </figure> <div class="format-note"> <span class="kicker">One recognizable family</span> <h3 class="display">Different forms.<br>Same volume.</h3> <p>
+Flower pouches, vape packaging, pre-rolls, and gummies share the same graphic
+          ingredients. The layouts adapt to each format without losing the yellow, the
+          attitude, or the eyecons.
+</p> <img src="/strane-site/vape-pack.webp" alt="Juicee J vape device beside its matching Strane packaging" loading="lazy" decoding="async"> </div> </div> <img class="family-image" src="/strane-site/product-family.webp" alt="A coordinated range of Strane products, packaging and branded accessories" loading="lazy" decoding="async"> </section> <div class="ticker black-ticker" aria-hidden="true"> <div>OFF THE SHELF ✳ INTO THE WORLD ✳ OFF THE SHELF ✳ INTO THE WORLD ✳</div> </div>  <section class="section lifestyle" id="in-the-wild"> <div class="wrap"> <div class="section-head"> <span class="kicker">05 / Lifestyle &amp; merchandise</span> <h2>Worn out.<br><span class="paper-strip">Taken out.</span></h2> <p>
+The collage language carries into shirts, accessories, and lifestyle imagery. Away
+          from the shelf, yellow and black keep the brand visible while the eyecons become
+          graphics people can wear.
+</p> </div> <figure class="skate-full"> <img src="/strane-site/skate-wide.webp" alt="Strane merchandise and products on a skateboard at a sunlit skatepark" loading="lazy" decoding="async"> <figcaption class="caption">LIFESTYLE PHOTOGRAPHY / SKATEPARK</figcaption> </figure> <div class="lifestyle-grid"> <figure> <img src="/strane-site/merch-shirt.webp" alt="Black Strane Alien Mints graphic T-shirt and yellow cap, photographed against a poster-covered brick wall" loading="lazy" decoding="async"> <figcaption class="caption">The packaging collage becomes a wearable graphic</figcaption> </figure> <figure> <img src="/strane-site/lifestyle-detail.webp" alt="A close-up of Strane lighter and branded case at the skatepark" loading="lazy" decoding="async"> <figcaption class="caption">Small objects carry the same brand cues</figcaption> </figure> </div> <figure class="moodboard"> <div class="mood-label kicker">Merch exploration / Mood board</div> <img src="/strane-site/merch-moodboard.webp" alt="Merchandise concept mood board exploring graphic tees, tie-dye, accessories and streetwear references" loading="lazy" decoding="async"> <figcaption class="caption">
+Creative exploration and references; not a released-product lineup.
+</figcaption> </figure> </div> </section>  <section class="section wrap" id="retail"> <div class="section-head"> <span class="kicker">06 / Retail activation</span> <h2>A statement.<br>At every scale.</h2> <p>
+The yellow brick becomes a recognizable backdrop for display stands, cabinets, and
+        larger retail graphics. The packaging language grows into an environment.
+</p> </div> <div class="retail-lead"> <figure class="display-render"> <img src="/strane-site/vape-display.webp" alt="Two views of a Strane disposable vape display stand with yellow brick graphics" loading="lazy" decoding="async"> <figcaption>DISPOSABLE VAPE DISPLAY / DESIGN VISUALIZATION</figcaption> </figure> <figure> <img src="/strane-site/retail-feature.webp" alt="Large yellow-brick Strane wall display installed in a retail space" loading="lazy" decoding="async"> <figcaption class="caption">A full-height expression of the brand</figcaption> </figure> </div> <div class="retail-grid"> <figure> <img src="/strane-site/retail-counter.webp" alt="Counter display incorporating Strane yellow-brick branding among Holistic brands" loading="lazy" decoding="async"> <figcaption class="caption">Counter display application</figcaption> </figure> <figure> <img src="/strane-site/retail-glass.webp" alt="Glass retail cabinet showcasing Strane and other Holistic brands" loading="lazy" decoding="async"> <figcaption class="caption">Glass cabinet application</figcaption> </figure> <figure> <img src="/strane-site/retail-cabinet.webp" alt="Branded cabinet with Strane, Garcia and Hellavated display graphics" loading="lazy" decoding="async"> <figcaption class="caption">Multi-brand cabinet application</figcaption> </figure> </div> </section>  <section class="section expo"> <div class="wrap"> <div class="section-head"> <span class="kicker">07 / Exhibition</span> <h2>Strane ×<br><span class="yellow-strip">Hellavated.</span></h2> <p>
+For Flower Expo, I assisted Holistic Industries' marketing team with booth design,
+          ideation, and 3D visualization. The co-branded space brought the graphics into a
+          shared physical experience.
+</p> </div> <div class="expo-grid"> <figure> <img src="/strane-site/expo-outside.webp" alt="Strane and Hellavated co-branded outdoor exhibition booth" loading="lazy" decoding="async"> <figcaption class="caption">FLOWER EXPO / CO-BRANDED ACTIVATION</figcaption> </figure> <figure class="arcade"> <img src="/strane-site/expo-arcade.webp" alt="Visitor using a Strane-branded yellow claw machine" loading="lazy" decoding="async"> <figcaption class="caption">Brand graphics meet event interaction</figcaption> </figure> <figure> <img src="/strane-site/expo-team.webp" alt="The event team in front of the Strane and Hellavated Flower Expo booth" loading="lazy" decoding="async"> <figcaption class="caption">The team behind the activation</figcaption> </figure> <figure> <img src="/strane-site/expo-inside.webp" alt="Interior exhibition space with Strane black brick graphics and oversized eyecons" loading="lazy" decoding="async"> <figcaption class="caption">Inside the brand environment</figcaption> </figure> </div> </div> </section>  <section class="closing"> <img src="/strane-site/closing-family.webp" alt="The complete Strane brand expression in packaging, devices and merchandise" loading="lazy" decoding="async"> <div class="wrap closing-copy"> <span class="kicker">08 / The takeaway</span> <h2>
+Recognizable<br>at a glance.<br><span>Unapologetically<br>Strane.</span> </h2> <p>
+The rebrand gives Strane a louder expression while keeping the elements people
+        recognize. Yellow, black, and the three eyecons connect a punk collage language across
+        packaging, merchandise, retail, and events.
+</p> <div class="credits"> <span>CREATED WITH<br><strong>Holistic Industries' marketing team</strong></span> <span>
+FEATURED WORK<br><strong>Brand evolution · Packaging · Retail · Exhibition</strong> </span> </div> </div> </section> </main>  <footer class="wrap footer"> <span>Strane / Brand evolution</span> <a href="#top">Back to top ↑</a> </footer>     </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync --> <script type="module">const s=document.getElementById("main-nav");if(s){let m=function(){g=!1;const e=window.scrollY>60,o=k.some(n=>{const c=n.getBoundingClientRect();return c.top<=b&&c.bottom>0});o===v&&e===p||(v=o,p=e,s.classList.toggle("nav-on-light",o),s.classList.toggle("nav-scrolled",e),t&&(o?(t.style.backgroundColor="rgba(255,255,255,0.78)",t.style.backdropFilter="blur(14px) saturate(1.8)",t.style.webkitBackdropFilter="blur(14px) saturate(1.8)",t.style.borderBottomColor="rgba(0,0,0,0.07)",u.forEach(n=>{n.style.color="#1a1a1a"}),a&&(a.style.filter="invert(1)")):(t.style.backgroundColor=e?"rgba(0,0,0,0.45)":"rgba(0,0,0,0)",t.style.backdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.webkitBackdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.borderBottomColor=e?"rgba(255,160,64,0.10)":"transparent",u.forEach(n=>{n.style.color=""}),a&&(a.style.filter=""))))};const t=document.getElementById("nav-bg"),a=s.querySelector("img"),u=Array.from(s.querySelectorAll(".nav-link")),k=Array.from(document.querySelectorAll("[data-nav-light]")),b=69;let g=!1,v=null,p=null;window.addEventListener("scroll",()=>{g||(g=!0,requestAnimationFrame(m))},{passive:!0}),m();const i=u.filter(l=>l.dataset.section);if(i.length){let l=0;const e=()=>{l=0;let f=null,d=-1/0;for(const r of i){const w=document.getElementById(r.dataset.section);if(!w)continue;const y=w.getBoundingClientRect().top-b;y<=0&&y>d&&(d=y,f=r)}for(const r of i)r.classList.toggle("is-active",r===f)},o=()=>{l||(l=requestAnimationFrame(e))};window.addEventListener("scroll",o,{passive:!0}),window.addEventListener("resize",o,{passive:!0});let n=0;const c=window.setInterval(()=>{o(),(i.every(d=>document.getElementById(d.dataset.section))||++n>40)&&window.clearInterval(c)},250)}}</script> <!-- Nav color switch on light sections.
+         The single owner of the nav's appearance. This used to be two scroll
+         listeners: this one toggling classes, and a second, unguarded one in
+         index.astro writing the inline styles that actually painted the bar.
+         They also disagreed on geometry, so the inline copy (which triggers
+         earlier and releases later) decided every visible flip. The inline
+         copy's thresholds are the ones kept here; the class toggles ride along
+         unchanged. --> <script type="module" src="/_astro/BaseLayout.astro_astro_type_script_index_1_lang.BKQlDpRt.js"></script> </body> </html> 

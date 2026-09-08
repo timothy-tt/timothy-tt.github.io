@@ -1,0 +1,188 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="California packaging adaptation, campaign design, lifestyle presentation, and 3D retail concepts for Garcia Hand Picked."><!-- Tab icons: the wordmark's own `z`, on the page's near-black so it
+         still reads in a light tab strip. Cut by scripts/build-favicons.mjs,
+         re-run it if Wordmark_White.png is ever replaced. The .ico is listed
+         too, because that is the file a crawler asks for by name. --><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><!-- Fonts are self-hosted (public/fonts + styles/fonts.css): Google's own
+         woff2 files, unchanged, with the same @font-face rules and
+         unicode-ranges. Rendering is identical — which matters because
+         DreamsScript's Caveat glyph centre-lines are screenshot-tuned.
+
+         They used to come from fonts.googleapis.com with display=swap, and
+         that is what made a case-study page jump. The chain was two sequential
+         cross-origin round trips (HTML → CSS on googleapis → woff2 on
+         gstatic), so the text painted in the fallback and reflowed when
+         Montserrat finally landed: measured on /work/avitas, the heading rose
+         18px in two steps starting 49ms after document.fonts.ready, ~0.65s in.
+         Same-origin and preloaded, the file is there for the first paint, so
+         there is no second pass to shift.
+
+         Only the latin subsets are preloaded — the others are real
+         @font-face entries with their unicode-ranges intact, so they still
+         fetch on demand for anything outside latin. --><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>Garcia Hand Picked · Portfolio Case Study | Zegoe</title><!-- Cross-document transition, arrival half. A case study fades itself out
+         and leaves this flag before navigating; whichever document loads next
+         fades in to meet it, so leaving and arriving read as one move instead
+         of a cut. Runs in <head>, before first paint, or the page would flash
+         at full opacity first. Only fires when the flag is there, so a cold
+         load or a bookmark is untouched. --><style>
+      @keyframes zg-arrive { from { opacity: 0; } to { opacity: 1; } }
+      /* will-change lifts the fade onto the compositor. Without it the
+         animation runs on the main thread, and hydrating the case-study
+         island lands right in its window: the clock keeps counting while no
+         frames render, so the page jumps forward mid-fade when the thread
+         frees up. That skip is the "jerk" on a case-study switch. The exit
+         half already primes the same way (warm() in CaseStudyContent);
+         opacity only, never transform: body has position:fixed descendants
+         (.cs-nav) and a transform hint would become their containing block.
+         Transient by construction: the class is stripped after load. */
+      html.zg-arriving body { animation: zg-arrive 0.45s ease-out both; will-change: opacity; }
+      /* The incoming page slides in from the side it was travelling from, so
+         it can sit outside the viewport for a frame and something has to clip
+         it. NOT the <html> element: body already carries overflow-x:hidden,
+         and that only reaches the viewport because html's overflow is
+         `visible`: the moment html is anything else the propagation stops,
+         body becomes a scroll container in its own right, and every
+         position:sticky pin inside it (the pager bar, the page-art layer)
+         loses its scrollport and drops to the foot of the document. The
+         clip now lives on .cs-page, which wraps the sliding <main> and is
+         not itself scrollable, so sticky still resolves against the
+         viewport. See CaseStudyContent's slide rules. */
+      @media (prefers-reduced-motion: reduce) {
+        html.zg-arriving body { animation: none; }
+      }
+    </style><script>
+      try {
+        var nav = sessionStorage.getItem('zg-nav');
+        if (nav) {
+          sessionStorage.removeItem('zg-nav');
+          var root = document.documentElement;
+          root.classList.add('zg-arriving');
+          // "next"/"prev" carry the direction of travel; "1" is a plain move.
+          if (nav === 'next' || nav === 'prev') root.classList.add('zg-arriving-' + nav);
+        }
+      } catch (e) { /* storage blocked; no transition, no harm */ }
+    </script><script>
+      /* Retire the arrival classes once the animation is over. They are a
+         trigger, not a state: left on, they keep the arriving-page rules
+         (and anything scoped to them) alive for the whole visit, which is
+         how a one-frame transition detail turns into a permanent bug. */
+      (function () {
+        var root = document.documentElement;
+        if (!root.classList.contains('zg-arriving')) return;
+        var done = function () {
+          root.classList.remove('zg-arriving', 'zg-arriving-next', 'zg-arriving-prev');
+        };
+        window.addEventListener('load', function () { window.setTimeout(done, 700); });
+        window.setTimeout(done, 2500); // load never fired (bfcache, blocked asset)
+      })();
+    </script><link rel="stylesheet" href="/_astro/index.ZH7OUS-B.css">
+<link rel="stylesheet" href="/_astro/garcia-site.iWreQ2p4.css">
+<style>html.gc-js .gc-rise[data-astro-cid-6bgpuj4r]{opacity:0;transform:translate3d(0,14px,0);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1),clip-path .9s cubic-bezier(.22,1,.36,1);transition-delay:calc(var(--i, 0) * 70ms)}html.gc-js .gc-rise[data-astro-cid-6bgpuj4r].is-in{opacity:1;transform:none}html.gc-js [data-astro-cid-6bgpuj4r]:where(.intro-figure,.vocabulary-grid figure,.california-main,.california-side,.solful-scene,.packaging-wide,.packaging-tall,.packaging-small,.wild-grid figure,.retail-wall,.retail-pair figure,.closing-image){clip-path:inset(12% 0 12% 0)}html.gc-js :where(.intro-figure,.vocabulary-grid figure,.california-main,.california-side,.solful-scene,.packaging-wide,.packaging-tall,.packaging-small,.wild-grid figure,.retail-wall,.retail-pair figure,.closing-image).is-in[data-astro-cid-6bgpuj4r]{clip-path:inset(0)}html.gc-js [data-astro-cid-6bgpuj4r]:where(.intro-figure,.closing-image) img[data-astro-cid-6bgpuj4r]{transform:scale(1.05);transition:transform 1.1s cubic-bezier(.22,1,.36,1);transition-delay:calc(var(--i, 0) * 70ms)}html.gc-js :where(.intro-figure,.closing-image).is-in[data-astro-cid-6bgpuj4r] img[data-astro-cid-6bgpuj4r]{transform:none}html.gc-js figcaption[data-astro-cid-6bgpuj4r]{position:relative;border-top-color:transparent}html.gc-js figcaption[data-astro-cid-6bgpuj4r]:before{content:"";position:absolute;top:-1px;left:0;right:0;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left center;transition:transform .85s cubic-bezier(.22,.61,.36,1);transition-delay:calc(var(--i, 0) * 70ms + .6s)}html.gc-js .gc-rise[data-astro-cid-6bgpuj4r].is-in figcaption[data-astro-cid-6bgpuj4r]:before{transform:scaleX(1)}@media(prefers-reduced-motion:no-preference){html.gc-js [data-astro-cid-6bgpuj4r]:where(.intro-figure,.vocabulary-grid figure,.california-main,.california-side,.solful-scene,.packaging-wide,.packaging-tall,.packaging-small,.wild-grid figure,.retail-wall,.retail-pair figure,.closing-image){overflow:hidden}html.gc-js [data-astro-cid-6bgpuj4r]:where(.vocabulary-grid figure,.california-main,.california-side,.solful-scene,.packaging-wide,.packaging-tall,.packaging-small,.wild-grid figure,.retail-wall,.retail-pair figure) img[data-astro-cid-6bgpuj4r]{transform:scale(1.09)}html.gc-js .hero-photo[data-astro-cid-6bgpuj4r]{transform-origin:50% 100%}}@media(prefers-reduced-motion:reduce){html.gc-js .gc-rise[data-astro-cid-6bgpuj4r]{opacity:1;transform:none;clip-path:none;transition:none}html.gc-js .gc-rise[data-astro-cid-6bgpuj4r] img[data-astro-cid-6bgpuj4r]{transform:none;transition:none}html.gc-js figcaption[data-astro-cid-6bgpuj4r]:before{transform:scaleX(1);transition:none}}
+</style></head> <body> <div id="page-content">  <script>
+  document.documentElement.classList.add('gc-js');
+</script><main data-astro-cid-6bgpuj4r>   <nav class="site-nav" aria-label="Case study sections" data-astro-cid-6bgpuj4r> <a class="nav-mark" href="/#work" data-astro-cid-6bgpuj4r>
+GARCIA / CASE STUDY<span class="gc-sr" data-astro-cid-6bgpuj4r>, Zegoe: back to all work</span> </a> <div class="nav-links" data-astro-cid-6bgpuj4r> <a href="#california" data-astro-cid-6bgpuj4r>California</a> <a href="#campaign" data-astro-cid-6bgpuj4r>Campaign</a> <a href="#retail" data-astro-cid-6bgpuj4r>Retail</a> </div> </nav>  <section class="hero" id="top" data-astro-cid-6bgpuj4r> <img class="hero-photo" src="/garcia-site/event-table.webp" alt="Garcia Hand Picked products and flower tasting menu at a California event" fetchpriority="high" loading="eager" decoding="async" data-astro-cid-6bgpuj4r> <div class="hero-scrim" data-astro-cid-6bgpuj4r></div> <div class="hero-copy" data-astro-cid-6bgpuj4r> <p class="eyebrow" data-astro-cid-6bgpuj4r>PORTFOLIO CASE STUDY / 2026</p> <h1 data-astro-cid-6bgpuj4r>A LEGACY,<br data-astro-cid-6bgpuj4r>PLAYED FORWARD.</h1> <p class="hero-deck" data-astro-cid-6bgpuj4r>
+Extending an established family-led identity across California packaging,
+        campaign design, lifestyle imagery, and dimensional retail concepts.
+</p> <div class="hero-meta" data-astro-cid-6bgpuj4r> <span data-astro-cid-6bgpuj4r>CLIENT / HOLISTIC INDUSTRIES</span> <span data-astro-cid-6bgpuj4r>MARKET / CALIFORNIA</span> </div> </div> <div class="hero-reel" data-astro-cid-6bgpuj4r>  <video autoplay muted loop playsinline poster="/garcia-site/door-magic.webp" aria-label="Animated Garcia Hand Picked Magic Is What We Do campaign artwork" data-astro-cid-6bgpuj4r> <source src="/garcia-site/magic-reel.mp4" type="video/mp4" data-astro-cid-6bgpuj4r> </video> <p data-astro-cid-6bgpuj4r>MOTION STUDY / CAMPAIGN SYSTEM</p> </div> </section> <section class="credit-strip" data-astro-cid-6bgpuj4r> <p class="gc-rise" style="--i:0" data-astro-cid-6bgpuj4r> <strong data-astro-cid-6bgpuj4r>ROLE</strong> Packaging adaptation and production design, campaign design,
+      lifestyle presentation, retail concepts, and 3D visualization.
+</p> <p class="gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <strong data-astro-cid-6bgpuj4r>ORIGINAL SYSTEM</strong> Brand identity and packaging preceded my
+      involvement. The work shown here demonstrates stewardship and extension, not a
+      rebrand.
+</p> </section>  <section class="paper-section intro-section" data-astro-cid-6bgpuj4r> <div class="section-copy narrow-copy gc-rise" data-astro-cid-6bgpuj4r> <p class="eyebrow" data-astro-cid-6bgpuj4r>TRACK 01 / THE BRIEF</p> <h2 data-astro-cid-6bgpuj4r>AN ICONIC VOICE, CARRIED FORWARD.</h2> <p class="lead" data-astro-cid-6bgpuj4r>
+Garcia Hand Picked arrived with a rich vocabulary already in motion: Jerry's
+        handprint, portraiture, marbled color, music references, and a generous sense
+        of individuality. My task was to carry that voice into new markets and
+        physical formats without mistaking adaptation for ownership.
+</p> <p data-astro-cid-6bgpuj4r>
+The creative challenge was one of discernment. Every solution needed to feel
+        discovered within the brand rather than placed on top of it, while still
+        resolving contemporary packaging, campaign, compliance, and retail demands.
+</p> </div> <figure class="intro-figure gc-rise" data-astro-cid-6bgpuj4r> <img src="/garcia-site/product-still.webp" alt="Garcia Hand Picked product family arranged with a wooden logo and plants" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>THE ESTABLISHED VOICE / PRODUCT FAMILY IN CONTEXT</figcaption> </figure> </section>  <section class="black-section stewardship" data-astro-cid-6bgpuj4r> <div class="marble-band gc-rise" aria-hidden="true" data-astro-cid-6bgpuj4r></div> <div class="stewardship-grid" data-astro-cid-6bgpuj4r> <div class="gc-rise" style="--i:0" data-astro-cid-6bgpuj4r> <p class="eyebrow" data-astro-cid-6bgpuj4r>TRACK 02 / CREATIVE STEWARDSHIP</p> <h2 data-astro-cid-6bgpuj4r>THIS WAS NOT A REBRAND.</h2> </div> <div class="stewardship-body gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <p class="serif-pull" data-astro-cid-6bgpuj4r>The identity was the master recording.</p> <p data-astro-cid-6bgpuj4r>
+Working inside an inherited system is a different kind of creativity. I
+          identified which cues carried the brand's authorship, then built around them
+          through proportion, hierarchy, color, material, and production decisions.
+</p> <p data-astro-cid-6bgpuj4r>
+The discipline was knowing when to introduce a new solution and when the most
+          intelligent choice was to let the original identity lead.
+</p> </div> </div> <div class="vocabulary-grid" data-astro-cid-6bgpuj4r> <figure class="gc-rise" style="--i:0" data-astro-cid-6bgpuj4r> <img src="/garcia-site/door-magic.webp" alt="Magic Is What We Do door graphic" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>CAMPAIGN LANGUAGE / MAGIC</figcaption> </figure> <figure class="gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <img src="/garcia-site/preroll-detail.webp" alt="Garcia Hand Picked pre-roll tubes and record-inspired sign" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>MUSIC CUES / PACKAGING DETAIL</figcaption> </figure> <figure class="gc-rise" style="--i:2" data-astro-cid-6bgpuj4r> <img src="/garcia-site/door-music.webp" alt="Music Is How We Do It door graphic" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>CAMPAIGN LANGUAGE / MUSIC</figcaption> </figure> </div> </section>  <section class="scope-section paper-section" data-astro-cid-6bgpuj4r> <div class="gc-rise" data-astro-cid-6bgpuj4r> <p class="eyebrow" data-astro-cid-6bgpuj4r>TRACK 03 / CONTRIBUTION</p> <h2 data-astro-cid-6bgpuj4r>THE WORK BEHIND THE WORK.</h2> </div> <ol class="scope-list" data-astro-cid-6bgpuj4r> <li class="gc-rise" style="--i:0" data-astro-cid-6bgpuj4r><span data-astro-cid-6bgpuj4r>01</span>California packaging adaptation and production design</li> <li class="gc-rise" style="--i:1" data-astro-cid-6bgpuj4r><span data-astro-cid-6bgpuj4r>02</span>Los Angeles campaign key art and packaging</li> <li class="gc-rise" style="--i:2" data-astro-cid-6bgpuj4r><span data-astro-cid-6bgpuj4r>03</span>Lifestyle-focused product presentation</li> <li class="gc-rise" style="--i:3" data-astro-cid-6bgpuj4r><span data-astro-cid-6bgpuj4r>04</span>Retail merchandising concepts</li> <li class="gc-rise" style="--i:4" data-astro-cid-6bgpuj4r><span data-astro-cid-6bgpuj4r>05</span>3D visualization and mockups</li> </ol> </section>  <section class="california-section" id="california" data-astro-cid-6bgpuj4r> <div class="california-heading gc-rise" data-astro-cid-6bgpuj4r> <p class="eyebrow" data-astro-cid-6bgpuj4r>SIDE A / CALIFORNIA PRESSING</p> <h2 data-astro-cid-6bgpuj4r>BUILT FOR CALIFORNIA. TRUE TO GARCIA.</h2> <p data-astro-cid-6bgpuj4r>
+California brought its own regulatory, production, and retail requirements, but
+        the package still needed to remain unmistakably Garcia. Working with Holistic
+        Industries, I adapted dielines, information hierarchy, compliance content, and
+        SKU distinctions while protecting the brand's familiar visual voice.
+</p> </div> <div class="california-gallery" data-astro-cid-6bgpuj4r> <figure class="california-main gc-rise" style="--i:0" data-astro-cid-6bgpuj4r> <img src="/garcia-site/jar-lifestyle.webp" alt="Close-up of Garcia Hand Picked California sun-grown flower packaging" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>CALIFORNIA / SUN-GROWN FLOWER / PACKAGING ADAPTATION</figcaption> </figure> <figure class="california-side gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <img src="/garcia-site/rolling-lifestyle.webp" alt="Flower being prepared beside Garcia Hand Picked packaging" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>PRODUCT IN USE / EVENT PHOTOGRAPHY</figcaption> </figure> </div> </section>  <section class="roles-section paper-section" data-astro-cid-6bgpuj4r> <div class="roles-intro gc-rise" data-astro-cid-6bgpuj4r> <p class="eyebrow" data-astro-cid-6bgpuj4r>THE CALIFORNIA PROGRAM</p> <h2 data-astro-cid-6bgpuj4r>THREE ROLES. ONE CONSISTENT RELEASE.</h2> </div> <div class="roles-grid" data-astro-cid-6bgpuj4r> <article class="gc-rise" style="--i:0" data-astro-cid-6bgpuj4r> <span data-astro-cid-6bgpuj4r>01</span> <h3 data-astro-cid-6bgpuj4r>DESIGN</h3> <p data-astro-cid-6bgpuj4r>Lenore Hensley for Holistic Industries</p> </article> <article class="gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <span data-astro-cid-6bgpuj4r>02</span> <h3 data-astro-cid-6bgpuj4r>MANUFACTURING</h3> <p data-astro-cid-6bgpuj4r>Solful</p> </article> <article class="gc-rise" style="--i:2" data-astro-cid-6bgpuj4r> <span data-astro-cid-6bgpuj4r>03</span> <h3 data-astro-cid-6bgpuj4r>STATEWIDE DISTRIBUTION</h3> <p data-astro-cid-6bgpuj4r>Kiva Sales &amp; Service</p> </article> </div> <p class="roles-note gc-rise" data-astro-cid-6bgpuj4r>
+Packaging and supporting applications were prepared to move coherently from
+      design and compliance through manufacturing and retail distribution.
+</p> </section>  <section class="solful-section" data-astro-cid-6bgpuj4r> <div class="solful-copy gc-rise" data-astro-cid-6bgpuj4r> <p class="eyebrow" data-astro-cid-6bgpuj4r>CALIFORNIA COLLABORATION / SOLFUL</p> <h2 data-astro-cid-6bgpuj4r>THE PARTNERSHIP HAD TO FEEL COMPOSED.</h2> <p data-astro-cid-6bgpuj4r>
+Shared materials needed to preserve Garcia Hand Picked's presence while giving
+        Solful a purposeful role in the California story. Poster, packaging, education,
+        and retail applications were treated as one connected system, not a collection
+        of appended logos.
+</p> <p class="production-note gc-rise" style="--i:1" data-astro-cid-6bgpuj4r>
+SOLFUL / MANUFACTURING COLLABORATOR<br data-astro-cid-6bgpuj4r>KSS / STATEWIDE DISTRIBUTION
+</p> </div> <figure class="solful-poster gc-rise" data-astro-cid-6bgpuj4r> <img src="/garcia-site/solful-poster.webp" alt="Garcia Hand Picked and Solful San Francisco poster featuring Jerry Garcia and the Golden Gate Bridge" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>SAN FRANCISCO PARTNERSHIP ARTWORK / POSTER</figcaption> </figure> <figure class="solful-scene gc-rise" data-astro-cid-6bgpuj4r> <img src="/garcia-site/solful-retail-concept.webp" alt="Garcia Hand Picked retail merchandising concept inside a Solful dispensary" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>IN-STORE MERCHANDISING / COMPOSITED CONCEPT</figcaption> </figure> </section>  <section class="packaging-section paper-section" data-astro-cid-6bgpuj4r> <div class="packaging-title gc-rise" data-astro-cid-6bgpuj4r> <p class="eyebrow" data-astro-cid-6bgpuj4r>TRACK 04 / THE PRODUCT FAMILY</p> <h2 data-astro-cid-6bgpuj4r>PACKAGING, PLAYED ACROSS THE FULL SET.</h2> <p data-astro-cid-6bgpuj4r>
+Flower jars, pre-roll tubes, cartons, and supporting formats each required their
+        own hierarchy and production decisions. The system had to stay clear at arm's
+        length, cohesive in a group, and recognizable when surrounded by the visual
+        noise of a working dispensary.
+</p> </div> <div class="packaging-collage" data-astro-cid-6bgpuj4r> <figure class="packaging-wide gc-rise" style="--i:0" data-astro-cid-6bgpuj4r> <img src="/garcia-site/event-table.webp" alt="Garcia Hand Picked packaging and tasting collateral" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>PRE-ROLLS / FLOWER / PRODUCT EDUCATION</figcaption> </figure> <figure class="packaging-tall gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <img src="/garcia-site/preroll-detail.webp" alt="Garcia Hand Picked Double Doobie pre-roll packaging" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>DOUBLE DOOBIE / FORMAT DETAIL</figcaption> </figure> <figure class="packaging-small gc-rise" style="--i:2" data-astro-cid-6bgpuj4r> <img src="/garcia-site/jar-lifestyle.webp" alt="Garcia Hand Picked sun-grown flower jar" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>FLOWER / CALIFORNIA</figcaption> </figure> </div> </section>  <section class="la-section" id="campaign" data-astro-cid-6bgpuj4r> <div class="la-header gc-rise" data-astro-cid-6bgpuj4r> <p class="eyebrow" data-astro-cid-6bgpuj4r>SIDE B / LOS ANGELES</p> <h2 data-astro-cid-6bgpuj4r>LOS ANGELES, PLAYED IN A NEW KEY.</h2> <p data-astro-cid-6bgpuj4r>
+The LA campaign formed a separate creative chapter within the California work. I
+        contributed campaign key art and packaging that interpreted the established
+        Garcia language through a city-specific lens, creating a local expression
+        without severing the brand from its roots.
+</p> </div> <div class="la-placeholder-grid" aria-label="Reserved positions for final Los Angeles campaign artwork" data-astro-cid-6bgpuj4r> <article class="gc-rise" style="--i:0" data-astro-cid-6bgpuj4r> <span data-astro-cid-6bgpuj4r>LA / 01</span> <h3 data-astro-cid-6bgpuj4r>KEY ART</h3> <p data-astro-cid-6bgpuj4r>Final approved artwork to be added.</p> </article> <article class="gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <span data-astro-cid-6bgpuj4r>LA / 02</span> <h3 data-astro-cid-6bgpuj4r>CAMPAIGN SYSTEM</h3> <p data-astro-cid-6bgpuj4r>Poster and applications to be added.</p> </article> <article class="gc-rise" style="--i:2" data-astro-cid-6bgpuj4r> <span data-astro-cid-6bgpuj4r>LA / 03</span> <h3 data-astro-cid-6bgpuj4r>PACKAGING</h3> <p data-astro-cid-6bgpuj4r>Final product photography or render to be added.</p> </article> </div> <p class="placeholder-note gc-rise" data-astro-cid-6bgpuj4r>
+RESERVED CHAPTER / LA ASSETS WERE NOT INCLUDED IN THE CURRENT FILE SET
+</p> </section>  <section class="wild-section paper-section" data-astro-cid-6bgpuj4r> <div class="wild-heading gc-rise" data-astro-cid-6bgpuj4r> <p class="eyebrow" data-astro-cid-6bgpuj4r>TRACK 05 / IN THE WILD</p> <h2 data-astro-cid-6bgpuj4r>PACKAGING MADE TO BE SEEN IN REAL LIFE.</h2> <p data-astro-cid-6bgpuj4r>
+Lifestyle and event photography gives the work scale and materiality. It shows
+        the package as part of a social, tactile experience, surrounded by education,
+        ritual, conversation, and the charming disorder of a live event.
+</p> </div> <div class="wild-grid" data-astro-cid-6bgpuj4r> <figure class="wild-hero gc-rise" style="--i:0" data-astro-cid-6bgpuj4r> <img src="/garcia-site/hero-event.webp" alt="Garcia Hand Picked velvet suitcase display at a California event" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>ACTIVATION / PACKAGING, COLLATERAL, AND DISPLAY</figcaption> </figure> <figure class="gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <img src="/garcia-site/rolling-lifestyle.webp" alt="Hands preparing flower beside Garcia Hand Picked packaging" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>PRODUCT RITUAL / LIFESTYLE</figcaption> </figure> <figure class="gc-rise" style="--i:2" data-astro-cid-6bgpuj4r> <img src="/garcia-site/product-still.webp" alt="Garcia Hand Picked product family in sunlight" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>PRODUCT FAMILY / NATURAL MATERIALS</figcaption> </figure> </div> </section>  <section class="retail-section" id="retail" data-astro-cid-6bgpuj4r> <div class="retail-heading gc-rise" data-astro-cid-6bgpuj4r> <p class="eyebrow" data-astro-cid-6bgpuj4r>TRACK 06 / CONCEPT TO COUNTER</p> <h2 data-astro-cid-6bgpuj4r>CONCEPTS YOU COULD WALK INTO.</h2> <p data-astro-cid-6bgpuj4r>
+Three-dimensional visualization made it possible to test scale, product density,
+        sightlines, lighting, and brand hierarchy before production. The concepts range
+        from portable activation pieces to dedicated shelf units and a broader
+        multi-brand retail environment.
+</p> </div> <div class="concept-row" data-astro-cid-6bgpuj4r> <figure class="foamboard-figure gc-rise" style="--i:0" data-astro-cid-6bgpuj4r> <img src="/garcia-site/foamboard-display.webp" alt="Garcia Hand Picked theatrical foamboard display concept" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>PHOTO MOMENT / 3D DISPLAY CONCEPT</figcaption> </figure> <figure class="gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <img src="/garcia-site/shelf-display-variations.webp" alt="Garcia Hand Picked freestanding shelf display variations" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>FREESTANDING SHELF / FORM EXPLORATION</figcaption> </figure> <figure class="gc-rise" style="--i:2" data-astro-cid-6bgpuj4r> <img src="/garcia-site/shelf-display-directions.webp" alt="Alternate Garcia Hand Picked shelf display directions" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>SHELF SYSTEM / ALTERNATE DIRECTIONS</figcaption> </figure> </div> <figure class="retail-wall gc-rise" data-astro-cid-6bgpuj4r> <img src="/garcia-site/retail-wall-front.webp" alt="Multi-brand Holistic retail wall concept with a central Garcia Hand Picked bay" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>HOLISTIC RETAIL ECOSYSTEM / GARCIA BAY AT CENTRE</figcaption> </figure> <div class="retail-pair" data-astro-cid-6bgpuj4r> <figure class="gc-rise" style="--i:0" data-astro-cid-6bgpuj4r> <img src="/garcia-site/retail-wall-angle.webp" alt="Angled view of the multi-brand retail wall concept" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> <figcaption data-astro-cid-6bgpuj4r>MODULAR RETAIL WALL / ANGLE</figcaption> </figure> <div class="retail-note gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <p class="serif-pull" data-astro-cid-6bgpuj4r>A brand can be faithful and still travel.</p> <p data-astro-cid-6bgpuj4r>
+The strongest concepts do not merely enlarge a package. They identify which
+          parts of the identity can become architecture, which details guide navigation,
+          and where restraint allows the product to remain the focus.
+</p> </div> </div> </section>  <section class="closing-section" data-astro-cid-6bgpuj4r> <div class="closing-image gc-rise" data-astro-cid-6bgpuj4r> <img src="/garcia-site/hero-event.webp" alt="Garcia Hand Picked activation display with people and products" loading="lazy" decoding="async" data-astro-cid-6bgpuj4r> </div> <div class="closing-copy gc-rise" data-astro-cid-6bgpuj4r> <p class="eyebrow" data-astro-cid-6bgpuj4r>ENCORE / THE RESULT</p> <h2 data-astro-cid-6bgpuj4r>THE MAGIC WAS IN THE TRANSLATION.</h2> <p data-astro-cid-6bgpuj4r>
+The brand was already beloved. My task was to make each new expression feel as
+        though it had always belonged. Across packaging, campaign work, photography, and
+        dimensional retail concepts, the project demonstrates what thoughtful
+        stewardship can do: preserve the soul, solve the practical problem, and give an
+        established voice new places to be heard.
+</p> <div class="closing-credit gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <p data-astro-cid-6bgpuj4r> <strong data-astro-cid-6bgpuj4r>ORIGINAL BRAND IDENTITY AND PACKAGING SYSTEM</strong><br data-astro-cid-6bgpuj4r>Garden State
+          Greenhouse in collaboration with the Garcia Family and Holistic Industries
+</p> <p data-astro-cid-6bgpuj4r> <strong data-astro-cid-6bgpuj4r>CALIFORNIA ADAPTATION, CAMPAIGN, RETAIL, AND 3D</strong><br data-astro-cid-6bgpuj4r>Lenore
+          Hensley for Holistic Industries
+</p> </div> </div> </section> <footer data-astro-cid-6bgpuj4r> <p class="gc-rise" style="--i:0" data-astro-cid-6bgpuj4r>GARCIA HAND PICKED / PORTFOLIO CASE STUDY</p> <div class="gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <a href="https://www.garciahandpicked.com/family/" target="_blank" rel="noreferrer" data-astro-cid-6bgpuj4r>Brand heritage</a> <a href="https://gardenstategh.com/ghp-case/" target="_blank" rel="noreferrer" data-astro-cid-6bgpuj4r>Original identity credit</a> <a href="https://www.globenewswire.com/news-release/2026/05/28/3303110/0/en/garcia-hand-picked-returns-home-to-california-where-it-all-began.html" target="_blank" rel="noreferrer" data-astro-cid-6bgpuj4r>California return</a> </div> </footer> </main>     <script>
+  (function () {
+    var reel = document.querySelector('.hero-reel video');
+    if (!reel) return;
+    var q = window.matchMedia('(prefers-reduced-motion: reduce)');
+    function apply() {
+      if (q.matches) {
+        reel.pause();
+        reel.removeAttribute('autoplay');
+        try {
+          reel.currentTime = 0;
+        } catch (e) {
+          /* not seekable yet; the pause above is what matters */
+        }
+      } else if (reel.paused) {
+        var p = reel.play();
+        if (p && p.catch) p.catch(function () { /* autoplay policy said no */ });
+      }
+    }
+    apply();
+    // addEventListener on a MediaQueryList is the modern form; older WebKit
+    // only has addListener.
+    if (q.addEventListener) q.addEventListener('change', apply);
+    else if (q.addListener) q.addListener(apply);
+  })();
+</script>    <script type="module" src="/_astro/GarciaCaseStudy.astro_astro_type_script_index_0_lang.MzVnxVlR.js"></script>  </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync --> <script type="module">const s=document.getElementById("main-nav");if(s){let m=function(){g=!1;const e=window.scrollY>60,o=k.some(n=>{const c=n.getBoundingClientRect();return c.top<=b&&c.bottom>0});o===v&&e===p||(v=o,p=e,s.classList.toggle("nav-on-light",o),s.classList.toggle("nav-scrolled",e),t&&(o?(t.style.backgroundColor="rgba(255,255,255,0.78)",t.style.backdropFilter="blur(14px) saturate(1.8)",t.style.webkitBackdropFilter="blur(14px) saturate(1.8)",t.style.borderBottomColor="rgba(0,0,0,0.07)",u.forEach(n=>{n.style.color="#1a1a1a"}),a&&(a.style.filter="invert(1)")):(t.style.backgroundColor=e?"rgba(0,0,0,0.45)":"rgba(0,0,0,0)",t.style.backdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.webkitBackdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.borderBottomColor=e?"rgba(255,160,64,0.10)":"transparent",u.forEach(n=>{n.style.color=""}),a&&(a.style.filter=""))))};const t=document.getElementById("nav-bg"),a=s.querySelector("img"),u=Array.from(s.querySelectorAll(".nav-link")),k=Array.from(document.querySelectorAll("[data-nav-light]")),b=69;let g=!1,v=null,p=null;window.addEventListener("scroll",()=>{g||(g=!0,requestAnimationFrame(m))},{passive:!0}),m();const i=u.filter(l=>l.dataset.section);if(i.length){let l=0;const e=()=>{l=0;let f=null,d=-1/0;for(const r of i){const w=document.getElementById(r.dataset.section);if(!w)continue;const y=w.getBoundingClientRect().top-b;y<=0&&y>d&&(d=y,f=r)}for(const r of i)r.classList.toggle("is-active",r===f)},o=()=>{l||(l=requestAnimationFrame(e))};window.addEventListener("scroll",o,{passive:!0}),window.addEventListener("resize",o,{passive:!0});let n=0;const c=window.setInterval(()=>{o(),(i.every(d=>document.getElementById(d.dataset.section))||++n>40)&&window.clearInterval(c)},250)}}</script> <!-- Nav color switch on light sections.
+         The single owner of the nav's appearance. This used to be two scroll
+         listeners: this one toggling classes, and a second, unguarded one in
+         index.astro writing the inline styles that actually painted the bar.
+         They also disagreed on geometry, so the inline copy (which triggers
+         earlier and releases later) decided every visible flip. The inline
+         copy's thresholds are the ones kept here; the class toggles ride along
+         unchanged. --> <script type="module" src="/_astro/BaseLayout.astro_astro_type_script_index_1_lang.BKQlDpRt.js"></script> </body> </html> 
