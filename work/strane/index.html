@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="A Strane brand evolution case study: unapologetic punk graphics, Pantone 3955 C yellow, eyecons, packaging, merchandise, and retail. Created with Holistic Industries."><!-- Tab icons: the wordmark's own `z`, on the page's near-black so it
+<!DOCTYPE html><html lang="en" data-arrival="cinematic"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="A Strane brand evolution case study: unapologetic punk graphics, Pantone 3955 C yellow, eyecons, packaging, merchandise, and retail. Created with Holistic Industries."><!-- Tab icons: the wordmark's own `z`, on the page's near-black so it
          still reads in a light tab strip. Cut by scripts/build-favicons.mjs,
          re-run it if Wordmark_White.png is ever replaced. The .ico is listed
          too, because that is the file a crawler asks for by name. --><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><!-- Fonts are self-hosted (public/fonts + styles/fonts.css): Google's own
@@ -21,8 +21,10 @@
          and leaves this flag before navigating; whichever document loads next
          fades in to meet it, so leaving and arriving read as one move instead
          of a cut. Runs in <head>, before first paint, or the page would flash
-         at full opacity first. Only fires when the flag is there, so a cold
-         load or a bookmark is untouched. --><style>
+         at full opacity first. On an ordinary page nothing happens without
+         the flag, so a cold load or a bookmark is untouched; the four
+         cinematic case-study routes play their plate on a cold load too, and
+         the rules for that are in the second half of this block. --><style>
       @keyframes zg-arrive { from { opacity: 0; } to { opacity: 1; } }
       /* will-change lifts the fade onto the compositor. Without it the
          animation runs on the main thread, and hydrating the case-study
@@ -45,15 +47,111 @@
          clip now lives on .cs-page, which wraps the sliding <main> and is
          not itself scrollable, so sticky still resolves against the
          viewport. See CaseStudyContent's slide rules. */
+
+      /* The home page's own exit, the counterpart of zg-arrive. Only the
+         pages that do NOT carry data-arrival fade out this way: a cinematic
+         page is covered by the plate instead, and fading body there would
+         take the plate with it, since the plate IS body's pseudo-element. */
+      @keyframes zg-leave { to { opacity: 0; } }
+      html.zg-leaving:not([data-arrival]) body { animation: zg-leave 0.3s ease-in forwards; will-change: opacity; }
+
+      /* ══ The plate ══════════════════════════════════════════════════════
+         Arriving at one of the four ported case studies is a scene cut, not
+         a fade: a full-viewport panel in the brand's own ink already covers
+         the viewport in the first frame, holds while the document is parsed,
+         then wipes away in the direction of travel and hands over to a page
+         that settles in behind it.
+
+         It is a pseudo-element on body, and it is ::after rather than
+         ::before because ::before is spoken for on every one of these four
+         routes — it carries the fixed gradient ground (global.css, and the
+         repaints in garcia-site.css, hellavated-site.css, strane-site.css
+         and dodrops-page.css). A pseudo-element rather than a real <div> so
+         that it exists at first paint: an element appended at the end of the
+         document paints after the markup above it, which is a frame of the
+         page showing through before the plate lands on top of it.
+
+         Its colour is var(--zg-plate), written to html's inline style by the
+         head script below from the ink the page you are leaving stored, so
+         the plate that covers DO DROPS on the way out of Garcia is still
+         Garcia-dark when it uncovers DO DROPS. With nothing stored (a cold
+         load, a bookmark, a hop in from a React case study, which stores no
+         ink) it falls back to this page's own --zg-plate-ink.
+
+         Parked off-screen whenever no zg-* class is on, with a standing
+         will-change, so the exit's cover animation starts from a layer that
+         is already composited instead of paying for the raster on its first
+         frame. will-change on a pseudo costs nothing elsewhere: it has no
+         descendants to become a containing block for. */
+      html[data-arrival='cinematic'] body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        pointer-events: none;
+        background: var(--zg-plate, var(--zg-plate-ink, #0b0b0d));
+        transform: translateX(100%);
+        will-change: transform;
+      }
+      /* Covering, and STATIC, from the first frame until the document is
+         parsed: zg-ready is what releases it (added by CaseStudyTransition's
+         script at the foot of the page, and again on DOMContentLoaded). A
+         wipe that started on a timer would uncover a half-built page on a
+         slow load; holding means the cut always lands on a finished one. */
+      html[data-arrival='cinematic'].zg-arriving body::after { transform: translate(0); }
+      /* The wipe leaves the way the page you came from left: forward, it
+         slides off to the left; back, to the right; and with no direction at
+         all (a cold load, the home page, All Work) it rises like a curtain. */
+      @keyframes zg-plate-off-left { to { transform: translateX(-100%); } }
+      @keyframes zg-plate-off-right { to { transform: translateX(100%); } }
+      @keyframes zg-plate-off-up { to { transform: translateY(-100%); } }
+      @keyframes zg-plate-fade { to { opacity: 0; } }
+      html[data-arrival='cinematic'].zg-arriving.zg-ready body::after {
+        animation: zg-plate-off-up 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.06s forwards;
+      }
+      html[data-arrival='cinematic'].zg-arriving-next.zg-ready body::after { animation-name: zg-plate-off-left; }
+      html[data-arrival='cinematic'].zg-arriving-prev.zg-ready body::after { animation-name: zg-plate-off-right; }
+      /* The plate replaces the fade on these pages; running both would fade
+         the plate out along with everything under it. */
+      html[data-arrival='cinematic'].zg-arriving body { animation: none; will-change: auto; }
+
       @media (prefers-reduced-motion: reduce) {
-        html.zg-arriving body { animation: none; }
+        html.zg-arriving body,
+        html.zg-leaving:not([data-arrival]) body { animation: none; }
+        /* The cut still happens, it just does not travel: the plate dissolves
+           where it stands and nothing under it moves. Last in source order so
+           it beats the three directional animation-name rules above, which
+           carry the same specificity. */
+        html[data-arrival='cinematic'].zg-arriving.zg-ready body::after {
+          animation: zg-plate-fade 0.3s linear forwards;
+        }
       }
     </style><script>
+      /* The arrival half of the cross-document transition, and the ink
+         hand-off. Runs in <head>, before first paint: the plate has to be
+         opaque in the very first frame or the cut is a flash of the page. */
       try {
+        var root = document.documentElement;
+        var cinematic = root.getAttribute('data-arrival') === 'cinematic';
         var nav = sessionStorage.getItem('zg-nav');
+        var ink = sessionStorage.getItem('zg-nav-ink');
+        // Both are one-shot. The ink is cleared even on a page that cannot
+        // use it (the home page, a -site route), or it would still be sitting
+        // there on the next cinematic arrival and paint that plate in the
+        // colour of a page two hops back.
+        if (nav) sessionStorage.removeItem('zg-nav');
+        if (ink) sessionStorage.removeItem('zg-nav-ink');
+        if (!nav && cinematic) {
+          // No flag: a cold load, a bookmark, a link from outside. The
+          // curtain still plays, because the plate is this page's opening
+          // shot and not only a stitch between two documents. Not on a
+          // reload and not on back/forward, where the reader already knows
+          // the page and a 900ms cover reads as a stall.
+          var e0 = performance.getEntriesByType('navigation')[0];
+          if (e0 && e0.type === 'navigate') nav = '1';
+        }
         if (nav) {
-          sessionStorage.removeItem('zg-nav');
-          var root = document.documentElement;
+          if (cinematic && ink) root.style.setProperty('--zg-plate', ink);
           root.classList.add('zg-arriving');
           // "next"/"prev" carry the direction of travel; "1" is a plain move.
           if (nav === 'next' || nav === 'prev') root.classList.add('zg-arriving-' + nav);
@@ -66,16 +164,56 @@
          how a one-frame transition detail turns into a permanent bug. */
       (function () {
         var root = document.documentElement;
-        if (!root.classList.contains('zg-arriving')) return;
+        var cinematic = root.getAttribute('data-arrival') === 'cinematic';
         var done = function () {
-          root.classList.remove('zg-arriving', 'zg-arriving-next', 'zg-arriving-prev');
+          root.classList.remove(
+            'zg-arriving', 'zg-arriving-next', 'zg-arriving-prev', 'zg-ready', 'zg-ready-deep',
+          );
+          root.style.removeProperty('--zg-plate');
         };
-        window.addEventListener('load', function () { window.setTimeout(done, 700); });
-        window.setTimeout(done, 2500); // load never fired (bfcache, blocked asset)
+        if (!cinematic) {
+          if (!root.classList.contains('zg-arriving')) return;
+          window.addEventListener('load', function () { window.setTimeout(done, 700); });
+          window.setTimeout(done, 2500); // load never fired (bfcache, blocked asset)
+          return;
+        }
+        /* A cinematic page cannot strip on load+700ms. With the assets warm
+           that fires while the plate is still holding, and the wipe gets cut
+           off mid-move or never starts at all. The plate itself says when it
+           is finished: animationend bubbles to document with pseudoElement
+           '::after', and body does not exist yet up here in <head>, which is
+           why the listener goes on document rather than on body. */
+        document.addEventListener('animationend', function (ev) {
+          if (ev.target !== document.body || ev.pseudoElement !== '::after') return;
+          /* Not on this frame: the plate is the SHORTEST of the arrival
+             animations, not the longest. The wipe runs 0.06 + 0.9 = 0.96s and
+             the page settling in behind it runs 0.06 + 1.3 = 1.36s, so
+             stripping the instant the plate is gone cuts the settle off at
+             98.2% of its curve, and <main> snaps the last 2.4px (measured at
+             1440px wide, 9vw of travel on cubic-bezier(.16,.84,.34,1)) to
+             identity in one frame. 420ms of grace covers the remaining 400. */
+          window.setTimeout(done, 420);
+        }, true);
+        /* Belt and braces for zg-ready, so the plate can never be left
+           holding over a finished page if the page's own script never runs.
+           The fallback clock starts at ready, not at parse: the hold has no
+           fixed length, so 4s from ready is 4s from the only moment the
+           remaining animation has a known duration (0.06 + 0.9). */
+        var arm = function () {
+          arm = function () {};
+          window.setTimeout(done, 4000);
+        };
+        var watch = new MutationObserver(function () {
+          if (root.classList.contains('zg-ready')) { watch.disconnect(); arm(); }
+        });
+        watch.observe(root, { attributes: true, attributeFilter: ['class'] });
+        document.addEventListener('DOMContentLoaded', function () {
+          if (root.classList.contains('zg-arriving')) root.classList.add('zg-ready');
+        });
       })();
     </script><link rel="stylesheet" href="/_astro/index.ZH7OUS-B.css">
-<link rel="stylesheet" href="/_astro/strane.BLZWuhDg.css">
-<style>@keyframes zg-leave{to{opacity:0}}html.zg-leaving body{animation:zg-leave .26s ease-in forwards;will-change:opacity}@keyframes zg-main-out{to{transform:translate3d(0,-12px,0)}}@keyframes zg-slide-out-left{to{transform:translate3d(-7vw,0,0)}}@keyframes zg-slide-out-right{to{transform:translate3d(7vw,0,0)}}html.zg-leaving-plain #page-content :is(main,.cs-next){animation:zg-main-out .26s ease-in forwards}html.zg-leaving-next #page-content :is(main,.cs-next){animation:zg-slide-out-left .26s ease-in forwards}html.zg-leaving-prev #page-content :is(main,.cs-next){animation:zg-slide-out-right .26s ease-in forwards}@keyframes zg-slide-in-right{0%{transform:translate3d(7vw,0,0)}to{transform:translateZ(0)}}@keyframes zg-slide-in-left{0%{transform:translate3d(-7vw,0,0)}to{transform:translateZ(0)}}html.zg-arriving-next #page-content :is(main,.cs-next){animation:zg-slide-in-right .55s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-prev #page-content :is(main,.cs-next){animation:zg-slide-in-left .55s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving #page-content :is(main,.cs-next){will-change:transform}html:is(.zg-arriving-next,.zg-arriving-prev,.zg-leaving-next,.zg-leaving-prev) #page-content{overflow-x:clip}@media(prefers-reduced-motion:reduce){html.zg-leaving body,html:is(.zg-leaving-plain,.zg-leaving-next,.zg-leaving-prev,.zg-arriving-next,.zg-arriving-prev) #page-content :is(main,.cs-next){animation:none}}
+<link rel="stylesheet" href="/_astro/strane.D2SbmG_M.css">
+<style>@keyframes zg-drift-left{to{transform:translate3d(-4vw,0,0)}}@keyframes zg-drift-right{to{transform:translate3d(4vw,0,0)}}@keyframes zg-drift-up{to{transform:translate3d(0,-12px,0)}}html.zg-leaving-plain #page-content :is(main,.cs-next){animation:zg-drift-up .48s ease-in forwards}html.zg-leaving-next #page-content :is(main,.cs-next){animation:zg-drift-left .48s ease-in forwards}html.zg-leaving-prev #page-content :is(main,.cs-next){animation:zg-drift-right .48s ease-in forwards}@keyframes zg-plate-on-left{0%{transform:translate(100%)}to{transform:translate(0)}}@keyframes zg-plate-on-right{0%{transform:translate(-100%)}to{transform:translate(0)}}@keyframes zg-plate-on-down{0%{transform:translateY(-100%)}to{transform:translateY(0)}}html[data-arrival=cinematic].zg-leaving-next body:after{animation:zg-plate-on-left .48s cubic-bezier(.76,0,.24,1) forwards}html[data-arrival=cinematic].zg-leaving-prev body:after{animation:zg-plate-on-right .48s cubic-bezier(.76,0,.24,1) forwards}html[data-arrival=cinematic].zg-leaving-plain body:after{animation:zg-plate-on-down .48s cubic-bezier(.76,0,.24,1) forwards}html[data-arrival=cinematic].zg-leaving body{animation:none;will-change:auto}@keyframes zg-arr-next{0%{transform:translate3d(9vw,0,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-prev{0%{transform:translate3d(-9vw,0,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-plain{0%{transform:translate3d(0,24px,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-next-flat{0%{transform:translate3d(9vw,0,0)}to{transform:translateZ(0)}}@keyframes zg-arr-prev-flat{0%{transform:translate3d(-9vw,0,0)}to{transform:translateZ(0)}}@keyframes zg-arr-plain-flat{0%{transform:translate3d(0,24px,0)}to{transform:translateZ(0)}}html.zg-arriving.zg-ready #page-content :is(main,.cs-next){transform-origin:50% 0}html.zg-arriving.zg-ready #page-content main{animation:zg-arr-plain 1.3s cubic-bezier(.16,.84,.34,1) .06s both}html.zg-arriving.zg-ready #page-content .cs-next{animation:zg-arr-plain-flat 1.3s cubic-bezier(.16,.84,.34,1) .06s both}html.zg-arriving-next.zg-ready #page-content main{animation-name:zg-arr-next}html.zg-arriving-next.zg-ready #page-content .cs-next{animation-name:zg-arr-next-flat}html.zg-arriving-prev.zg-ready #page-content main{animation-name:zg-arr-prev}html.zg-arriving-prev.zg-ready #page-content .cs-next{animation-name:zg-arr-prev-flat}html.zg-arriving.zg-ready-deep #page-content main{animation-name:zg-arr-plain-flat}html.zg-arriving-next.zg-ready-deep #page-content main{animation-name:zg-arr-next-flat}html.zg-arriving-prev.zg-ready-deep #page-content main{animation-name:zg-arr-prev-flat}@keyframes zg-bar-down{0%{transform:translateY(-100%)}to{transform:translateY(0)}}@keyframes zg-bar-up{0%{transform:translateY(100%)}to{transform:translateY(0)}}html.zg-arriving.zg-ready #page-content .cs-nav{animation:zg-bar-down .6s cubic-bezier(.16,.84,.34,1) .5s both}html.zg-arriving.zg-ready #page-content .cs-pagerbar{animation:zg-bar-up .6s cubic-bezier(.16,.84,.34,1) .65s both}html.zg-arriving #page-content :is(main,.cs-next,.cs-nav,.cs-pagerbar){will-change:transform}html:is(.zg-arriving-next,.zg-arriving-prev,.zg-leaving-next,.zg-leaving-prev) #page-content{overflow-x:clip}@media(prefers-reduced-motion:reduce){html:is(.zg-leaving-plain,.zg-leaving-next,.zg-leaving-prev) #page-content :is(main,.cs-next),html.zg-arriving.zg-ready #page-content :is(main,.cs-next,.cs-nav,.cs-pagerbar){animation:none}}
 </style></head> <body> <div id="page-content">  <script>
   document.documentElement.classList.add('st-js');
 </script><a href="#story" class="skip">Skip to case study</a>  <nav class="cs-nav" aria-label="Case study"> <a href="/" class="cs-nav-logo"> <img src="/Wordmark_White.png" alt="Zegoe"> </a>  <div class="cs-nav-mid"> <span class="cs-nav-brand">Strane</span> <span class="cs-nav-sections"> <a href="#story">The shift</a> <a href="#identity">Identity</a> <a href="#packaging">Packaging</a> <a href="#in-the-wild">In the wild</a> </span> </div> <a href="/#work" class="cs-nav-back"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M19 12H5M5 12l6-6M5 12l6 6"></path> </svg> <span>All Work</span> </a> </nav> <main>  <section class="hero" aria-labelledby="hero-title"> <div class="wrap"> <div class="hero-main">  <div class="hero-collage" aria-hidden="true"> <img class="hs hs-model" src="/strane-site/hero-model.webp" alt="" width="1140" height="1637"> <img class="hs hs-eye-a" src="/strane-site/sticker-eye-sativa.webp" alt="" width="560" height="490"> <img class="hs hs-eye-b" src="/strane-site/sticker-eye-indica.webp" alt="" width="500" height="438"> <img class="hs hs-eye-c" src="/strane-site/sticker-eye-hybrid.webp" alt="" width="560" height="490"> <img class="hs hs-bolt-a" src="/strane-site/bolt-1.svg" alt=""> <img class="hs hs-bolt-b" src="/strane-site/bolt-2.svg" alt=""> <img class="hs hs-star-a" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-b" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-c" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-d" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-e" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> </div> <div class="hero-headline"> <h1 id="hero-title">Loud.<br><span>By design.</span></h1> <p class="hero-copy">
@@ -127,7 +265,7 @@ Recognizable<br>at a glance.<br><span>Unapologetically<br>Strane.</span> </h2> <
 The rebrand gives Strane a louder expression while keeping the elements people
         recognize. Yellow, black, and the three eyecons connect a punk collage language across
         packaging, merchandise, retail, and events.
-</p> </div> <img class="st-rise st-wipe" src="/strane-site/closing-family.webp" alt="The complete Strane brand expression in packaging, devices and merchandise" loading="lazy" decoding="async"> </section> </main>  <footer class="cs-next"> <a href="/work/avitas" class="cs-next-link" data-dir="next" style="--nx-bg:#04141c;--nx-accent:#e8c87a;--nx-glow:rgba(64,200,210,0.30);--nx-art:url(&#34;/portfolio/avitas/avitas-wood-pattern.webp&#34;);--nx-art-op:0.384;--nx-art-filter:brightness(0.8);--nx-art-size:cover;--nx-art-repeat:no-repeat;--nx-art-pos:50% 50%;--nx-logo-scale:1.7"> <span class="cs-next-art" aria-hidden="true"></span> <span class="cs-next-scrim" aria-hidden="true"></span> <span class="cs-eyebrow">Next Project</span> <span class="cs-next-name"> <span class="cs-next-index">05</span> <img class="cs-next-logo" src="/brand-logo/avitas-trim.png" alt="AVITAS" draggable="false"> <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M7 17L17 7M17 7H7M17 7V17"></path> </svg> </span> </a> </footer>  <div class="cs-pagerpin"> <nav class="cs-pagerbar" aria-label="Case studies"> <a href="/work/hellavated" class="cs-pagerbar-link" data-dir="prev"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M19 12H5M5 12l6-6M5 12l6 6"></path> </svg> <span> <i>Previous</i> <b>Hellavated</b> </span> </a> <span class="cs-pagerbar-here"> <span class="cs-pagerbar-count" aria-hidden="true"> <b>04</b> <i>/</i> 07 </span> <em>Strane</em> </span> <a href="/work/avitas" class="cs-pagerbar-link cs-pagerbar-next" data-dir="next"> <span> <i>Next</i> <b>AVITAS</b> </span> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M5 12h14M19 12l-6-6M19 12l-6 6"></path> </svg> </a> </nav> </div>  <script type="module">(()=>{if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;const r=document.documentElement,n=document.getElementById("page-content");if(!n)return;const l=["zg-arriving","zg-arriving-next","zg-arriving-prev"],c=["zg-leaving","zg-leaving-plain","zg-leaving-next","zg-leaving-prev"],i=()=>Array.from(n.querySelectorAll("main, .cs-next")),s=()=>{document.body.style.willChange="opacity";for(const e of i())e.style.willChange="transform"},g=()=>{document.body.style.willChange="";for(const e of i())e.style.willChange=""},d=(e,t)=>{s();try{sessionStorage.setItem("zg-nav",t??"1")}catch{}r.classList.remove(...l),r.classList.add("zg-leaving",t?`zg-leaving-${t}`:"zg-leaving-plain"),window.setTimeout(()=>{location.href=e},260)};n.addEventListener("click",e=>{if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;const t=e.target?.closest?.("a[href]");if(!t||t.target==="_blank"||t.hasAttribute("download"))return;const a=new URL(t.href,location.href);if(a.origin!==location.origin||a.pathname===location.pathname&&a.hash)return;e.preventDefault();const o=t.dataset.dir;d(t.href,o==="next"||o==="prev"?o:void 0)}),n.addEventListener("pointerover",e=>{const t=e.target?.closest?.("a[href]");!t||t.target==="_blank"||t.hasAttribute("download")||s()},{passive:!0}),window.addEventListener("pageshow",e=>{e.persisted&&(r.classList.remove(...c),g())})})();</script>   <script type="module" src="/_astro/StraneCaseStudy.astro_astro_type_script_index_0_lang.9RPGMQm4.js"></script>  </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync --> <script type="module">const s=document.getElementById("main-nav");if(s){let m=function(){g=!1;const e=window.scrollY>60,o=k.some(n=>{const c=n.getBoundingClientRect();return c.top<=b&&c.bottom>0});o===v&&e===p||(v=o,p=e,s.classList.toggle("nav-on-light",o),s.classList.toggle("nav-scrolled",e),t&&(o?(t.style.backgroundColor="rgba(255,255,255,0.78)",t.style.backdropFilter="blur(14px) saturate(1.8)",t.style.webkitBackdropFilter="blur(14px) saturate(1.8)",t.style.borderBottomColor="rgba(0,0,0,0.07)",u.forEach(n=>{n.style.color="#1a1a1a"}),a&&(a.style.filter="invert(1)")):(t.style.backgroundColor=e?"rgba(0,0,0,0.45)":"rgba(0,0,0,0)",t.style.backdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.webkitBackdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.borderBottomColor=e?"rgba(255,160,64,0.10)":"transparent",u.forEach(n=>{n.style.color=""}),a&&(a.style.filter=""))))};const t=document.getElementById("nav-bg"),a=s.querySelector("img"),u=Array.from(s.querySelectorAll(".nav-link")),k=Array.from(document.querySelectorAll("[data-nav-light]")),b=69;let g=!1,v=null,p=null;window.addEventListener("scroll",()=>{g||(g=!0,requestAnimationFrame(m))},{passive:!0}),m();const i=u.filter(l=>l.dataset.section);if(i.length){let l=0;const e=()=>{l=0;let f=null,d=-1/0;for(const r of i){const w=document.getElementById(r.dataset.section);if(!w)continue;const y=w.getBoundingClientRect().top-b;y<=0&&y>d&&(d=y,f=r)}for(const r of i)r.classList.toggle("is-active",r===f)},o=()=>{l||(l=requestAnimationFrame(e))};window.addEventListener("scroll",o,{passive:!0}),window.addEventListener("resize",o,{passive:!0});let n=0;const c=window.setInterval(()=>{o(),(i.every(d=>document.getElementById(d.dataset.section))||++n>40)&&window.clearInterval(c)},250)}}</script> <!-- Nav color switch on light sections.
+</p> </div> <img class="st-rise st-wipe" src="/strane-site/closing-family.webp" alt="The complete Strane brand expression in packaging, devices and merchandise" loading="lazy" decoding="async"> </section> </main>  <footer class="cs-next"> <a href="/work/avitas" class="cs-next-link" data-dir="next" style="--nx-bg:#04141c;--nx-accent:#e8c87a;--nx-glow:rgba(64,200,210,0.30);--nx-art:url(&#34;/portfolio/avitas/avitas-wood-pattern.webp&#34;);--nx-art-op:0.384;--nx-art-filter:brightness(0.8);--nx-art-size:cover;--nx-art-repeat:no-repeat;--nx-art-pos:50% 50%;--nx-logo-scale:1.7"> <span class="cs-next-art" aria-hidden="true"></span> <span class="cs-next-scrim" aria-hidden="true"></span> <span class="cs-eyebrow">Next Project</span> <span class="cs-next-name"> <span class="cs-next-index">05</span> <img class="cs-next-logo" src="/brand-logo/avitas-trim.png" alt="AVITAS" draggable="false"> <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M7 17L17 7M17 7H7M17 7V17"></path> </svg> </span> </a> </footer>  <div class="cs-pagerpin"> <nav class="cs-pagerbar" aria-label="Case studies"> <a href="/work/hellavated" class="cs-pagerbar-link" data-dir="prev"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M19 12H5M5 12l6-6M5 12l6 6"></path> </svg> <span> <i>Previous</i> <b>Hellavated</b> </span> </a> <span class="cs-pagerbar-here"> <span class="cs-pagerbar-count" aria-hidden="true"> <b>04</b> <i>/</i> 07 </span> <em>Strane</em> </span> <a href="/work/avitas" class="cs-pagerbar-link cs-pagerbar-next" data-dir="next"> <span> <i>Next</i> <b>AVITAS</b> </span> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M5 12h14M19 12l-6-6M19 12l-6 6"></path> </svg> </a> </nav> </div>  <script type="module">(()=>{const n=document.documentElement;if(n.classList.contains("zg-arriving")&&((window.scrollY||document.documentElement.scrollTop||0)>0&&n.classList.add("zg-ready-deep"),n.classList.add("zg-ready")),window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;const o=document.getElementById("page-content");if(!o)return;const s=["zg-arriving","zg-arriving-next","zg-arriving-prev","zg-ready","zg-ready-deep"],c=["zg-leaving","zg-leaving-plain","zg-leaving-next","zg-leaving-prev"],i=()=>Array.from(o.querySelectorAll("main, .cs-next")),l=()=>{for(const e of i())e.style.willChange="transform"},g=()=>{for(const e of i())e.style.willChange=""},d=()=>getComputedStyle(n).getPropertyValue("--zg-plate-ink").trim()||getComputedStyle(document.body).backgroundColor,m=(e,t)=>{l();const r=d();try{sessionStorage.setItem("zg-nav",t??"1"),r&&sessionStorage.setItem("zg-nav-ink",r)}catch{}n.classList.remove(...s),n.style.removeProperty("--zg-plate"),n.classList.add("zg-leaving",t?`zg-leaving-${t}`:"zg-leaving-plain"),window.setTimeout(()=>{location.href=e},480)};o.addEventListener("click",e=>{if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;const t=e.target?.closest?.("a[href]");if(!t||t.target==="_blank"||t.hasAttribute("download"))return;const r=new URL(t.href,location.href);if(r.origin!==location.origin||r.pathname===location.pathname&&r.hash)return;e.preventDefault();const a=t.dataset.dir;m(t.href,a==="next"||a==="prev"?a:void 0)}),o.addEventListener("pointerover",e=>{const t=e.target?.closest?.("a[href]");!t||t.target==="_blank"||t.hasAttribute("download")||l()},{passive:!0}),window.addEventListener("pageshow",e=>{e.persisted&&(n.classList.remove(...c,...s),n.style.removeProperty("--zg-plate"),g())})})();</script>   <script type="module" src="/_astro/StraneCaseStudy.astro_astro_type_script_index_0_lang.9RPGMQm4.js"></script>  </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync --> <script type="module">const s=document.getElementById("main-nav");if(s){let m=function(){g=!1;const e=window.scrollY>60,o=k.some(n=>{const c=n.getBoundingClientRect();return c.top<=b&&c.bottom>0});o===v&&e===p||(v=o,p=e,s.classList.toggle("nav-on-light",o),s.classList.toggle("nav-scrolled",e),t&&(o?(t.style.backgroundColor="rgba(255,255,255,0.78)",t.style.backdropFilter="blur(14px) saturate(1.8)",t.style.webkitBackdropFilter="blur(14px) saturate(1.8)",t.style.borderBottomColor="rgba(0,0,0,0.07)",u.forEach(n=>{n.style.color="#1a1a1a"}),a&&(a.style.filter="invert(1)")):(t.style.backgroundColor=e?"rgba(0,0,0,0.45)":"rgba(0,0,0,0)",t.style.backdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.webkitBackdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.borderBottomColor=e?"rgba(255,160,64,0.10)":"transparent",u.forEach(n=>{n.style.color=""}),a&&(a.style.filter=""))))};const t=document.getElementById("nav-bg"),a=s.querySelector("img"),u=Array.from(s.querySelectorAll(".nav-link")),k=Array.from(document.querySelectorAll("[data-nav-light]")),b=69;let g=!1,v=null,p=null;window.addEventListener("scroll",()=>{g||(g=!0,requestAnimationFrame(m))},{passive:!0}),m();const i=u.filter(l=>l.dataset.section);if(i.length){let l=0;const e=()=>{l=0;let f=null,d=-1/0;for(const r of i){const w=document.getElementById(r.dataset.section);if(!w)continue;const y=w.getBoundingClientRect().top-b;y<=0&&y>d&&(d=y,f=r)}for(const r of i)r.classList.toggle("is-active",r===f)},o=()=>{l||(l=requestAnimationFrame(e))};window.addEventListener("scroll",o,{passive:!0}),window.addEventListener("resize",o,{passive:!0});let n=0;const c=window.setInterval(()=>{o(),(i.every(d=>document.getElementById(d.dataset.section))||++n>40)&&window.clearInterval(c)},250)}}</script> <!-- Nav color switch on light sections.
          The single owner of the nav's appearance. This used to be two scroll
          listeners: this one toggling classes, and a second, unguarded one in
          index.astro writing the inline styles that actually painted the bar.

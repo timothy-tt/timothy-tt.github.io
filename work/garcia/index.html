@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="California packaging adaptation, campaign design, lifestyle presentation, and 3D retail concepts for Garcia Hand Picked."><!-- Tab icons: the wordmark's own `z`, on the page's near-black so it
+<!DOCTYPE html><html lang="en" data-arrival="cinematic"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="California packaging adaptation, campaign design, lifestyle presentation, and 3D retail concepts for Garcia Hand Picked."><!-- Tab icons: the wordmark's own `z`, on the page's near-black so it
          still reads in a light tab strip. Cut by scripts/build-favicons.mjs,
          re-run it if Wordmark_White.png is ever replaced. The .ico is listed
          too, because that is the file a crawler asks for by name. --><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><!-- Fonts are self-hosted (public/fonts + styles/fonts.css): Google's own
@@ -21,8 +21,10 @@
          and leaves this flag before navigating; whichever document loads next
          fades in to meet it, so leaving and arriving read as one move instead
          of a cut. Runs in <head>, before first paint, or the page would flash
-         at full opacity first. Only fires when the flag is there, so a cold
-         load or a bookmark is untouched. --><style>
+         at full opacity first. On an ordinary page nothing happens without
+         the flag, so a cold load or a bookmark is untouched; the four
+         cinematic case-study routes play their plate on a cold load too, and
+         the rules for that are in the second half of this block. --><style>
       @keyframes zg-arrive { from { opacity: 0; } to { opacity: 1; } }
       /* will-change lifts the fade onto the compositor. Without it the
          animation runs on the main thread, and hydrating the case-study
@@ -45,15 +47,111 @@
          clip now lives on .cs-page, which wraps the sliding <main> and is
          not itself scrollable, so sticky still resolves against the
          viewport. See CaseStudyContent's slide rules. */
+
+      /* The home page's own exit, the counterpart of zg-arrive. Only the
+         pages that do NOT carry data-arrival fade out this way: a cinematic
+         page is covered by the plate instead, and fading body there would
+         take the plate with it, since the plate IS body's pseudo-element. */
+      @keyframes zg-leave { to { opacity: 0; } }
+      html.zg-leaving:not([data-arrival]) body { animation: zg-leave 0.3s ease-in forwards; will-change: opacity; }
+
+      /* ══ The plate ══════════════════════════════════════════════════════
+         Arriving at one of the four ported case studies is a scene cut, not
+         a fade: a full-viewport panel in the brand's own ink already covers
+         the viewport in the first frame, holds while the document is parsed,
+         then wipes away in the direction of travel and hands over to a page
+         that settles in behind it.
+
+         It is a pseudo-element on body, and it is ::after rather than
+         ::before because ::before is spoken for on every one of these four
+         routes — it carries the fixed gradient ground (global.css, and the
+         repaints in garcia-site.css, hellavated-site.css, strane-site.css
+         and dodrops-page.css). A pseudo-element rather than a real <div> so
+         that it exists at first paint: an element appended at the end of the
+         document paints after the markup above it, which is a frame of the
+         page showing through before the plate lands on top of it.
+
+         Its colour is var(--zg-plate), written to html's inline style by the
+         head script below from the ink the page you are leaving stored, so
+         the plate that covers DO DROPS on the way out of Garcia is still
+         Garcia-dark when it uncovers DO DROPS. With nothing stored (a cold
+         load, a bookmark, a hop in from a React case study, which stores no
+         ink) it falls back to this page's own --zg-plate-ink.
+
+         Parked off-screen whenever no zg-* class is on, with a standing
+         will-change, so the exit's cover animation starts from a layer that
+         is already composited instead of paying for the raster on its first
+         frame. will-change on a pseudo costs nothing elsewhere: it has no
+         descendants to become a containing block for. */
+      html[data-arrival='cinematic'] body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        pointer-events: none;
+        background: var(--zg-plate, var(--zg-plate-ink, #0b0b0d));
+        transform: translateX(100%);
+        will-change: transform;
+      }
+      /* Covering, and STATIC, from the first frame until the document is
+         parsed: zg-ready is what releases it (added by CaseStudyTransition's
+         script at the foot of the page, and again on DOMContentLoaded). A
+         wipe that started on a timer would uncover a half-built page on a
+         slow load; holding means the cut always lands on a finished one. */
+      html[data-arrival='cinematic'].zg-arriving body::after { transform: translate(0); }
+      /* The wipe leaves the way the page you came from left: forward, it
+         slides off to the left; back, to the right; and with no direction at
+         all (a cold load, the home page, All Work) it rises like a curtain. */
+      @keyframes zg-plate-off-left { to { transform: translateX(-100%); } }
+      @keyframes zg-plate-off-right { to { transform: translateX(100%); } }
+      @keyframes zg-plate-off-up { to { transform: translateY(-100%); } }
+      @keyframes zg-plate-fade { to { opacity: 0; } }
+      html[data-arrival='cinematic'].zg-arriving.zg-ready body::after {
+        animation: zg-plate-off-up 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.06s forwards;
+      }
+      html[data-arrival='cinematic'].zg-arriving-next.zg-ready body::after { animation-name: zg-plate-off-left; }
+      html[data-arrival='cinematic'].zg-arriving-prev.zg-ready body::after { animation-name: zg-plate-off-right; }
+      /* The plate replaces the fade on these pages; running both would fade
+         the plate out along with everything under it. */
+      html[data-arrival='cinematic'].zg-arriving body { animation: none; will-change: auto; }
+
       @media (prefers-reduced-motion: reduce) {
-        html.zg-arriving body { animation: none; }
+        html.zg-arriving body,
+        html.zg-leaving:not([data-arrival]) body { animation: none; }
+        /* The cut still happens, it just does not travel: the plate dissolves
+           where it stands and nothing under it moves. Last in source order so
+           it beats the three directional animation-name rules above, which
+           carry the same specificity. */
+        html[data-arrival='cinematic'].zg-arriving.zg-ready body::after {
+          animation: zg-plate-fade 0.3s linear forwards;
+        }
       }
     </style><script>
+      /* The arrival half of the cross-document transition, and the ink
+         hand-off. Runs in <head>, before first paint: the plate has to be
+         opaque in the very first frame or the cut is a flash of the page. */
       try {
+        var root = document.documentElement;
+        var cinematic = root.getAttribute('data-arrival') === 'cinematic';
         var nav = sessionStorage.getItem('zg-nav');
+        var ink = sessionStorage.getItem('zg-nav-ink');
+        // Both are one-shot. The ink is cleared even on a page that cannot
+        // use it (the home page, a -site route), or it would still be sitting
+        // there on the next cinematic arrival and paint that plate in the
+        // colour of a page two hops back.
+        if (nav) sessionStorage.removeItem('zg-nav');
+        if (ink) sessionStorage.removeItem('zg-nav-ink');
+        if (!nav && cinematic) {
+          // No flag: a cold load, a bookmark, a link from outside. The
+          // curtain still plays, because the plate is this page's opening
+          // shot and not only a stitch between two documents. Not on a
+          // reload and not on back/forward, where the reader already knows
+          // the page and a 900ms cover reads as a stall.
+          var e0 = performance.getEntriesByType('navigation')[0];
+          if (e0 && e0.type === 'navigate') nav = '1';
+        }
         if (nav) {
-          sessionStorage.removeItem('zg-nav');
-          var root = document.documentElement;
+          if (cinematic && ink) root.style.setProperty('--zg-plate', ink);
           root.classList.add('zg-arriving');
           // "next"/"prev" carry the direction of travel; "1" is a plain move.
           if (nav === 'next' || nav === 'prev') root.classList.add('zg-arriving-' + nav);
@@ -66,16 +164,56 @@
          how a one-frame transition detail turns into a permanent bug. */
       (function () {
         var root = document.documentElement;
-        if (!root.classList.contains('zg-arriving')) return;
+        var cinematic = root.getAttribute('data-arrival') === 'cinematic';
         var done = function () {
-          root.classList.remove('zg-arriving', 'zg-arriving-next', 'zg-arriving-prev');
+          root.classList.remove(
+            'zg-arriving', 'zg-arriving-next', 'zg-arriving-prev', 'zg-ready', 'zg-ready-deep',
+          );
+          root.style.removeProperty('--zg-plate');
         };
-        window.addEventListener('load', function () { window.setTimeout(done, 700); });
-        window.setTimeout(done, 2500); // load never fired (bfcache, blocked asset)
+        if (!cinematic) {
+          if (!root.classList.contains('zg-arriving')) return;
+          window.addEventListener('load', function () { window.setTimeout(done, 700); });
+          window.setTimeout(done, 2500); // load never fired (bfcache, blocked asset)
+          return;
+        }
+        /* A cinematic page cannot strip on load+700ms. With the assets warm
+           that fires while the plate is still holding, and the wipe gets cut
+           off mid-move or never starts at all. The plate itself says when it
+           is finished: animationend bubbles to document with pseudoElement
+           '::after', and body does not exist yet up here in <head>, which is
+           why the listener goes on document rather than on body. */
+        document.addEventListener('animationend', function (ev) {
+          if (ev.target !== document.body || ev.pseudoElement !== '::after') return;
+          /* Not on this frame: the plate is the SHORTEST of the arrival
+             animations, not the longest. The wipe runs 0.06 + 0.9 = 0.96s and
+             the page settling in behind it runs 0.06 + 1.3 = 1.36s, so
+             stripping the instant the plate is gone cuts the settle off at
+             98.2% of its curve, and <main> snaps the last 2.4px (measured at
+             1440px wide, 9vw of travel on cubic-bezier(.16,.84,.34,1)) to
+             identity in one frame. 420ms of grace covers the remaining 400. */
+          window.setTimeout(done, 420);
+        }, true);
+        /* Belt and braces for zg-ready, so the plate can never be left
+           holding over a finished page if the page's own script never runs.
+           The fallback clock starts at ready, not at parse: the hold has no
+           fixed length, so 4s from ready is 4s from the only moment the
+           remaining animation has a known duration (0.06 + 0.9). */
+        var arm = function () {
+          arm = function () {};
+          window.setTimeout(done, 4000);
+        };
+        var watch = new MutationObserver(function () {
+          if (root.classList.contains('zg-ready')) { watch.disconnect(); arm(); }
+        });
+        watch.observe(root, { attributes: true, attributeFilter: ['class'] });
+        document.addEventListener('DOMContentLoaded', function () {
+          if (root.classList.contains('zg-arriving')) root.classList.add('zg-ready');
+        });
       })();
     </script><link rel="stylesheet" href="/_astro/index.ZH7OUS-B.css">
-<link rel="stylesheet" href="/_astro/garcia.B3twuHVD.css">
-<style>@keyframes zg-leave{to{opacity:0}}html.zg-leaving body{animation:zg-leave .26s ease-in forwards;will-change:opacity}@keyframes zg-main-out{to{transform:translate3d(0,-12px,0)}}@keyframes zg-slide-out-left{to{transform:translate3d(-7vw,0,0)}}@keyframes zg-slide-out-right{to{transform:translate3d(7vw,0,0)}}html.zg-leaving-plain #page-content :is(main,.cs-next){animation:zg-main-out .26s ease-in forwards}html.zg-leaving-next #page-content :is(main,.cs-next){animation:zg-slide-out-left .26s ease-in forwards}html.zg-leaving-prev #page-content :is(main,.cs-next){animation:zg-slide-out-right .26s ease-in forwards}@keyframes zg-slide-in-right{0%{transform:translate3d(7vw,0,0)}to{transform:translateZ(0)}}@keyframes zg-slide-in-left{0%{transform:translate3d(-7vw,0,0)}to{transform:translateZ(0)}}html.zg-arriving-next #page-content :is(main,.cs-next){animation:zg-slide-in-right .55s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-prev #page-content :is(main,.cs-next){animation:zg-slide-in-left .55s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving #page-content :is(main,.cs-next){will-change:transform}html:is(.zg-arriving-next,.zg-arriving-prev,.zg-leaving-next,.zg-leaving-prev) #page-content{overflow-x:clip}@media(prefers-reduced-motion:reduce){html.zg-leaving body,html:is(.zg-leaving-plain,.zg-leaving-next,.zg-leaving-prev,.zg-arriving-next,.zg-arriving-prev) #page-content :is(main,.cs-next){animation:none}}
+<link rel="stylesheet" href="/_astro/garcia.C1ClN6Tw.css">
+<style>@keyframes zg-drift-left{to{transform:translate3d(-4vw,0,0)}}@keyframes zg-drift-right{to{transform:translate3d(4vw,0,0)}}@keyframes zg-drift-up{to{transform:translate3d(0,-12px,0)}}html.zg-leaving-plain #page-content :is(main,.cs-next){animation:zg-drift-up .48s ease-in forwards}html.zg-leaving-next #page-content :is(main,.cs-next){animation:zg-drift-left .48s ease-in forwards}html.zg-leaving-prev #page-content :is(main,.cs-next){animation:zg-drift-right .48s ease-in forwards}@keyframes zg-plate-on-left{0%{transform:translate(100%)}to{transform:translate(0)}}@keyframes zg-plate-on-right{0%{transform:translate(-100%)}to{transform:translate(0)}}@keyframes zg-plate-on-down{0%{transform:translateY(-100%)}to{transform:translateY(0)}}html[data-arrival=cinematic].zg-leaving-next body:after{animation:zg-plate-on-left .48s cubic-bezier(.76,0,.24,1) forwards}html[data-arrival=cinematic].zg-leaving-prev body:after{animation:zg-plate-on-right .48s cubic-bezier(.76,0,.24,1) forwards}html[data-arrival=cinematic].zg-leaving-plain body:after{animation:zg-plate-on-down .48s cubic-bezier(.76,0,.24,1) forwards}html[data-arrival=cinematic].zg-leaving body{animation:none;will-change:auto}@keyframes zg-arr-next{0%{transform:translate3d(9vw,0,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-prev{0%{transform:translate3d(-9vw,0,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-plain{0%{transform:translate3d(0,24px,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-next-flat{0%{transform:translate3d(9vw,0,0)}to{transform:translateZ(0)}}@keyframes zg-arr-prev-flat{0%{transform:translate3d(-9vw,0,0)}to{transform:translateZ(0)}}@keyframes zg-arr-plain-flat{0%{transform:translate3d(0,24px,0)}to{transform:translateZ(0)}}html.zg-arriving.zg-ready #page-content :is(main,.cs-next){transform-origin:50% 0}html.zg-arriving.zg-ready #page-content main{animation:zg-arr-plain 1.3s cubic-bezier(.16,.84,.34,1) .06s both}html.zg-arriving.zg-ready #page-content .cs-next{animation:zg-arr-plain-flat 1.3s cubic-bezier(.16,.84,.34,1) .06s both}html.zg-arriving-next.zg-ready #page-content main{animation-name:zg-arr-next}html.zg-arriving-next.zg-ready #page-content .cs-next{animation-name:zg-arr-next-flat}html.zg-arriving-prev.zg-ready #page-content main{animation-name:zg-arr-prev}html.zg-arriving-prev.zg-ready #page-content .cs-next{animation-name:zg-arr-prev-flat}html.zg-arriving.zg-ready-deep #page-content main{animation-name:zg-arr-plain-flat}html.zg-arriving-next.zg-ready-deep #page-content main{animation-name:zg-arr-next-flat}html.zg-arriving-prev.zg-ready-deep #page-content main{animation-name:zg-arr-prev-flat}@keyframes zg-bar-down{0%{transform:translateY(-100%)}to{transform:translateY(0)}}@keyframes zg-bar-up{0%{transform:translateY(100%)}to{transform:translateY(0)}}html.zg-arriving.zg-ready #page-content .cs-nav{animation:zg-bar-down .6s cubic-bezier(.16,.84,.34,1) .5s both}html.zg-arriving.zg-ready #page-content .cs-pagerbar{animation:zg-bar-up .6s cubic-bezier(.16,.84,.34,1) .65s both}html.zg-arriving #page-content :is(main,.cs-next,.cs-nav,.cs-pagerbar){will-change:transform}html:is(.zg-arriving-next,.zg-arriving-prev,.zg-leaving-next,.zg-leaving-prev) #page-content{overflow-x:clip}@media(prefers-reduced-motion:reduce){html:is(.zg-leaving-plain,.zg-leaving-next,.zg-leaving-prev) #page-content :is(main,.cs-next),html.zg-arriving.zg-ready #page-content :is(main,.cs-next,.cs-nav,.cs-pagerbar){animation:none}}
 html.gc-js .gc-rise[data-astro-cid-6bgpuj4r]{opacity:0;transform:translate3d(0,14px,0);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1),clip-path .9s cubic-bezier(.22,1,.36,1);transition-delay:calc(var(--i, 0) * 70ms)}html.gc-js .gc-rise[data-astro-cid-6bgpuj4r].is-in{opacity:1;transform:none}html.gc-js [data-astro-cid-6bgpuj4r]:where(.intro-figure,.vegas-pair figure,.california-trio figure:not(.ca-poster),.california-apply figure,.magic-pair figure:not(.magic-process),.magic-wide,.retail-wall,.retail-pair figure,.closing-image){clip-path:inset(12% 0 12% 0)}html.gc-js :where(.intro-figure,.vegas-pair figure,.california-trio figure:not(.ca-poster),.california-apply figure,.magic-pair figure:not(.magic-process),.magic-wide,.retail-wall,.retail-pair figure,.closing-image).is-in[data-astro-cid-6bgpuj4r]{clip-path:inset(0)}html.gc-js [data-astro-cid-6bgpuj4r]:where(.intro-figure,.closing-image) img[data-astro-cid-6bgpuj4r]{transform:scale(1.05);transition:transform 1.1s cubic-bezier(.22,1,.36,1);transition-delay:calc(var(--i, 0) * 70ms)}html.gc-js :where(.intro-figure,.closing-image).is-in[data-astro-cid-6bgpuj4r] img[data-astro-cid-6bgpuj4r]{transform:none}html.gc-js .concept-row[data-astro-cid-6bgpuj4r] figcaption[data-astro-cid-6bgpuj4r]{position:relative;border-top-color:transparent}html.gc-js .concept-row[data-astro-cid-6bgpuj4r] figcaption[data-astro-cid-6bgpuj4r]:before{content:"";position:absolute;top:-1px;left:0;right:0;height:1px;background:#0b0b0d73;transform:scaleX(0);transform-origin:left center;transition:transform .85s cubic-bezier(.22,.61,.36,1);transition-delay:calc(var(--i, 0) * 70ms + .6s)}html.gc-js .concept-row[data-astro-cid-6bgpuj4r] .gc-rise[data-astro-cid-6bgpuj4r].is-in figcaption[data-astro-cid-6bgpuj4r]:before{transform:scaleX(1)}@media(prefers-reduced-motion:no-preference){html.gc-js [data-astro-cid-6bgpuj4r]:where(.intro-figure,.vegas-pair figure,.california-trio figure:not(.ca-poster),.california-apply figure,.magic-pair figure:not(.magic-process),.magic-wide,.retail-wall,.retail-pair figure,.closing-image){overflow:hidden}html.gc-js [data-astro-cid-6bgpuj4r]:where(.vegas-pair figure,.california-trio figure:not(.ca-poster),.california-apply figure,.magic-pair figure:not(.magic-process),.magic-wide,.retail-wall,.retail-pair figure) img[data-astro-cid-6bgpuj4r]{transform:scale(1.09)}html.gc-js .hero-photo[data-astro-cid-6bgpuj4r]{transform-origin:50% 100%}}@media(prefers-reduced-motion:reduce){html.gc-js .gc-rise[data-astro-cid-6bgpuj4r]{opacity:1;transform:none;clip-path:none;transition:none}html.gc-js .gc-rise[data-astro-cid-6bgpuj4r] img[data-astro-cid-6bgpuj4r]{transform:none;transition:none}html.gc-js .concept-row[data-astro-cid-6bgpuj4r] figcaption[data-astro-cid-6bgpuj4r]:before{transform:scaleX(1);transition:none}}
 </style></head> <body> <div id="page-content">  <script>
   document.documentElement.classList.add('gc-js');
@@ -138,7 +276,7 @@ The brand was already established. The task was to make each new expression feel
         and dimensional retail concepts, the project demonstrates what thoughtful
         stewardship can do: preserve the soul, solve the practical problem, and give an
         established voice new places to be heard.
-</p> </div> </section> <footer data-astro-cid-6bgpuj4r> <p class="gc-rise" style="--i:0" data-astro-cid-6bgpuj4r>GARCIA HAND PICKED / PORTFOLIO CASE STUDY</p> <div class="gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <a href="https://www.garciahandpicked.com/family/" target="_blank" rel="noreferrer" data-astro-cid-6bgpuj4r>Brand heritage — https://www.garciahandpicked.com/family/</a> <a href="https://www.globenewswire.com/news-release/2026/05/28/3303110/0/en/garcia-hand-picked-returns-home-to-california-where-it-all-began.html" target="_blank" rel="noreferrer" data-astro-cid-6bgpuj4r>California return — globenewswire.com/news-release/2026/05/28/3303110</a> </div> </footer> </main> <footer class="cs-next" data-astro-cid-6bgpuj4r> <a href="/work/dodrops" class="cs-next-link" data-dir="next" style="--nx-bg:#0b0714;--nx-accent:#ff0d6c;--nx-glow:rgba(255,13,108,0.30);--nx-art:url(&#34;/portfolio/dodrops/dodrops-aura-banner-notext.webp&#34;);--nx-art-op:0.288;--nx-art-filter:none;--nx-art-size:cover;--nx-art-repeat:no-repeat;--nx-art-pos:50% 42%;--nx-logo-scale:1.9" data-astro-cid-6bgpuj4r> <span class="cs-next-art" aria-hidden="true" data-astro-cid-6bgpuj4r></span> <span class="cs-next-scrim" aria-hidden="true" data-astro-cid-6bgpuj4r></span> <span class="cs-eyebrow" data-astro-cid-6bgpuj4r>Next Project</span> <span class="cs-next-name" data-astro-cid-6bgpuj4r> <span class="cs-next-index" data-astro-cid-6bgpuj4r>02</span> <img class="cs-next-logo" src="/brand-logo/dodrops-lockup.png" alt="DO Drops" draggable="false" data-astro-cid-6bgpuj4r> <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-6bgpuj4r> <path d="M7 17L17 7M17 7H7M17 7V17" data-astro-cid-6bgpuj4r></path> </svg> </span> </a> </footer>  <div class="cs-pagerpin" data-astro-cid-6bgpuj4r> <nav class="cs-pagerbar" aria-label="Case studies" data-astro-cid-6bgpuj4r> <a href="/work/better" class="cs-pagerbar-link" data-dir="prev" data-astro-cid-6bgpuj4r> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-6bgpuj4r> <path d="M19 12H5M5 12l6-6M5 12l6 6" data-astro-cid-6bgpuj4r></path> </svg> <span data-astro-cid-6bgpuj4r> <i data-astro-cid-6bgpuj4r>Previous</i> <b data-astro-cid-6bgpuj4r>BETTER</b> </span> </a> <span class="cs-pagerbar-here" data-astro-cid-6bgpuj4r> <span class="cs-pagerbar-count" aria-hidden="true" data-astro-cid-6bgpuj4r> <b data-astro-cid-6bgpuj4r>01</b> <i data-astro-cid-6bgpuj4r>/</i> 07 </span> <em data-astro-cid-6bgpuj4r>Garcia HandPicked</em> </span> <a href="/work/dodrops" class="cs-pagerbar-link cs-pagerbar-next" data-dir="next" data-astro-cid-6bgpuj4r> <span data-astro-cid-6bgpuj4r> <i data-astro-cid-6bgpuj4r>Next</i> <b data-astro-cid-6bgpuj4r>DO Drops</b> </span> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-6bgpuj4r> <path d="M5 12h14M19 12l-6-6M19 12l-6 6" data-astro-cid-6bgpuj4r></path> </svg> </a> </nav> </div>  <script type="module">(()=>{if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;const r=document.documentElement,n=document.getElementById("page-content");if(!n)return;const l=["zg-arriving","zg-arriving-next","zg-arriving-prev"],c=["zg-leaving","zg-leaving-plain","zg-leaving-next","zg-leaving-prev"],i=()=>Array.from(n.querySelectorAll("main, .cs-next")),s=()=>{document.body.style.willChange="opacity";for(const e of i())e.style.willChange="transform"},g=()=>{document.body.style.willChange="";for(const e of i())e.style.willChange=""},d=(e,t)=>{s();try{sessionStorage.setItem("zg-nav",t??"1")}catch{}r.classList.remove(...l),r.classList.add("zg-leaving",t?`zg-leaving-${t}`:"zg-leaving-plain"),window.setTimeout(()=>{location.href=e},260)};n.addEventListener("click",e=>{if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;const t=e.target?.closest?.("a[href]");if(!t||t.target==="_blank"||t.hasAttribute("download"))return;const a=new URL(t.href,location.href);if(a.origin!==location.origin||a.pathname===location.pathname&&a.hash)return;e.preventDefault();const o=t.dataset.dir;d(t.href,o==="next"||o==="prev"?o:void 0)}),n.addEventListener("pointerover",e=>{const t=e.target?.closest?.("a[href]");!t||t.target==="_blank"||t.hasAttribute("download")||s()},{passive:!0}),window.addEventListener("pageshow",e=>{e.persisted&&(r.classList.remove(...c),g())})})();</script>   <script>
+</p> </div> </section> <footer data-astro-cid-6bgpuj4r> <p class="gc-rise" style="--i:0" data-astro-cid-6bgpuj4r>GARCIA HAND PICKED / PORTFOLIO CASE STUDY</p> <div class="gc-rise" style="--i:1" data-astro-cid-6bgpuj4r> <a href="https://www.garciahandpicked.com/family/" target="_blank" rel="noreferrer" data-astro-cid-6bgpuj4r>Brand heritage — https://www.garciahandpicked.com/family/</a> <a href="https://www.globenewswire.com/news-release/2026/05/28/3303110/0/en/garcia-hand-picked-returns-home-to-california-where-it-all-began.html" target="_blank" rel="noreferrer" data-astro-cid-6bgpuj4r>California return — globenewswire.com/news-release/2026/05/28/3303110</a> </div> </footer> </main> <footer class="cs-next" data-astro-cid-6bgpuj4r> <a href="/work/dodrops" class="cs-next-link" data-dir="next" style="--nx-bg:#0b0714;--nx-accent:#ff0d6c;--nx-glow:rgba(255,13,108,0.30);--nx-art:url(&#34;/portfolio/dodrops/dodrops-aura-banner-notext.webp&#34;);--nx-art-op:0.288;--nx-art-filter:none;--nx-art-size:cover;--nx-art-repeat:no-repeat;--nx-art-pos:50% 42%;--nx-logo-scale:1.9" data-astro-cid-6bgpuj4r> <span class="cs-next-art" aria-hidden="true" data-astro-cid-6bgpuj4r></span> <span class="cs-next-scrim" aria-hidden="true" data-astro-cid-6bgpuj4r></span> <span class="cs-eyebrow" data-astro-cid-6bgpuj4r>Next Project</span> <span class="cs-next-name" data-astro-cid-6bgpuj4r> <span class="cs-next-index" data-astro-cid-6bgpuj4r>02</span> <img class="cs-next-logo" src="/brand-logo/dodrops-lockup.png" alt="DO Drops" draggable="false" data-astro-cid-6bgpuj4r> <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-6bgpuj4r> <path d="M7 17L17 7M17 7H7M17 7V17" data-astro-cid-6bgpuj4r></path> </svg> </span> </a> </footer>  <div class="cs-pagerpin" data-astro-cid-6bgpuj4r> <nav class="cs-pagerbar" aria-label="Case studies" data-astro-cid-6bgpuj4r> <a href="/work/better" class="cs-pagerbar-link" data-dir="prev" data-astro-cid-6bgpuj4r> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-6bgpuj4r> <path d="M19 12H5M5 12l6-6M5 12l6 6" data-astro-cid-6bgpuj4r></path> </svg> <span data-astro-cid-6bgpuj4r> <i data-astro-cid-6bgpuj4r>Previous</i> <b data-astro-cid-6bgpuj4r>BETTER</b> </span> </a> <span class="cs-pagerbar-here" data-astro-cid-6bgpuj4r> <span class="cs-pagerbar-count" aria-hidden="true" data-astro-cid-6bgpuj4r> <b data-astro-cid-6bgpuj4r>01</b> <i data-astro-cid-6bgpuj4r>/</i> 07 </span> <em data-astro-cid-6bgpuj4r>Garcia HandPicked</em> </span> <a href="/work/dodrops" class="cs-pagerbar-link cs-pagerbar-next" data-dir="next" data-astro-cid-6bgpuj4r> <span data-astro-cid-6bgpuj4r> <i data-astro-cid-6bgpuj4r>Next</i> <b data-astro-cid-6bgpuj4r>DO Drops</b> </span> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-6bgpuj4r> <path d="M5 12h14M19 12l-6-6M19 12l-6 6" data-astro-cid-6bgpuj4r></path> </svg> </a> </nav> </div>  <script type="module">(()=>{const n=document.documentElement;if(n.classList.contains("zg-arriving")&&((window.scrollY||document.documentElement.scrollTop||0)>0&&n.classList.add("zg-ready-deep"),n.classList.add("zg-ready")),window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;const o=document.getElementById("page-content");if(!o)return;const s=["zg-arriving","zg-arriving-next","zg-arriving-prev","zg-ready","zg-ready-deep"],c=["zg-leaving","zg-leaving-plain","zg-leaving-next","zg-leaving-prev"],i=()=>Array.from(o.querySelectorAll("main, .cs-next")),l=()=>{for(const e of i())e.style.willChange="transform"},g=()=>{for(const e of i())e.style.willChange=""},d=()=>getComputedStyle(n).getPropertyValue("--zg-plate-ink").trim()||getComputedStyle(document.body).backgroundColor,m=(e,t)=>{l();const r=d();try{sessionStorage.setItem("zg-nav",t??"1"),r&&sessionStorage.setItem("zg-nav-ink",r)}catch{}n.classList.remove(...s),n.style.removeProperty("--zg-plate"),n.classList.add("zg-leaving",t?`zg-leaving-${t}`:"zg-leaving-plain"),window.setTimeout(()=>{location.href=e},480)};o.addEventListener("click",e=>{if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;const t=e.target?.closest?.("a[href]");if(!t||t.target==="_blank"||t.hasAttribute("download"))return;const r=new URL(t.href,location.href);if(r.origin!==location.origin||r.pathname===location.pathname&&r.hash)return;e.preventDefault();const a=t.dataset.dir;m(t.href,a==="next"||a==="prev"?a:void 0)}),o.addEventListener("pointerover",e=>{const t=e.target?.closest?.("a[href]");!t||t.target==="_blank"||t.hasAttribute("download")||l()},{passive:!0}),window.addEventListener("pageshow",e=>{e.persisted&&(n.classList.remove(...c,...s),n.style.removeProperty("--zg-plate"),g())})})();</script>   <script>
   (function () {
     var reels = document.querySelectorAll('.magic-pair video');
     if (!reels.length) return;
