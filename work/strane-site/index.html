@@ -161,13 +161,16 @@
            the view-transition path does not happen until pagereveal). Either
            can land first, so wait for the pair.
 
-           1600ms after that: the settle is 60ms of delay plus 1300ms, and the
-           bars run 650 + 600. 1600 clears both with room, and is short enough
-           that nothing is still sitting on a composited layer by the time the
-           reader has started scrolling. */
+           1000ms after that, which is the whole of the entrance now. The
+           settle is a 900ms scale, the fallback's swipe-in is 550ms, and the
+           two bars that used to be dealt in on their own 650 + 600 are gone
+           (a swipe moves the page with its furniture attached). 1000 clears
+           the longest of them and is short enough that nothing is still
+           sitting on a composited layer by the time the reader has started
+           scrolling. */
         var arm = function () {
           arm = function () {};
-          window.setTimeout(done, 1600);
+          window.setTimeout(done, 1000);
         };
         var watch = new MutationObserver(function () {
           var c = root.classList;
@@ -184,9 +187,7 @@
         });
       })();
     </script><link rel="stylesheet" href="/_astro/index.ZH7OUS-B.css">
-<link rel="stylesheet" href="/_astro/strane-site.Cy0jJsOv.css">
-<style>@keyframes zg-arr-next{0%{transform:translate3d(9vw,0,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-prev{0%{transform:translate3d(-9vw,0,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-plain{0%{transform:translate3d(0,24px,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-next-flat{0%{transform:translate3d(9vw,0,0)}to{transform:translateZ(0)}}@keyframes zg-arr-prev-flat{0%{transform:translate3d(-9vw,0,0)}to{transform:translateZ(0)}}@keyframes zg-arr-plain-flat{0%{transform:translate3d(0,24px,0)}to{transform:translateZ(0)}}html.zg-arriving.zg-ready #page-content :is(main,.cs-next){transform-origin:50% 0}html.zg-arriving.zg-ready #page-content main{animation:zg-arr-plain 1.3s cubic-bezier(.16,.84,.34,1) .06s both}html.zg-arriving.zg-ready #page-content .cs-next{animation:zg-arr-plain-flat 1.3s cubic-bezier(.16,.84,.34,1) .06s both}html.zg-arriving-next.zg-ready #page-content main{animation-name:zg-arr-next}html.zg-arriving-next.zg-ready #page-content .cs-next{animation-name:zg-arr-next-flat}html.zg-arriving-prev.zg-ready #page-content main{animation-name:zg-arr-prev}html.zg-arriving-prev.zg-ready #page-content .cs-next{animation-name:zg-arr-prev-flat}html.zg-arriving.zg-ready-deep #page-content main{animation-name:zg-arr-plain-flat}html.zg-arriving-next.zg-ready-deep #page-content main{animation-name:zg-arr-next-flat}html.zg-arriving-prev.zg-ready-deep #page-content main{animation-name:zg-arr-prev-flat}@keyframes zg-arr-settle{0%{transform:scale(1.035)}to{transform:scale(1)}}html.zg-vt.zg-arriving.zg-ready #page-content main{animation-name:zg-arr-settle}html.zg-vt.zg-arriving.zg-ready #page-content .cs-next{animation:none}html.zg-vt.zg-arriving.zg-ready-deep #page-content main{animation:none}@keyframes zg-bar-down{0%{transform:translateY(-100%)}to{transform:translateY(0)}}@keyframes zg-bar-up{0%{transform:translateY(100%)}to{transform:translateY(0)}}html.zg-arriving.zg-ready #page-content .cs-nav{animation:zg-bar-down .6s cubic-bezier(.16,.84,.34,1) .5s both}html.zg-arriving.zg-ready #page-content .cs-pagerbar{animation:zg-bar-up .6s cubic-bezier(.16,.84,.34,1) .65s both}html.zg-arriving #page-content :is(main,.cs-next,.cs-nav,.cs-pagerbar){will-change:transform}html:is(.zg-arriving-next,.zg-arriving-prev) #page-content{overflow-x:clip}@media(prefers-reduced-motion:reduce){html.zg-arriving.zg-ready #page-content :is(main,.cs-next,.cs-nav,.cs-pagerbar),html.zg-vt.zg-arriving.zg-ready #page-content :is(main,.cs-next){animation:none}}
-</style></head> <body> <div id="page-content">  <script>
+<link rel="stylesheet" href="/_astro/strane-site.Cy0jJsOv.css"></head> <body> <div id="page-content">  <script>
   document.documentElement.classList.add('st-js');
 </script><a href="#story" class="skip">Skip to case study</a>  <header class="topbar" id="top"> <a class="masthead" href="/#work" aria-label="Strane, Zegoe: back to all work">Strane.</a> <span class="project-type kicker">Brand evolution / Case study</span> <nav aria-label="Case study sections"> <a href="#story">The shift</a> <a href="#identity">Identity</a> <a href="#packaging">Packaging</a> <a href="#in-the-wild">In the wild</a> </nav> </header> <main>  <section class="hero" aria-labelledby="hero-title"> <div class="wrap"> <div class="hero-main">  <div class="hero-collage" aria-hidden="true"> <img class="hs hs-model" src="/strane-site/hero-model.webp" alt="" width="1140" height="1637"> <img class="hs hs-eye-a" src="/strane-site/sticker-eye-sativa.webp" alt="" width="560" height="490"> <img class="hs hs-eye-b" src="/strane-site/sticker-eye-indica.webp" alt="" width="500" height="438"> <img class="hs hs-eye-c" src="/strane-site/sticker-eye-hybrid.webp" alt="" width="560" height="490"> <img class="hs hs-bolt-a" src="/strane-site/bolt-1.svg" alt=""> <img class="hs hs-bolt-b" src="/strane-site/bolt-2.svg" alt=""> <img class="hs hs-star-a" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-b" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-c" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-d" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-e" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> </div> <div class="hero-headline"> <h1 id="hero-title">Loud.<br><span>By design.</span></h1> <p class="hero-copy">
 A familiar brand. A louder point of view.<br>Turning Strane's yellow and black

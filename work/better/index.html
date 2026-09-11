@@ -161,13 +161,16 @@
            the view-transition path does not happen until pagereveal). Either
            can land first, so wait for the pair.
 
-           1600ms after that: the settle is 60ms of delay plus 1300ms, and the
-           bars run 650 + 600. 1600 clears both with room, and is short enough
-           that nothing is still sitting on a composited layer by the time the
-           reader has started scrolling. */
+           1000ms after that, which is the whole of the entrance now. The
+           settle is a 900ms scale, the fallback's swipe-in is 550ms, and the
+           two bars that used to be dealt in on their own 650 + 600 are gone
+           (a swipe moves the page with its furniture attached). 1000 clears
+           the longest of them and is short enough that nothing is still
+           sitting on a composited layer by the time the reader has started
+           scrolling. */
         var arm = function () {
           arm = function () {};
-          window.setTimeout(done, 1600);
+          window.setTimeout(done, 1000);
         };
         var watch = new MutationObserver(function () {
           var c = root.classList;

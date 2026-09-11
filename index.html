@@ -64,47 +64,89 @@
     </style><style>
         @view-transition { navigation: auto; }
 
-        /* Direction. The pager knows whether you are going forward or back
-           through the set, and that survives the document swap as a view
-           transition TYPE ('next' or 'prev'), added in pageswap on the way out
-           and in pagereveal on the way in (see the script below and
-           CaseStudyTransition). A type is the right channel for this because
-           it is scoped to the one transition: nothing has to be cleaned up
-           afterwards, and an untyped navigation simply does not match.
+        /* Direction, and the shape of the move. The pager knows whether you
+           are going forward or back through the set, and that survives the
+           document swap as a view transition TYPE ('next' or 'prev'), added in
+           pageswap on the way out and in pagereveal on the way in (see the
+           script below and CaseStudyTransition). A type is the right channel
+           for this because it is scoped to the one transition: nothing has to
+           be cleaned up afterwards, and an untyped navigation simply does not
+           match.
 
-           6vw of travel against the 0.42s cut. Short, because both pages are
-           on screen for the whole of it and the move only has to say which way
-           the set is running; a long slide would read as two pages being
-           dragged past each other. */
-        @keyframes zg-vt-out-left { to { opacity: 0; transform: translateX(-6vw); } }
-        @keyframes zg-vt-in-right { from { opacity: 0; transform: translateX(6vw); } }
-        @keyframes zg-vt-out-right { to { opacity: 0; transform: translateX(6vw); } }
-        @keyframes zg-vt-in-left { from { opacity: 0; transform: translateX(-6vw); } }
+           The move is a push. The whole outgoing page travels off one edge
+           while the whole incoming page travels in from the other, the way a
+           deck advances, and the owner's word for that is a swipe. What was
+           here before was 6vw of travel with the old page fading all the way
+           to zero and the new one fading up from zero, and that is what he
+           read as "it just jumps in": for most of the cut the old page was
+           nearly gone, the new one was nearly transparent, and the frame was
+           mostly the space between them. The new snapshot now crosses the
+           whole viewport (100% to 0), which is what makes the edge between the
+           two pages a travelling seam you can follow.
 
-        html:active-view-transition-type(next)::view-transition-old(root) { animation: zg-vt-out-left 0.42s cubic-bezier(0.16, 0.84, 0.34, 1) both; }
-        html:active-view-transition-type(next)::view-transition-new(root) { animation: zg-vt-in-right 0.42s cubic-bezier(0.16, 0.84, 0.34, 1) both; }
-        html:active-view-transition-type(prev)::view-transition-old(root) { animation: zg-vt-out-right 0.42s cubic-bezier(0.16, 0.84, 0.34, 1) both; }
-        html:active-view-transition-type(prev)::view-transition-new(root) { animation: zg-vt-in-left 0.42s cubic-bezier(0.16, 0.84, 0.34, 1) both; }
+           The old page never reaches zero. It dims to 0.55 and gives up 28% of
+           the width, which is the depth cue that says it is passing behind the
+           page arriving over it, and it keeps real content in every frame of
+           the hop. The two snapshots covering different distances is the point:
+           the fast one covers the slow one, so there is a single moving edge
+           rather than two sheets sliding in lockstep.
 
-        /* Everything with no direction to carry — the home page's cards, the
-           wordmark, All Work, a bookmark, back and forward — keeps the
-           browser's own cross-fade and only has its length set, so it matches
-           the directional cut. DO DROPS declares the same pair at 0.32s for
-           its light/dark switch (dodrops-page.css), and on that page that rule
-           wins the untyped case on source order. Both are a dissolve of the
-           same length class, so the two are interchangeable here; the typed
-           rules above outrank it either way. */
+           mix-blend-mode is forced to normal on both. The UA sheet paints the
+           root pair with plus-lighter, which is the correct recipe for a
+           cross-fade, where two half-opaque copies of the page have to add
+           back up to one. Here the old page sits at 0.55 UNDER an opaque new
+           page, and plus-lighter would add its light through, so the dim would
+           read as a glow along the seam. Normal keeps the dim a dim.
+
+           0.6s on an ease-out with a long tail, so both pages are moving
+           fastest at the start and arrive rather than stop. */
+        @keyframes zg-vt-push-out-left { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-28%); opacity: 0.55; } }
+        @keyframes zg-vt-push-in-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes zg-vt-push-out-right { from { transform: translateX(0); opacity: 1; } to { transform: translateX(28%); opacity: 0.55; } }
+        @keyframes zg-vt-push-in-left { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+
+        html:active-view-transition-type(next)::view-transition-old(root) { animation: zg-vt-push-out-left 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both; mix-blend-mode: normal; }
+        html:active-view-transition-type(next)::view-transition-new(root) { animation: zg-vt-push-in-right 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both; mix-blend-mode: normal; }
+        html:active-view-transition-type(prev)::view-transition-old(root) { animation: zg-vt-push-out-right 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both; mix-blend-mode: normal; }
+        html:active-view-transition-type(prev)::view-transition-new(root) { animation: zg-vt-push-in-left 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both; mix-blend-mode: normal; }
+
+        /* Everything with no direction to carry (the home page's cards, the
+           wordmark, All Work, a bookmark, back and forward) keeps the
+           browser's own cross-fade and only has its length set. A push needs a
+           direction to mean anything, and a bookmark has none, so a dissolve
+           is the honest answer there. DO DROPS declares the same pair at 0.32s
+           for its light/dark switch (dodrops-page.css), and on that page that
+           rule wins the untyped case on source order. Both are a dissolve of
+           the same length class, so the two are interchangeable here; the
+           typed rules above carry a pseudo-class on html and outrank it. */
         ::view-transition-old(root),
         ::view-transition-new(root) { animation-duration: 0.42s; }
 
+        /* The reduced-motion pair, hoisted out of the media query below so the
+           two halves of one idea sit next to the keyframes they replace. */
+        @keyframes zg-vt-fade-out { from { opacity: 1; } to { opacity: 0; } }
+        @keyframes zg-vt-fade-in { from { opacity: 0; } to { opacity: 1; } }
+
         @media (prefers-reduced-motion: reduce) {
-          /* Still a cut with nothing in between: the transition is captured
-             and swapped on one frame instead of being animated across
-             several. !important because the UA's own keyframes are set on the
-             pseudo-elements at a weight ordinary rules cannot reach. */
-          ::view-transition-group(*),
-          ::view-transition-old(*),
-          ::view-transition-new(*) { animation: none !important; }
+          /* Travel is the thing to drop here, and travel alone. This used to
+             switch every animation off, which captured and swapped the two
+             documents on a single frame: a hard cut, which is the same
+             complaint the push was built to answer, with the motion taken away
+             as well. Both documents are on screen either way, so the answer
+             that respects the setting is the oldest one available: dissolve
+             one into the other with nothing moving.
+
+             plus-lighter and a linear pair is the browser's own recipe for
+             that. The two opacities sum to 1 on every frame inside the
+             isolated image pair, so the blend holds the brightness of a single
+             page instead of washing towards the canvas underneath, and it puts
+             back the blend mode the typed rules above turn off.
+
+             !important because those typed rules carry a pseudo-class on html
+             and out-specify anything written against the bare pseudo-elements,
+             and a media query adds no specificity of its own. */
+          ::view-transition-old(root) { animation: zg-vt-fade-out 0.3s linear both !important; mix-blend-mode: plus-lighter !important; }
+          ::view-transition-new(root) { animation: zg-vt-fade-in 0.3s linear both !important; mix-blend-mode: plus-lighter !important; }
         }
       </style><script>
       /* The arrival half, and the direction hand-off. Runs in <head>, before
@@ -206,13 +248,16 @@
            the view-transition path does not happen until pagereveal). Either
            can land first, so wait for the pair.
 
-           1600ms after that: the settle is 60ms of delay plus 1300ms, and the
-           bars run 650 + 600. 1600 clears both with room, and is short enough
-           that nothing is still sitting on a composited layer by the time the
-           reader has started scrolling. */
+           1000ms after that, which is the whole of the entrance now. The
+           settle is a 900ms scale, the fallback's swipe-in is 550ms, and the
+           two bars that used to be dealt in on their own 650 + 600 are gone
+           (a swipe moves the page with its furniture attached). 1000 clears
+           the longest of them and is short enough that nothing is still
+           sitting on a composited layer by the time the reader has started
+           scrolling. */
         var arm = function () {
           arm = function () {};
-          window.setTimeout(done, 1600);
+          window.setTimeout(done, 1000);
         };
         var watch = new MutationObserver(function () {
           var c = root.classList;
