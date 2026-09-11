@@ -17,14 +17,14 @@
 
          Only the latin subsets are preloaded — the others are real
          @font-face entries with their unicode-ranges intact, so they still
-         fetch on demand for anything outside latin. --><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>AVITAS: Case Study · Zegoe</title><!-- Cross-document transition, arrival half. A case study fades itself out
-         and leaves this flag before navigating; whichever document loads next
-         fades in to meet it, so leaving and arriving read as one move instead
-         of a cut. Runs in <head>, before first paint, or the page would flash
-         at full opacity first. On an ordinary page nothing happens without
-         the flag, so a cold load or a bookmark is untouched; the four
-         cinematic case-study routes play their plate on a cold load too, and
-         the rules for that are in the second half of this block. --><style>
+         fetch on demand for anything outside latin. --><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>AVITAS: Case Study · Zegoe</title><!-- Cross-document transition, arrival half. A React case study fades
+         itself out and leaves this flag before navigating; whichever document
+         loads next fades in to meet it, so leaving and arriving read as one
+         move instead of a cut. Runs in <head>, before first paint, or the page
+         would flash at full opacity first. On an ordinary page nothing happens
+         without the flag, so a cold load or a bookmark is untouched. The pages
+         that opt into the jump get the browser's own cross-document view
+         transition instead, in the second block below. --><style>
       @keyframes zg-arrive { from { opacity: 0; } to { opacity: 1; } }
       /* will-change lifts the fade onto the compositor. Without it the
          animation runs on the main thread, and hydrating the case-study
@@ -48,113 +48,86 @@
          not itself scrollable, so sticky still resolves against the
          viewport. See CaseStudyContent's slide rules. */
 
-      /* The home page's own exit, the counterpart of zg-arrive. Only the
-         pages that do NOT carry data-arrival fade out this way: a cinematic
-         page is covered by the plate instead, and fading body there would
-         take the plate with it, since the plate IS body's pseudo-element. */
-      @keyframes zg-leave { to { opacity: 0; } }
-      html.zg-leaving:not([data-arrival]) body { animation: zg-leave 0.3s ease-in forwards; will-change: opacity; }
-
-      /* ══ The plate ══════════════════════════════════════════════════════
-         Arriving at one of the four ported case studies is a scene cut, not
-         a fade: a full-viewport panel in the brand's own ink already covers
-         the viewport in the first frame, holds while the document is parsed,
-         then wipes away in the direction of travel and hands over to a page
-         that settles in behind it.
-
-         It is a pseudo-element on body, and it is ::after rather than
-         ::before because ::before is spoken for on every one of these four
-         routes — it carries the fixed gradient ground (global.css, and the
-         repaints in garcia-site.css, hellavated-site.css, strane-site.css
-         and dodrops-page.css). A pseudo-element rather than a real <div> so
-         that it exists at first paint: an element appended at the end of the
-         document paints after the markup above it, which is a frame of the
-         page showing through before the plate lands on top of it.
-
-         Its colour is var(--zg-plate), written to html's inline style by the
-         head script below from the ink the page you are leaving stored, so
-         the plate that covers DO DROPS on the way out of Garcia is still
-         Garcia-dark when it uncovers DO DROPS. With nothing stored (a cold
-         load, a bookmark, a hop in from a React case study, which stores no
-         ink) it falls back to this page's own --zg-plate-ink.
-
-         Parked off-screen whenever no zg-* class is on, with a standing
-         will-change, so the exit's cover animation starts from a layer that
-         is already composited instead of paying for the raster on its first
-         frame. will-change on a pseudo costs nothing elsewhere: it has no
-         descendants to become a containing block for. */
-      html[data-arrival='cinematic'] body::after {
-        content: '';
-        position: fixed;
-        inset: 0;
-        z-index: 9000;
-        pointer-events: none;
-        background: var(--zg-plate, var(--zg-plate-ink, #0b0b0d));
-        transform: translateX(100%);
-        will-change: transform;
-      }
-      /* Covering, and STATIC, from the first frame until the document is
-         parsed: zg-ready is what releases it (added by CaseStudyTransition's
-         script at the foot of the page, and again on DOMContentLoaded). A
-         wipe that started on a timer would uncover a half-built page on a
-         slow load; holding means the cut always lands on a finished one. */
-      html[data-arrival='cinematic'].zg-arriving body::after { transform: translate(0); }
-      /* The wipe leaves the way the page you came from left: forward, it
-         slides off to the left; back, to the right; and with no direction at
-         all (a cold load, the home page, All Work) it rises like a curtain. */
-      @keyframes zg-plate-off-left { to { transform: translateX(-100%); } }
-      @keyframes zg-plate-off-right { to { transform: translateX(100%); } }
-      @keyframes zg-plate-off-up { to { transform: translateY(-100%); } }
-      @keyframes zg-plate-fade { to { opacity: 0; } }
-      html[data-arrival='cinematic'].zg-arriving.zg-ready body::after {
-        animation: zg-plate-off-up 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.06s forwards;
-      }
-      html[data-arrival='cinematic'].zg-arriving-next.zg-ready body::after { animation-name: zg-plate-off-left; }
-      html[data-arrival='cinematic'].zg-arriving-prev.zg-ready body::after { animation-name: zg-plate-off-right; }
-      /* The plate replaces the fade on these pages; running both would fade
-         the plate out along with everything under it. */
+      /* The body fade is for the pages that are NOT in the jump: the React
+         case studies, which meet an exit fade of their own. Where the browser
+         is running a view transition the root snapshot already carries the
+         cross-fade, and a second opacity animation inside the new snapshot
+         would compound it into a slow, muddy fade; where the page settles in
+         under the directional fallback, the settle is the entrance. Both of
+         those switch it off here. */
+      html.zg-vt.zg-arriving body,
       html[data-arrival='cinematic'].zg-arriving body { animation: none; will-change: auto; }
 
       @media (prefers-reduced-motion: reduce) {
-        html.zg-arriving body,
-        html.zg-leaving:not([data-arrival]) body { animation: none; }
-        /* The cut still happens, it just does not travel: the plate dissolves
-           where it stands and nothing under it moves. Last in source order so
-           it beats the three directional animation-name rules above, which
-           carry the same specificity. */
-        html[data-arrival='cinematic'].zg-arriving.zg-ready body::after {
-          animation: zg-plate-fade 0.3s linear forwards;
-        }
+        html.zg-arriving body { animation: none; }
       }
     </style><script>
-      /* The arrival half of the cross-document transition, and the ink
-         hand-off. Runs in <head>, before first paint: the plate has to be
-         opaque in the very first frame or the cut is a flash of the page. */
+      /* The arrival half, and the direction hand-off. Runs in <head>, before
+         first paint, because on a page that is not in the jump the classes
+         below drive a fade that has to own the very first frame. */
       try {
         var root = document.documentElement;
         var cinematic = root.getAttribute('data-arrival') === 'cinematic';
+        var opted = cinematic || root.hasAttribute('data-jump');
+        // One-shot: the page you left wrote it immediately before navigating,
+        // and it is consumed here. Left in place it would steer the arrival
+        // after next as well, in the direction of a hop two pages back.
         var nav = sessionStorage.getItem('zg-nav');
-        var ink = sessionStorage.getItem('zg-nav-ink');
-        // Both are one-shot. The ink is cleared even on a page that cannot
-        // use it (the home page, a -site route), or it would still be sitting
-        // there on the next cinematic arrival and paint that plate in the
-        // colour of a page two hops back.
         if (nav) sessionStorage.removeItem('zg-nav');
-        if (ink) sessionStorage.removeItem('zg-nav-ink');
         if (!nav && cinematic) {
-          // No flag: a cold load, a bookmark, a link from outside. The
-          // curtain still plays, because the plate is this page's opening
-          // shot and not only a stitch between two documents. Not on a
-          // reload and not on back/forward, where the reader already knows
-          // the page and a 900ms cover reads as a stall.
+          // No flag: a cold load, a bookmark, a link from outside. The four
+          // case studies still play their settle, because it is the page's
+          // opening shot and not only a stitch between two documents. Not on
+          // a reload and not on back/forward, where the reader already knows
+          // the page and an entrance reads as a stall.
           var e0 = performance.getEntriesByType('navigation')[0];
           if (e0 && e0.type === 'navigate') nav = '1';
         }
-        if (nav) {
-          if (cinematic && ink) root.style.setProperty('--zg-plate', ink);
+        /* Published for the two scripts that run later in this document: the
+           strip below, and the "the page is parsed" marker at the foot of the
+           four case studies (CaseStudyTransition). Neither can read the flag
+           itself, because it has already been consumed here, and on the view
+           transition path neither can read the arrival classes either, since
+           those do not land until pagereveal fires. */
+        window.__zgArrive = nav || null;
+
+        /* The fallback entrance: the arrival classes, as they have always
+           been. Used where there is no cross-document view transition to ride
+           — an older browser, or a hop in from a page that does not opt in
+           (a React case study, a -site microsite, an external link). */
+        var settle = function () {
+          if (!nav) return;
           root.classList.add('zg-arriving');
           // "next"/"prev" carry the direction of travel; "1" is a plain move.
           if (nav === 'next' || nav === 'prev') root.classList.add('zg-arriving-' + nav);
+        };
+
+        if (opted && 'onpagereveal' in window) {
+          /* pagereveal is the new document's first word, fired before its
+             first rendering opportunity, and it is the only place the
+             transition object exists on this side. Two things happen here and
+             nowhere else:
+
+               · the direction becomes a view-transition TYPE, which is what
+                 the :active-view-transition-type() rules above are keyed on.
+                 Set here rather than only in pageswap because the pseudo-
+                 elements resolve against THIS document's style.
+               · zg-arriving goes on now, not at parse time, so the settle
+                 underneath starts inside the live new snapshot and runs with
+                 the cut rather than ahead of it.
+
+             e.viewTransition is null when the navigation did not produce one:
+             a cold load, a bookmark, or a hop in from a document that does not
+             opt into the jump. That is the fallback's case. */
+          window.addEventListener('pagereveal', function (e) {
+            if (!e.viewTransition) { settle(); return; }
+            if (nav === 'next' || nav === 'prev') {
+              try { e.viewTransition.types.add(nav); } catch (err) { /* older types API */ }
+            }
+            root.classList.add('zg-vt', 'zg-arriving');
+          }, { once: true });
+        } else {
+          settle();
         }
       } catch (e) { /* storage blocked; no transition, no harm */ }
     </script><script>
@@ -164,51 +137,50 @@
          how a one-frame transition detail turns into a permanent bug. */
       (function () {
         var root = document.documentElement;
-        var cinematic = root.getAttribute('data-arrival') === 'cinematic';
+        var opted = root.getAttribute('data-arrival') === 'cinematic' || root.hasAttribute('data-jump');
         var done = function () {
           root.classList.remove(
-            'zg-arriving', 'zg-arriving-next', 'zg-arriving-prev', 'zg-ready', 'zg-ready-deep',
+            'zg-vt', 'zg-arriving', 'zg-arriving-next', 'zg-arriving-prev', 'zg-ready', 'zg-ready-deep',
           );
-          root.style.removeProperty('--zg-plate');
         };
-        if (!cinematic) {
+        if (!opted) {
           if (!root.classList.contains('zg-arriving')) return;
           window.addEventListener('load', function () { window.setTimeout(done, 700); });
           window.setTimeout(done, 2500); // load never fired (bfcache, blocked asset)
           return;
         }
-        /* A cinematic page cannot strip on load+700ms. With the assets warm
-           that fires while the plate is still holding, and the wipe gets cut
-           off mid-move or never starts at all. The plate itself says when it
-           is finished: animationend bubbles to document with pseudoElement
-           '::after', and body does not exist yet up here in <head>, which is
-           why the listener goes on document rather than on body. */
-        document.addEventListener('animationend', function (ev) {
-          if (ev.target !== document.body || ev.pseudoElement !== '::after') return;
-          /* Not on this frame: the plate is the SHORTEST of the arrival
-             animations, not the longest. The wipe runs 0.06 + 0.9 = 0.96s and
-             the page settling in behind it runs 0.06 + 1.3 = 1.36s, so
-             stripping the instant the plate is gone cuts the settle off at
-             98.2% of its curve, and <main> snaps the last 2.4px (measured at
-             1440px wide, 9vw of travel on cubic-bezier(.16,.84,.34,1)) to
-             identity in one frame. 420ms of grace covers the remaining 400. */
-          window.setTimeout(done, 420);
-        }, true);
-        /* Belt and braces for zg-ready, so the plate can never be left
-           holding over a finished page if the page's own script never runs.
-           The fallback clock starts at ready, not at parse: the hold has no
-           fixed length, so 4s from ready is 4s from the only moment the
-           remaining animation has a known duration (0.06 + 0.9). */
+        // No arrival pending on this document (a reload, back/forward, a
+        // bookmark): there is nothing to watch for and nothing to retire.
+        if (!window.__zgArrive) return;
+        /* A page in the jump cannot strip on load+700ms. With the assets warm
+           that fires while the settle is still running, and the page snaps the
+           rest of its move to identity in one frame. The settle's own clock is
+           what to measure from, and it starts when BOTH halves are in place:
+           zg-ready (the document is parsed, marked at the foot of the page by
+           CaseStudyTransition) and zg-arriving (the entrance is on, which on
+           the view-transition path does not happen until pagereveal). Either
+           can land first, so wait for the pair.
+
+           1600ms after that: the settle is 60ms of delay plus 1300ms, and the
+           bars run 650 + 600. 1600 clears both with room, and is short enough
+           that nothing is still sitting on a composited layer by the time the
+           reader has started scrolling. */
         var arm = function () {
           arm = function () {};
-          window.setTimeout(done, 4000);
+          window.setTimeout(done, 1600);
         };
         var watch = new MutationObserver(function () {
-          if (root.classList.contains('zg-ready')) { watch.disconnect(); arm(); }
+          var c = root.classList;
+          if (c.contains('zg-ready') && c.contains('zg-arriving')) { watch.disconnect(); arm(); }
         });
         watch.observe(root, { attributes: true, attributeFilter: ['class'] });
+        /* Belt and braces: nothing may outlive the entrance, so a page whose
+           own script never ran, or which was never marked ready at all, is
+           still cleared. From load rather than from parse, because that is the
+           last moment with a fixed relationship to anything. */
+        window.addEventListener('load', function () { window.setTimeout(done, 4000); });
         document.addEventListener('DOMContentLoaded', function () {
-          if (root.classList.contains('zg-arriving')) root.classList.add('zg-ready');
+          if (window.__zgArrive) root.classList.add('zg-ready');
         });
       })();
     </script><link rel="stylesheet" href="/_astro/index.ZH7OUS-B.css">

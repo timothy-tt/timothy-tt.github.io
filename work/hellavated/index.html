@@ -17,14 +17,14 @@
 
          Only the latin subsets are preloaded — the others are real
          @font-face entries with their unicode-ranges intact, so they still
-         fetch on demand for anything outside latin. --><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>Hellavated · Brand Evolution &amp; Packaging Case Study | Zegoe</title><!-- Cross-document transition, arrival half. A case study fades itself out
-         and leaves this flag before navigating; whichever document loads next
-         fades in to meet it, so leaving and arriving read as one move instead
-         of a cut. Runs in <head>, before first paint, or the page would flash
-         at full opacity first. On an ordinary page nothing happens without
-         the flag, so a cold load or a bookmark is untouched; the four
-         cinematic case-study routes play their plate on a cold load too, and
-         the rules for that are in the second half of this block. --><style>
+         fetch on demand for anything outside latin. --><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>Hellavated · Brand Evolution &amp; Packaging Case Study | Zegoe</title><!-- Cross-document transition, arrival half. A React case study fades
+         itself out and leaves this flag before navigating; whichever document
+         loads next fades in to meet it, so leaving and arriving read as one
+         move instead of a cut. Runs in <head>, before first paint, or the page
+         would flash at full opacity first. On an ordinary page nothing happens
+         without the flag, so a cold load or a bookmark is untouched. The pages
+         that opt into the jump get the browser's own cross-document view
+         transition instead, in the second block below. --><style>
       @keyframes zg-arrive { from { opacity: 0; } to { opacity: 1; } }
       /* will-change lifts the fade onto the compositor. Without it the
          animation runs on the main thread, and hydrating the case-study
@@ -48,113 +48,131 @@
          not itself scrollable, so sticky still resolves against the
          viewport. See CaseStudyContent's slide rules. */
 
-      /* The home page's own exit, the counterpart of zg-arrive. Only the
-         pages that do NOT carry data-arrival fade out this way: a cinematic
-         page is covered by the plate instead, and fading body there would
-         take the plate with it, since the plate IS body's pseudo-element. */
-      @keyframes zg-leave { to { opacity: 0; } }
-      html.zg-leaving:not([data-arrival]) body { animation: zg-leave 0.3s ease-in forwards; will-change: opacity; }
-
-      /* ══ The plate ══════════════════════════════════════════════════════
-         Arriving at one of the four ported case studies is a scene cut, not
-         a fade: a full-viewport panel in the brand's own ink already covers
-         the viewport in the first frame, holds while the document is parsed,
-         then wipes away in the direction of travel and hands over to a page
-         that settles in behind it.
-
-         It is a pseudo-element on body, and it is ::after rather than
-         ::before because ::before is spoken for on every one of these four
-         routes — it carries the fixed gradient ground (global.css, and the
-         repaints in garcia-site.css, hellavated-site.css, strane-site.css
-         and dodrops-page.css). A pseudo-element rather than a real <div> so
-         that it exists at first paint: an element appended at the end of the
-         document paints after the markup above it, which is a frame of the
-         page showing through before the plate lands on top of it.
-
-         Its colour is var(--zg-plate), written to html's inline style by the
-         head script below from the ink the page you are leaving stored, so
-         the plate that covers DO DROPS on the way out of Garcia is still
-         Garcia-dark when it uncovers DO DROPS. With nothing stored (a cold
-         load, a bookmark, a hop in from a React case study, which stores no
-         ink) it falls back to this page's own --zg-plate-ink.
-
-         Parked off-screen whenever no zg-* class is on, with a standing
-         will-change, so the exit's cover animation starts from a layer that
-         is already composited instead of paying for the raster on its first
-         frame. will-change on a pseudo costs nothing elsewhere: it has no
-         descendants to become a containing block for. */
-      html[data-arrival='cinematic'] body::after {
-        content: '';
-        position: fixed;
-        inset: 0;
-        z-index: 9000;
-        pointer-events: none;
-        background: var(--zg-plate, var(--zg-plate-ink, #0b0b0d));
-        transform: translateX(100%);
-        will-change: transform;
-      }
-      /* Covering, and STATIC, from the first frame until the document is
-         parsed: zg-ready is what releases it (added by CaseStudyTransition's
-         script at the foot of the page, and again on DOMContentLoaded). A
-         wipe that started on a timer would uncover a half-built page on a
-         slow load; holding means the cut always lands on a finished one. */
-      html[data-arrival='cinematic'].zg-arriving body::after { transform: translate(0); }
-      /* The wipe leaves the way the page you came from left: forward, it
-         slides off to the left; back, to the right; and with no direction at
-         all (a cold load, the home page, All Work) it rises like a curtain. */
-      @keyframes zg-plate-off-left { to { transform: translateX(-100%); } }
-      @keyframes zg-plate-off-right { to { transform: translateX(100%); } }
-      @keyframes zg-plate-off-up { to { transform: translateY(-100%); } }
-      @keyframes zg-plate-fade { to { opacity: 0; } }
-      html[data-arrival='cinematic'].zg-arriving.zg-ready body::after {
-        animation: zg-plate-off-up 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.06s forwards;
-      }
-      html[data-arrival='cinematic'].zg-arriving-next.zg-ready body::after { animation-name: zg-plate-off-left; }
-      html[data-arrival='cinematic'].zg-arriving-prev.zg-ready body::after { animation-name: zg-plate-off-right; }
-      /* The plate replaces the fade on these pages; running both would fade
-         the plate out along with everything under it. */
+      /* The body fade is for the pages that are NOT in the jump: the React
+         case studies, which meet an exit fade of their own. Where the browser
+         is running a view transition the root snapshot already carries the
+         cross-fade, and a second opacity animation inside the new snapshot
+         would compound it into a slow, muddy fade; where the page settles in
+         under the directional fallback, the settle is the entrance. Both of
+         those switch it off here. */
+      html.zg-vt.zg-arriving body,
       html[data-arrival='cinematic'].zg-arriving body { animation: none; will-change: auto; }
 
       @media (prefers-reduced-motion: reduce) {
-        html.zg-arriving body,
-        html.zg-leaving:not([data-arrival]) body { animation: none; }
-        /* The cut still happens, it just does not travel: the plate dissolves
-           where it stands and nothing under it moves. Last in source order so
-           it beats the three directional animation-name rules above, which
-           carry the same specificity. */
-        html[data-arrival='cinematic'].zg-arriving.zg-ready body::after {
-          animation: zg-plate-fade 0.3s linear forwards;
-        }
+        html.zg-arriving body { animation: none; }
       }
-    </style><script>
-      /* The arrival half of the cross-document transition, and the ink
-         hand-off. Runs in <head>, before first paint: the plate has to be
-         opaque in the very first frame or the cut is a flash of the page. */
+    </style><style>
+        @view-transition { navigation: auto; }
+
+        /* Direction. The pager knows whether you are going forward or back
+           through the set, and that survives the document swap as a view
+           transition TYPE ('next' or 'prev'), added in pageswap on the way out
+           and in pagereveal on the way in (see the script below and
+           CaseStudyTransition). A type is the right channel for this because
+           it is scoped to the one transition: nothing has to be cleaned up
+           afterwards, and an untyped navigation simply does not match.
+
+           6vw of travel against the 0.42s cut. Short, because both pages are
+           on screen for the whole of it and the move only has to say which way
+           the set is running; a long slide would read as two pages being
+           dragged past each other. */
+        @keyframes zg-vt-out-left { to { opacity: 0; transform: translateX(-6vw); } }
+        @keyframes zg-vt-in-right { from { opacity: 0; transform: translateX(6vw); } }
+        @keyframes zg-vt-out-right { to { opacity: 0; transform: translateX(6vw); } }
+        @keyframes zg-vt-in-left { from { opacity: 0; transform: translateX(-6vw); } }
+
+        html:active-view-transition-type(next)::view-transition-old(root) { animation: zg-vt-out-left 0.42s cubic-bezier(0.16, 0.84, 0.34, 1) both; }
+        html:active-view-transition-type(next)::view-transition-new(root) { animation: zg-vt-in-right 0.42s cubic-bezier(0.16, 0.84, 0.34, 1) both; }
+        html:active-view-transition-type(prev)::view-transition-old(root) { animation: zg-vt-out-right 0.42s cubic-bezier(0.16, 0.84, 0.34, 1) both; }
+        html:active-view-transition-type(prev)::view-transition-new(root) { animation: zg-vt-in-left 0.42s cubic-bezier(0.16, 0.84, 0.34, 1) both; }
+
+        /* Everything with no direction to carry — the home page's cards, the
+           wordmark, All Work, a bookmark, back and forward — keeps the
+           browser's own cross-fade and only has its length set, so it matches
+           the directional cut. DO DROPS declares the same pair at 0.32s for
+           its light/dark switch (dodrops-page.css), and on that page that rule
+           wins the untyped case on source order. Both are a dissolve of the
+           same length class, so the two are interchangeable here; the typed
+           rules above outrank it either way. */
+        ::view-transition-old(root),
+        ::view-transition-new(root) { animation-duration: 0.42s; }
+
+        @media (prefers-reduced-motion: reduce) {
+          /* Still a cut with nothing in between: the transition is captured
+             and swapped on one frame instead of being animated across
+             several. !important because the UA's own keyframes are set on the
+             pseudo-elements at a weight ordinary rules cannot reach. */
+          ::view-transition-group(*),
+          ::view-transition-old(*),
+          ::view-transition-new(*) { animation: none !important; }
+        }
+      </style><script>
+      /* The arrival half, and the direction hand-off. Runs in <head>, before
+         first paint, because on a page that is not in the jump the classes
+         below drive a fade that has to own the very first frame. */
       try {
         var root = document.documentElement;
         var cinematic = root.getAttribute('data-arrival') === 'cinematic';
+        var opted = cinematic || root.hasAttribute('data-jump');
+        // One-shot: the page you left wrote it immediately before navigating,
+        // and it is consumed here. Left in place it would steer the arrival
+        // after next as well, in the direction of a hop two pages back.
         var nav = sessionStorage.getItem('zg-nav');
-        var ink = sessionStorage.getItem('zg-nav-ink');
-        // Both are one-shot. The ink is cleared even on a page that cannot
-        // use it (the home page, a -site route), or it would still be sitting
-        // there on the next cinematic arrival and paint that plate in the
-        // colour of a page two hops back.
         if (nav) sessionStorage.removeItem('zg-nav');
-        if (ink) sessionStorage.removeItem('zg-nav-ink');
         if (!nav && cinematic) {
-          // No flag: a cold load, a bookmark, a link from outside. The
-          // curtain still plays, because the plate is this page's opening
-          // shot and not only a stitch between two documents. Not on a
-          // reload and not on back/forward, where the reader already knows
-          // the page and a 900ms cover reads as a stall.
+          // No flag: a cold load, a bookmark, a link from outside. The four
+          // case studies still play their settle, because it is the page's
+          // opening shot and not only a stitch between two documents. Not on
+          // a reload and not on back/forward, where the reader already knows
+          // the page and an entrance reads as a stall.
           var e0 = performance.getEntriesByType('navigation')[0];
           if (e0 && e0.type === 'navigate') nav = '1';
         }
-        if (nav) {
-          if (cinematic && ink) root.style.setProperty('--zg-plate', ink);
+        /* Published for the two scripts that run later in this document: the
+           strip below, and the "the page is parsed" marker at the foot of the
+           four case studies (CaseStudyTransition). Neither can read the flag
+           itself, because it has already been consumed here, and on the view
+           transition path neither can read the arrival classes either, since
+           those do not land until pagereveal fires. */
+        window.__zgArrive = nav || null;
+
+        /* The fallback entrance: the arrival classes, as they have always
+           been. Used where there is no cross-document view transition to ride
+           — an older browser, or a hop in from a page that does not opt in
+           (a React case study, a -site microsite, an external link). */
+        var settle = function () {
+          if (!nav) return;
           root.classList.add('zg-arriving');
           // "next"/"prev" carry the direction of travel; "1" is a plain move.
           if (nav === 'next' || nav === 'prev') root.classList.add('zg-arriving-' + nav);
+        };
+
+        if (opted && 'onpagereveal' in window) {
+          /* pagereveal is the new document's first word, fired before its
+             first rendering opportunity, and it is the only place the
+             transition object exists on this side. Two things happen here and
+             nowhere else:
+
+               · the direction becomes a view-transition TYPE, which is what
+                 the :active-view-transition-type() rules above are keyed on.
+                 Set here rather than only in pageswap because the pseudo-
+                 elements resolve against THIS document's style.
+               · zg-arriving goes on now, not at parse time, so the settle
+                 underneath starts inside the live new snapshot and runs with
+                 the cut rather than ahead of it.
+
+             e.viewTransition is null when the navigation did not produce one:
+             a cold load, a bookmark, or a hop in from a document that does not
+             opt into the jump. That is the fallback's case. */
+          window.addEventListener('pagereveal', function (e) {
+            if (!e.viewTransition) { settle(); return; }
+            if (nav === 'next' || nav === 'prev') {
+              try { e.viewTransition.types.add(nav); } catch (err) { /* older types API */ }
+            }
+            root.classList.add('zg-vt', 'zg-arriving');
+          }, { once: true });
+        } else {
+          settle();
         }
       } catch (e) { /* storage blocked; no transition, no harm */ }
     </script><script>
@@ -164,56 +182,55 @@
          how a one-frame transition detail turns into a permanent bug. */
       (function () {
         var root = document.documentElement;
-        var cinematic = root.getAttribute('data-arrival') === 'cinematic';
+        var opted = root.getAttribute('data-arrival') === 'cinematic' || root.hasAttribute('data-jump');
         var done = function () {
           root.classList.remove(
-            'zg-arriving', 'zg-arriving-next', 'zg-arriving-prev', 'zg-ready', 'zg-ready-deep',
+            'zg-vt', 'zg-arriving', 'zg-arriving-next', 'zg-arriving-prev', 'zg-ready', 'zg-ready-deep',
           );
-          root.style.removeProperty('--zg-plate');
         };
-        if (!cinematic) {
+        if (!opted) {
           if (!root.classList.contains('zg-arriving')) return;
           window.addEventListener('load', function () { window.setTimeout(done, 700); });
           window.setTimeout(done, 2500); // load never fired (bfcache, blocked asset)
           return;
         }
-        /* A cinematic page cannot strip on load+700ms. With the assets warm
-           that fires while the plate is still holding, and the wipe gets cut
-           off mid-move or never starts at all. The plate itself says when it
-           is finished: animationend bubbles to document with pseudoElement
-           '::after', and body does not exist yet up here in <head>, which is
-           why the listener goes on document rather than on body. */
-        document.addEventListener('animationend', function (ev) {
-          if (ev.target !== document.body || ev.pseudoElement !== '::after') return;
-          /* Not on this frame: the plate is the SHORTEST of the arrival
-             animations, not the longest. The wipe runs 0.06 + 0.9 = 0.96s and
-             the page settling in behind it runs 0.06 + 1.3 = 1.36s, so
-             stripping the instant the plate is gone cuts the settle off at
-             98.2% of its curve, and <main> snaps the last 2.4px (measured at
-             1440px wide, 9vw of travel on cubic-bezier(.16,.84,.34,1)) to
-             identity in one frame. 420ms of grace covers the remaining 400. */
-          window.setTimeout(done, 420);
-        }, true);
-        /* Belt and braces for zg-ready, so the plate can never be left
-           holding over a finished page if the page's own script never runs.
-           The fallback clock starts at ready, not at parse: the hold has no
-           fixed length, so 4s from ready is 4s from the only moment the
-           remaining animation has a known duration (0.06 + 0.9). */
+        // No arrival pending on this document (a reload, back/forward, a
+        // bookmark): there is nothing to watch for and nothing to retire.
+        if (!window.__zgArrive) return;
+        /* A page in the jump cannot strip on load+700ms. With the assets warm
+           that fires while the settle is still running, and the page snaps the
+           rest of its move to identity in one frame. The settle's own clock is
+           what to measure from, and it starts when BOTH halves are in place:
+           zg-ready (the document is parsed, marked at the foot of the page by
+           CaseStudyTransition) and zg-arriving (the entrance is on, which on
+           the view-transition path does not happen until pagereveal). Either
+           can land first, so wait for the pair.
+
+           1600ms after that: the settle is 60ms of delay plus 1300ms, and the
+           bars run 650 + 600. 1600 clears both with room, and is short enough
+           that nothing is still sitting on a composited layer by the time the
+           reader has started scrolling. */
         var arm = function () {
           arm = function () {};
-          window.setTimeout(done, 4000);
+          window.setTimeout(done, 1600);
         };
         var watch = new MutationObserver(function () {
-          if (root.classList.contains('zg-ready')) { watch.disconnect(); arm(); }
+          var c = root.classList;
+          if (c.contains('zg-ready') && c.contains('zg-arriving')) { watch.disconnect(); arm(); }
         });
         watch.observe(root, { attributes: true, attributeFilter: ['class'] });
+        /* Belt and braces: nothing may outlive the entrance, so a page whose
+           own script never ran, or which was never marked ready at all, is
+           still cleared. From load rather than from parse, because that is the
+           last moment with a fixed relationship to anything. */
+        window.addEventListener('load', function () { window.setTimeout(done, 4000); });
         document.addEventListener('DOMContentLoaded', function () {
-          if (root.classList.contains('zg-arriving')) root.classList.add('zg-ready');
+          if (window.__zgArrive) root.classList.add('zg-ready');
         });
       })();
     </script><link rel="stylesheet" href="/_astro/index.ZH7OUS-B.css">
-<link rel="stylesheet" href="/_astro/hellavated.CnNbSxZa.css">
-<style>@keyframes zg-drift-left{to{transform:translate3d(-4vw,0,0)}}@keyframes zg-drift-right{to{transform:translate3d(4vw,0,0)}}@keyframes zg-drift-up{to{transform:translate3d(0,-12px,0)}}html.zg-leaving-plain #page-content :is(main,.cs-next){animation:zg-drift-up .48s ease-in forwards}html.zg-leaving-next #page-content :is(main,.cs-next){animation:zg-drift-left .48s ease-in forwards}html.zg-leaving-prev #page-content :is(main,.cs-next){animation:zg-drift-right .48s ease-in forwards}@keyframes zg-plate-on-left{0%{transform:translate(100%)}to{transform:translate(0)}}@keyframes zg-plate-on-right{0%{transform:translate(-100%)}to{transform:translate(0)}}@keyframes zg-plate-on-down{0%{transform:translateY(-100%)}to{transform:translateY(0)}}html[data-arrival=cinematic].zg-leaving-next body:after{animation:zg-plate-on-left .48s cubic-bezier(.76,0,.24,1) forwards}html[data-arrival=cinematic].zg-leaving-prev body:after{animation:zg-plate-on-right .48s cubic-bezier(.76,0,.24,1) forwards}html[data-arrival=cinematic].zg-leaving-plain body:after{animation:zg-plate-on-down .48s cubic-bezier(.76,0,.24,1) forwards}html[data-arrival=cinematic].zg-leaving body{animation:none;will-change:auto}@keyframes zg-arr-next{0%{transform:translate3d(9vw,0,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-prev{0%{transform:translate3d(-9vw,0,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-plain{0%{transform:translate3d(0,24px,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-next-flat{0%{transform:translate3d(9vw,0,0)}to{transform:translateZ(0)}}@keyframes zg-arr-prev-flat{0%{transform:translate3d(-9vw,0,0)}to{transform:translateZ(0)}}@keyframes zg-arr-plain-flat{0%{transform:translate3d(0,24px,0)}to{transform:translateZ(0)}}html.zg-arriving.zg-ready #page-content :is(main,.cs-next){transform-origin:50% 0}html.zg-arriving.zg-ready #page-content main{animation:zg-arr-plain 1.3s cubic-bezier(.16,.84,.34,1) .06s both}html.zg-arriving.zg-ready #page-content .cs-next{animation:zg-arr-plain-flat 1.3s cubic-bezier(.16,.84,.34,1) .06s both}html.zg-arriving-next.zg-ready #page-content main{animation-name:zg-arr-next}html.zg-arriving-next.zg-ready #page-content .cs-next{animation-name:zg-arr-next-flat}html.zg-arriving-prev.zg-ready #page-content main{animation-name:zg-arr-prev}html.zg-arriving-prev.zg-ready #page-content .cs-next{animation-name:zg-arr-prev-flat}html.zg-arriving.zg-ready-deep #page-content main{animation-name:zg-arr-plain-flat}html.zg-arriving-next.zg-ready-deep #page-content main{animation-name:zg-arr-next-flat}html.zg-arriving-prev.zg-ready-deep #page-content main{animation-name:zg-arr-prev-flat}@keyframes zg-bar-down{0%{transform:translateY(-100%)}to{transform:translateY(0)}}@keyframes zg-bar-up{0%{transform:translateY(100%)}to{transform:translateY(0)}}html.zg-arriving.zg-ready #page-content .cs-nav{animation:zg-bar-down .6s cubic-bezier(.16,.84,.34,1) .5s both}html.zg-arriving.zg-ready #page-content .cs-pagerbar{animation:zg-bar-up .6s cubic-bezier(.16,.84,.34,1) .65s both}html.zg-arriving #page-content :is(main,.cs-next,.cs-nav,.cs-pagerbar){will-change:transform}html:is(.zg-arriving-next,.zg-arriving-prev,.zg-leaving-next,.zg-leaving-prev) #page-content{overflow-x:clip}@media(prefers-reduced-motion:reduce){html:is(.zg-leaving-plain,.zg-leaving-next,.zg-leaving-prev) #page-content :is(main,.cs-next),html.zg-arriving.zg-ready #page-content :is(main,.cs-next,.cs-nav,.cs-pagerbar){animation:none}}
+<link rel="stylesheet" href="/_astro/hellavated.DZ6_iOY-.css">
+<style>@keyframes zg-arr-next{0%{transform:translate3d(9vw,0,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-prev{0%{transform:translate3d(-9vw,0,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-plain{0%{transform:translate3d(0,24px,0) scale(1.035)}to{transform:translateZ(0) scale(1)}}@keyframes zg-arr-next-flat{0%{transform:translate3d(9vw,0,0)}to{transform:translateZ(0)}}@keyframes zg-arr-prev-flat{0%{transform:translate3d(-9vw,0,0)}to{transform:translateZ(0)}}@keyframes zg-arr-plain-flat{0%{transform:translate3d(0,24px,0)}to{transform:translateZ(0)}}html.zg-arriving.zg-ready #page-content :is(main,.cs-next){transform-origin:50% 0}html.zg-arriving.zg-ready #page-content main{animation:zg-arr-plain 1.3s cubic-bezier(.16,.84,.34,1) .06s both}html.zg-arriving.zg-ready #page-content .cs-next{animation:zg-arr-plain-flat 1.3s cubic-bezier(.16,.84,.34,1) .06s both}html.zg-arriving-next.zg-ready #page-content main{animation-name:zg-arr-next}html.zg-arriving-next.zg-ready #page-content .cs-next{animation-name:zg-arr-next-flat}html.zg-arriving-prev.zg-ready #page-content main{animation-name:zg-arr-prev}html.zg-arriving-prev.zg-ready #page-content .cs-next{animation-name:zg-arr-prev-flat}html.zg-arriving.zg-ready-deep #page-content main{animation-name:zg-arr-plain-flat}html.zg-arriving-next.zg-ready-deep #page-content main{animation-name:zg-arr-next-flat}html.zg-arriving-prev.zg-ready-deep #page-content main{animation-name:zg-arr-prev-flat}@keyframes zg-arr-settle{0%{transform:scale(1.035)}to{transform:scale(1)}}html.zg-vt.zg-arriving.zg-ready #page-content main{animation-name:zg-arr-settle}html.zg-vt.zg-arriving.zg-ready #page-content .cs-next{animation:none}html.zg-vt.zg-arriving.zg-ready-deep #page-content main{animation:none}@keyframes zg-bar-down{0%{transform:translateY(-100%)}to{transform:translateY(0)}}@keyframes zg-bar-up{0%{transform:translateY(100%)}to{transform:translateY(0)}}html.zg-arriving.zg-ready #page-content .cs-nav{animation:zg-bar-down .6s cubic-bezier(.16,.84,.34,1) .5s both}html.zg-arriving.zg-ready #page-content .cs-pagerbar{animation:zg-bar-up .6s cubic-bezier(.16,.84,.34,1) .65s both}html.zg-arriving #page-content :is(main,.cs-next,.cs-nav,.cs-pagerbar){will-change:transform}html:is(.zg-arriving-next,.zg-arriving-prev) #page-content{overflow-x:clip}@media(prefers-reduced-motion:reduce){html.zg-arriving.zg-ready #page-content :is(main,.cs-next,.cs-nav,.cs-pagerbar),html.zg-vt.zg-arriving.zg-ready #page-content :is(main,.cs-next){animation:none}}
 #case-study[data-astro-cid-r6tfto3y]{--hv-ease: cubic-bezier(.22, 1, .36, 1)}html.hv-js .hv-rise[data-astro-cid-r6tfto3y]{opacity:0;transform:translate3d(0,14px,0);transition:opacity .7s var(--hv-ease),transform .7s var(--hv-ease),clip-path .9s var(--hv-ease);transition-delay:calc(var(--i, 0) * 70ms)}html.hv-js .hv-rise[data-astro-cid-r6tfto3y]:where(.orbit-word,.orbit-core){transform:scale(.92)}html.hv-js .hv-rise[data-astro-cid-r6tfto3y].is-in{opacity:1;transform:none}html.hv-js .section-label[data-astro-cid-r6tfto3y]{position:relative}html.hv-js .section-label[data-astro-cid-r6tfto3y]:after{content:"";position:absolute;left:0;right:0;bottom:-.6rem;height:1px;background:currentColor;opacity:.4;transform:scaleX(0);transform-origin:left center;transition:transform .85s var(--hv-ease);transition-delay:calc(var(--i, 0) * 70ms + .12s)}html.hv-js .section-label[data-astro-cid-r6tfto3y].is-in:after{transform:scaleX(1)}.hv-frame[data-astro-cid-r6tfto3y]{display:block}.device-section__wide[data-astro-cid-r6tfto3y] .hv-frame[data-astro-cid-r6tfto3y],.device-section__portrait[data-astro-cid-r6tfto3y] .hv-frame[data-astro-cid-r6tfto3y]{height:100%}html.hv-js .hv-frame[data-astro-cid-r6tfto3y]{overflow:hidden;clip-path:inset(12% 0 12% 0);transition:clip-path .9s var(--hv-ease);transition-delay:calc(var(--i, 0) * 70ms)}html.hv-js .hv-rise[data-astro-cid-r6tfto3y].current-product,html.hv-js .lifestyle__gallery[data-astro-cid-r6tfto3y] .hv-rise[data-astro-cid-r6tfto3y]{clip-path:inset(12% 0 12% 0)}html.hv-js .hv-rise[data-astro-cid-r6tfto3y].is-in .hv-frame[data-astro-cid-r6tfto3y],html.hv-js .hv-rise[data-astro-cid-r6tfto3y].is-in.current-product,html.hv-js .lifestyle__gallery[data-astro-cid-r6tfto3y] .hv-rise[data-astro-cid-r6tfto3y].is-in{clip-path:inset(0)}@keyframes hv-settle{0%{transform:scale(1.05)}to{transform:scale(1)}}html.hv-js .hv-rise[data-astro-cid-r6tfto3y].is-in .hv-frame[data-astro-cid-r6tfto3y]:not([data-hv-drift]) img[data-astro-cid-r6tfto3y],html.hv-js .hv-rise[data-astro-cid-r6tfto3y].is-in.current-product img[data-astro-cid-r6tfto3y]{animation:hv-settle 1.1s var(--hv-ease) calc(var(--i, 0) * 70ms) backwards}@media(prefers-reduced-motion:no-preference){html.hv-js [data-astro-cid-r6tfto3y][data-hv-drift] img[data-astro-cid-r6tfto3y]{transform:scale(1.09);transition:none}html.hv-js .cosmic-turn[data-astro-cid-r6tfto3y]>img[data-astro-cid-r6tfto3y],html.hv-js .environment__art[data-astro-cid-r6tfto3y]{transform:scale(1.08)}}@media(prefers-reduced-motion:reduce){html.hv-js .hv-rise[data-astro-cid-r6tfto3y],html.hv-js .hv-frame[data-astro-cid-r6tfto3y]{opacity:1;transform:none;clip-path:none;transition:none}html.hv-js .section-label[data-astro-cid-r6tfto3y]:after{transform:scaleX(1);transition:none}html.hv-js .hv-frame[data-astro-cid-r6tfto3y] img[data-astro-cid-r6tfto3y],html.hv-js .hv-rise[data-astro-cid-r6tfto3y].current-product img[data-astro-cid-r6tfto3y]{animation:none}}
 </style></head> <body> <div id="page-content">  <script>
   document.documentElement.classList.add('hv-js');
@@ -262,7 +279,7 @@ Colored light, cosmic atmosphere, bold styling, and fruit-forward props move
 </p> </div> <div class="lifestyle__gallery" data-astro-cid-r6tfto3y> <img class="hv-rise" style="--i:0" src="/hellavated-site/lifestyle-duo.webp" alt="Two models with Hellavated products in a colorful galaxy setting" loading="lazy" decoding="async" data-astro-cid-r6tfto3y> <img class="hv-rise" style="--i:1" src="/hellavated-site/lifestyle-hero.webp" alt="Three models with Hellavated vape, gummy, and infused pre-roll products" loading="lazy" decoding="async" data-astro-cid-r6tfto3y> <img class="hv-rise" style="--i:2" src="/hellavated-site/lifestyle-preroll.webp" alt="Model holding an infused pre-roll and dragonfruit" loading="lazy" decoding="async" data-astro-cid-r6tfto3y> </div> </section>  <section class="seasonal" id="seasons" data-astro-cid-r6tfto3y> <div class="seasonal__heading" data-astro-cid-r6tfto3y> <div class="section-label hv-rise" data-astro-cid-r6tfto3y><span data-astro-cid-r6tfto3y>Limited-time flavors</span></div> <h2 data-astro-cid-r6tfto3y>Four seasons.<br data-astro-cid-r6tfto3y>One wild orbit.</h2> <p data-astro-cid-r6tfto3y>
 Seasonal drops keep the flavor universe moving. Each release shifts the fruit,
         color, and atmosphere while the core identity remains unmistakable.
-</p> </div> <div class="seasonal__grid" data-astro-cid-r6tfto3y> <figure class="seasonal__lto hv-rise" data-astro-cid-r6tfto3y> <div class="hv-frame" data-hv-drift="3" data-astro-cid-r6tfto3y> <img src="/hellavated-site/current-lto-baja.webp" alt="Baja Blastoff limited-time Hellavated product campaign" loading="lazy" decoding="async" data-astro-cid-r6tfto3y> </div> <figcaption data-astro-cid-r6tfto3y> <b data-astro-cid-r6tfto3y>Current limited release</b> <span data-astro-cid-r6tfto3y>Baja Blastoff · tropical soda, sweet lime, and citrus</span> </figcaption> </figure>  <article class="season season--spring hv-rise" style="--i:0" data-astro-cid-r6tfto3y> <span data-astro-cid-r6tfto3y>01</span> <div data-astro-cid-r6tfto3y> <h3 data-astro-cid-r6tfto3y>Spring</h3> <p data-astro-cid-r6tfto3y>Bright fruit and electric color break through the darkness.</p> </div> <small data-astro-cid-r6tfto3y>Limited-time flavor artwork placeholder</small> </article> <article class="season season--summer hv-rise" style="--i:1" data-astro-cid-r6tfto3y> <span data-astro-cid-r6tfto3y>02</span> <div data-astro-cid-r6tfto3y> <h3 data-astro-cid-r6tfto3y>Summer</h3> <p data-astro-cid-r6tfto3y>Juicy, saturated, and turned all the way up.</p> </div> <small data-astro-cid-r6tfto3y>Limited-time flavor artwork placeholder</small> </article> <article class="season season--fall hv-rise" style="--i:2" data-astro-cid-r6tfto3y> <span data-astro-cid-r6tfto3y>03</span> <div data-astro-cid-r6tfto3y> <h3 data-astro-cid-r6tfto3y>Fall</h3> <p data-astro-cid-r6tfto3y>Richer tones pull the collection into a darker orbit.</p> </div> <small data-astro-cid-r6tfto3y>Limited-time flavor artwork placeholder</small> </article> <article class="season season--winter hv-rise" style="--i:3" data-astro-cid-r6tfto3y> <span data-astro-cid-r6tfto3y>04</span> <div data-astro-cid-r6tfto3y> <h3 data-astro-cid-r6tfto3y>Winter</h3> <p data-astro-cid-r6tfto3y>Icy contrast gives the coldest drop an after-dark glow.</p> </div> <small data-astro-cid-r6tfto3y>Limited-time flavor artwork placeholder</small> </article> </div> </section>  <section class="closing" data-astro-cid-r6tfto3y> <div class="closing__art" data-astro-cid-r6tfto3y></div> <div class="closing__copy hv-rise" data-astro-cid-r6tfto3y> <div class="section-label hv-rise" data-astro-cid-r6tfto3y><span data-astro-cid-r6tfto3y>The result</span></div> <h2 data-astro-cid-r6tfto3y>Hellavated did not lose its edge.</h2> <p data-astro-cid-r6tfto3y>It gave that edge a bigger universe to live in.</p> </div> </section> </main> <footer class="cs-next" data-astro-cid-r6tfto3y> <a href="/work/strane/" class="cs-next-link" data-dir="next" style="--nx-bg:#0b0b06;--nx-accent:#e5ff00;--nx-glow:rgba(229,255,0,0.30);--nx-art:url(&#34;/portfolio/strane/strane_brick_bg_yellow.webp&#34;);--nx-art-op:0.288;--nx-art-filter:grayscale(1) brightness(0.75) contrast(1.2);--nx-art-size:760px;--nx-art-repeat:repeat;--nx-art-pos:50% 50%" data-astro-cid-r6tfto3y> <span class="cs-next-art" aria-hidden="true" data-astro-cid-r6tfto3y></span> <span class="cs-next-scrim" aria-hidden="true" data-astro-cid-r6tfto3y></span> <span class="cs-eyebrow" data-astro-cid-r6tfto3y>Next Project</span> <span class="cs-next-name" data-astro-cid-r6tfto3y> <span class="cs-next-index" data-astro-cid-r6tfto3y>04</span> <img class="cs-next-logo" src="/brand-logo/strane.png" alt="Strane" draggable="false" data-astro-cid-r6tfto3y> <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-r6tfto3y> <path d="M7 17L17 7M17 7H7M17 7V17" data-astro-cid-r6tfto3y></path> </svg> </span> </a> </footer>  <div class="cs-pagerpin" data-astro-cid-r6tfto3y> <nav class="cs-pagerbar" aria-label="Case studies" data-astro-cid-r6tfto3y> <a href="/work/dodrops/" class="cs-pagerbar-link" data-dir="prev" data-astro-cid-r6tfto3y> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-r6tfto3y> <path d="M19 12H5M5 12l6-6M5 12l6 6" data-astro-cid-r6tfto3y></path> </svg> <span data-astro-cid-r6tfto3y> <i data-astro-cid-r6tfto3y>Previous</i> <b data-astro-cid-r6tfto3y>DO Drops</b> </span> </a> <span class="cs-pagerbar-here" data-astro-cid-r6tfto3y> <span class="cs-pagerbar-count" aria-hidden="true" data-astro-cid-r6tfto3y> <b data-astro-cid-r6tfto3y>03</b> <i data-astro-cid-r6tfto3y>/</i> 07 </span> <em data-astro-cid-r6tfto3y>Hellavated</em> </span> <a href="/work/strane/" class="cs-pagerbar-link cs-pagerbar-next" data-dir="next" data-astro-cid-r6tfto3y> <span data-astro-cid-r6tfto3y> <i data-astro-cid-r6tfto3y>Next</i> <b data-astro-cid-r6tfto3y>Strane</b> </span> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-r6tfto3y> <path d="M5 12h14M19 12l-6-6M19 12l-6 6" data-astro-cid-r6tfto3y></path> </svg> </a> </nav> </div>  <script type="module">(()=>{const n=document.documentElement;if(n.classList.contains("zg-arriving")&&((window.scrollY||document.documentElement.scrollTop||0)>0&&n.classList.add("zg-ready-deep"),n.classList.add("zg-ready")),window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;const o=document.getElementById("page-content");if(!o)return;const s=["zg-arriving","zg-arriving-next","zg-arriving-prev","zg-ready","zg-ready-deep"],c=["zg-leaving","zg-leaving-plain","zg-leaving-next","zg-leaving-prev"],i=()=>Array.from(o.querySelectorAll("main, .cs-next")),l=()=>{for(const e of i())e.style.willChange="transform"},g=()=>{for(const e of i())e.style.willChange=""},d=()=>getComputedStyle(n).getPropertyValue("--zg-plate-ink").trim()||getComputedStyle(document.body).backgroundColor,m=(e,t)=>{l();const r=d();try{sessionStorage.setItem("zg-nav",t??"1"),r&&sessionStorage.setItem("zg-nav-ink",r)}catch{}n.classList.remove(...s),n.style.removeProperty("--zg-plate"),n.classList.add("zg-leaving",t?`zg-leaving-${t}`:"zg-leaving-plain"),window.setTimeout(()=>{location.href=e},480)};o.addEventListener("click",e=>{if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;const t=e.target?.closest?.("a[href]");if(!t||t.target==="_blank"||t.hasAttribute("download"))return;const r=new URL(t.href,location.href);if(r.origin!==location.origin||r.pathname===location.pathname&&r.hash)return;e.preventDefault();const a=t.dataset.dir;m(t.href,a==="next"||a==="prev"?a:void 0)}),o.addEventListener("pointerover",e=>{const t=e.target?.closest?.("a[href]");!t||t.target==="_blank"||t.hasAttribute("download")||l()},{passive:!0}),window.addEventListener("pageshow",e=>{e.persisted&&(n.classList.remove(...c,...s),n.style.removeProperty("--zg-plate"),g())})})();</script> <script>(function(){const prefetch = [{"url":"/work/dodrops/","as":"document"},{"url":"/work/strane/","as":"document"}];
+</p> </div> <div class="seasonal__grid" data-astro-cid-r6tfto3y> <figure class="seasonal__lto hv-rise" data-astro-cid-r6tfto3y> <div class="hv-frame" data-hv-drift="3" data-astro-cid-r6tfto3y> <img src="/hellavated-site/current-lto-baja.webp" alt="Baja Blastoff limited-time Hellavated product campaign" loading="lazy" decoding="async" data-astro-cid-r6tfto3y> </div> <figcaption data-astro-cid-r6tfto3y> <b data-astro-cid-r6tfto3y>Current limited release</b> <span data-astro-cid-r6tfto3y>Baja Blastoff · tropical soda, sweet lime, and citrus</span> </figcaption> </figure>  <article class="season season--spring hv-rise" style="--i:0" data-astro-cid-r6tfto3y> <span data-astro-cid-r6tfto3y>01</span> <div data-astro-cid-r6tfto3y> <h3 data-astro-cid-r6tfto3y>Spring</h3> <p data-astro-cid-r6tfto3y>Bright fruit and electric color break through the darkness.</p> </div> <small data-astro-cid-r6tfto3y>Limited-time flavor artwork placeholder</small> </article> <article class="season season--summer hv-rise" style="--i:1" data-astro-cid-r6tfto3y> <span data-astro-cid-r6tfto3y>02</span> <div data-astro-cid-r6tfto3y> <h3 data-astro-cid-r6tfto3y>Summer</h3> <p data-astro-cid-r6tfto3y>Juicy, saturated, and turned all the way up.</p> </div> <small data-astro-cid-r6tfto3y>Limited-time flavor artwork placeholder</small> </article> <article class="season season--fall hv-rise" style="--i:2" data-astro-cid-r6tfto3y> <span data-astro-cid-r6tfto3y>03</span> <div data-astro-cid-r6tfto3y> <h3 data-astro-cid-r6tfto3y>Fall</h3> <p data-astro-cid-r6tfto3y>Richer tones pull the collection into a darker orbit.</p> </div> <small data-astro-cid-r6tfto3y>Limited-time flavor artwork placeholder</small> </article> <article class="season season--winter hv-rise" style="--i:3" data-astro-cid-r6tfto3y> <span data-astro-cid-r6tfto3y>04</span> <div data-astro-cid-r6tfto3y> <h3 data-astro-cid-r6tfto3y>Winter</h3> <p data-astro-cid-r6tfto3y>Icy contrast gives the coldest drop an after-dark glow.</p> </div> <small data-astro-cid-r6tfto3y>Limited-time flavor artwork placeholder</small> </article> </div> </section>  <section class="closing" data-astro-cid-r6tfto3y> <div class="closing__art" data-astro-cid-r6tfto3y></div> <div class="closing__copy hv-rise" data-astro-cid-r6tfto3y> <div class="section-label hv-rise" data-astro-cid-r6tfto3y><span data-astro-cid-r6tfto3y>The result</span></div> <h2 data-astro-cid-r6tfto3y>Hellavated did not lose its edge.</h2> <p data-astro-cid-r6tfto3y>It gave that edge a bigger universe to live in.</p> </div> </section> </main> <footer class="cs-next" data-astro-cid-r6tfto3y> <a href="/work/strane/" class="cs-next-link" data-dir="next" style="--nx-bg:#0b0b06;--nx-accent:#e5ff00;--nx-glow:rgba(229,255,0,0.30);--nx-art:url(&#34;/portfolio/strane/strane_brick_bg_yellow.webp&#34;);--nx-art-op:0.288;--nx-art-filter:grayscale(1) brightness(0.75) contrast(1.2);--nx-art-size:760px;--nx-art-repeat:repeat;--nx-art-pos:50% 50%" data-astro-cid-r6tfto3y> <span class="cs-next-art" aria-hidden="true" data-astro-cid-r6tfto3y></span> <span class="cs-next-scrim" aria-hidden="true" data-astro-cid-r6tfto3y></span> <span class="cs-eyebrow" data-astro-cid-r6tfto3y>Next Project</span> <span class="cs-next-name" data-astro-cid-r6tfto3y> <span class="cs-next-index" data-astro-cid-r6tfto3y>04</span> <img class="cs-next-logo" src="/brand-logo/strane.png" alt="Strane" draggable="false" data-astro-cid-r6tfto3y> <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-r6tfto3y> <path d="M7 17L17 7M17 7H7M17 7V17" data-astro-cid-r6tfto3y></path> </svg> </span> </a> </footer>  <div class="cs-pagerpin" data-astro-cid-r6tfto3y> <nav class="cs-pagerbar" aria-label="Case studies" data-astro-cid-r6tfto3y> <a href="/work/dodrops/" class="cs-pagerbar-link" data-dir="prev" data-astro-cid-r6tfto3y> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-r6tfto3y> <path d="M19 12H5M5 12l6-6M5 12l6 6" data-astro-cid-r6tfto3y></path> </svg> <span data-astro-cid-r6tfto3y> <i data-astro-cid-r6tfto3y>Previous</i> <b data-astro-cid-r6tfto3y>DO Drops</b> </span> </a> <span class="cs-pagerbar-here" data-astro-cid-r6tfto3y> <span class="cs-pagerbar-count" aria-hidden="true" data-astro-cid-r6tfto3y> <b data-astro-cid-r6tfto3y>03</b> <i data-astro-cid-r6tfto3y>/</i> 07 </span> <em data-astro-cid-r6tfto3y>Hellavated</em> </span> <a href="/work/strane/" class="cs-pagerbar-link cs-pagerbar-next" data-dir="next" data-astro-cid-r6tfto3y> <span data-astro-cid-r6tfto3y> <i data-astro-cid-r6tfto3y>Next</i> <b data-astro-cid-r6tfto3y>Strane</b> </span> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-astro-cid-r6tfto3y> <path d="M5 12h14M19 12l-6-6M19 12l-6 6" data-astro-cid-r6tfto3y></path> </svg> </a> </nav> </div>  <script type="module">(()=>{const a=document.documentElement;window.__zgArrive&&((window.scrollY||document.documentElement.scrollTop||0)>0&&a.classList.add("zg-ready-deep"),a.classList.add("zg-ready"));const i=document.getElementById("page-content");i&&(i.addEventListener("click",t=>{if(t.defaultPrevented||t.button!==0||t.metaKey||t.ctrlKey||t.shiftKey||t.altKey)return;const e=t.target?.closest?.("a[href]");if(!e||e.target==="_blank"||e.hasAttribute("download"))return;const n=new URL(e.href,location.href);if(n.origin!==location.origin||n.pathname===location.pathname&&n.hash)return;const r=e.dataset.dir;try{sessionStorage.setItem("zg-nav",r==="next"||r==="prev"?r:"1")}catch{}}),"onpageswap"in window&&window.addEventListener("pageswap",t=>{if(!t.viewTransition)return;let e=null;try{e=sessionStorage.getItem("zg-nav")}catch{}if(e==="next"||e==="prev")try{t.viewTransition.types.add(e)}catch{}}))})();</script> <script>(function(){const prefetch = [{"url":"/work/dodrops/","as":"document"},{"url":"/work/strane/","as":"document"}];
 
     (() => {
       const c = navigator.connection;
