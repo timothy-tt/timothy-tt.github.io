@@ -73,9 +73,9 @@
            be cleaned up afterwards, and an untyped navigation simply does not
            match.
 
-           The move is a push. The whole outgoing page travels off one edge
-           while the whole incoming page travels in from the other, the way a
-           deck advances, and the owner's word for that is a swipe. What was
+           The move is a push. The outgoing page travels off one edge while
+           the incoming page travels in from the other, the way a deck
+           advances, and the owner's word for that is a swipe. What was
            here before was 6vw of travel with the old page fading all the way
            to zero and the new one fading up from zero, and that is what he
            read as "it just jumps in": for most of the cut the old page was
@@ -99,7 +99,21 @@
            read as a glow along the seam. Normal keeps the dim a dim.
 
            0.6s on an ease-out with a long tail, so both pages are moving
-           fastest at the start and arrive rather than stop. */
+           fastest at the start and arrive rather than stop.
+
+           What travels under these keyframes is the content and not the whole
+           page. The nav, the pager bar and the screen grain are each given a
+           view-transition-name in src/styles/case-study-swipe.css, which takes
+           them out of the root capture and gives each one a group of its own,
+           so `root` here is the four case studies minus their furniture. The
+           bars have the same box on both sides of a hop, so their groups have
+           nothing to animate but the dissolve from one page's bar to the
+           next's, and they hold their place while this push runs underneath
+           them. That is the owner's ask, "keep the menu bar and nav bar and
+           only swipe the content inside", and it is why the numbers here did
+           not have to change to answer it. The home page opts into the jump
+           without that stylesheet and has none of those elements, so a hop to
+           or from home is this push over the whole page, as before. */
         @keyframes zg-vt-push-out-left { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-28%); opacity: 0.55; } }
         @keyframes zg-vt-push-in-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
         @keyframes zg-vt-push-out-right { from { transform: translateX(0); opacity: 1; } to { transform: translateX(28%); opacity: 0.55; } }
