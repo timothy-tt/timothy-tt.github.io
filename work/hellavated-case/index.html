@@ -17,7 +17,7 @@
 
          Only the latin subsets are preloaded — the others are real
          @font-face entries with their unicode-ranges intact, so they still
-         fetch on demand for anything outside latin. --><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>Hellavated: Case Study · Zegoe</title><!-- Cross-document transition, arrival half. A React case study fades
+         fetch on demand for anything outside latin. --><style>html{background:#050505}</style><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>Hellavated: Case Study · Zegoe</title><!-- Cross-document transition, arrival half. A React case study fades
          itself out and leaves this flag before navigating; whichever document
          loads next fades in to meet it, so leaving and arriving read as one
          move instead of a cut. Runs in <head>, before first paint, or the page
@@ -35,7 +35,13 @@
          opacity only, never transform: body has position:fixed descendants
          (.cs-nav) and a transform hint would become their containing block.
          Transient by construction: the class is stripped after load. */
-      html.zg-arriving body { animation: zg-arrive 0.45s ease-out both; will-change: opacity; }
+      /* No will-change. body is the whole document -- 7953px tall on AVITAS,
+         over fifteen megapixels of layer -- and Firefox's budget for a page
+         is 2,073,600. Asking for this put the arriving page so far over that
+         every hint in the document was ignored. The animation below gets its
+         own compositor layer when it starts; the hint only asked a few
+         milliseconds earlier and cost the whole budget to do it. */
+      html.zg-arriving body { animation: zg-arrive 0.45s ease-out both; }
       /* The incoming page slides in from the side it was travelling from, so
          it can sit outside the viewport for a frame and something has to clip
          it. NOT the <html> element: body already carries overflow-x:hidden,
@@ -56,7 +62,7 @@
          under the directional fallback, the settle is the entrance. Both of
          those switch it off here. */
       html.zg-vt.zg-arriving body,
-      html[data-arrival='cinematic'].zg-arriving body { animation: none; will-change: auto; }
+      html[data-arrival='cinematic'].zg-arriving body { animation: none; }
 
       @media (prefers-reduced-motion: reduce) {
         html.zg-arriving body { animation: none; }
@@ -64,7 +70,13 @@
     </style><script>
       /* The arrival half, and the direction hand-off. Runs in <head>, before
          first paint, because on a page that is not in the jump the classes
-         below drive a fade that has to own the very first frame. */
+         below drive a fade that has to own the very first frame.
+
+         Named and then called, rather than run inline. It is one-shot work
+         keyed on a navigation, and under a same-document router there is no
+         second parse to trigger it -- a lifecycle event has to. Calling it
+         immediately is what keeps today's timing exactly as it was. */
+      window.__zgArrival = function (sameDoc) {
       try {
         var root = document.documentElement;
         var cinematic = root.getAttribute('data-arrival') === 'cinematic';
@@ -74,7 +86,13 @@
         // after next as well, in the direction of a hop two pages back.
         var nav = sessionStorage.getItem('zg-nav');
         if (nav) sessionStorage.removeItem('zg-nav');
-        if (!nav && cinematic) {
+        /* `sameDoc` is the router calling this after a swap. The inference
+           below asks the NAVIGATION what kind of arrival this is, and after a
+           swap the only navigation entry is the one that loaded the document
+           we are still in -- it would answer for a page the reader opened
+           minutes ago. Under the router an explicit flag is the only thing
+           that counts. */
+        if (!nav && cinematic && !sameDoc) {
           // No flag: a cold load, a bookmark, a link from outside. The four
           // case studies still play their settle, because it is the page's
           // opening shot and not only a stitch between two documents. Not on
@@ -91,6 +109,25 @@
            those do not land until pagereveal fires. */
         window.__zgArrive = nav || null;
 
+        /* The Strane match cut's half of the arrival. The flag carries a
+           value the next/prev branches do not match, so everything below
+           treats it as a plain move and the root pair gets the dissolve --
+           which is what this wants, because the collage is held by a
+           view-transition-name and a push under it would slide the one thing
+           that is meant to stay still. The class goes on before first paint
+           so the name is in place when pagereveal takes the new snapshot. */
+        if (nav === 'match:strane') {
+          root.classList.add('zg-match-strane');
+          /* The handover already played on the home page: the bars came in,
+             the headline rose, and the frame this document is about to paint
+             is the frame that one ended on. So the entrance is CONSUMED --
+             nav is cleared and the arrival classes are never added, and both
+             paths (Chrome's dissolve, Firefox's held frame) land on a page
+             that is already settled rather than one that replays the move
+             the reader just watched. */
+          nav = null;
+        }
+
         /* The fallback entrance: the arrival classes, as they have always
            been. Used where there is no cross-document view transition to ride
            — an older browser, or a hop in from a page that does not opt in
@@ -101,6 +138,46 @@
           // "next"/"prev" carry the direction of travel; "1" is a plain move.
           if (nav === 'next' || nav === 'prev') root.classList.add('zg-arriving-' + nav);
         };
+
+        /* Leaving. This document declares @view-transition, so the browser
+           starts one on every navigation out of it -- and SKIPS it whenever
+           the destination does not opt in, which is most of them. The
+           transition's promises reject when that happens, and with nothing
+           holding them the rejection surfaced as an uncaught AbortError.
+           Claimed here and nowhere else, because this is the only place the
+           object exists on the way out. */
+        var claimVT = function (ev) {
+          if (!ev || !ev.viewTransition) return;
+          try {
+            ev.viewTransition.finished.catch(function () {});
+            ev.viewTransition.ready.catch(function () {});
+            ev.viewTransition.updateCallbackDone.catch(function () {});
+          } catch (err) { /* older transition object */ }
+        };
+        /* On EVERY page, opted in or not. A document that declares
+           @view-transition starts one on the way out and the browser skips
+           it whenever the destination does not declare it too -- which is
+           most of them -- and the skip rejects the transition's promises on
+           BOTH sides. The page that does not opt in is exactly the page with
+           no handler of its own, so the rejection surfaced there as an
+           uncaught AbortError. */
+        if ('onpageswap' in window) window.addEventListener('pageswap', claimVT);
+        if ('onpagereveal' in window) window.addEventListener('pagereveal', claimVT);
+
+        /* And the one the handlers above cannot reach. When the destination
+           does not declare @view-transition the browser skips the transition
+           without ever handing either document the object, so there is
+           nothing to attach a catch to -- the rejection simply surfaces. This
+           swallows that one rejection and nothing else: the two error names a
+           skipped or aborted transition throws, and only when the message
+           says so. Every other unhandled rejection still reaches the
+           console. */
+        window.addEventListener('unhandledrejection', function (ev) {
+          var r = ev && ev.reason;
+          if (!r) return;
+          var named = r.name === 'AbortError' || r.name === 'InvalidStateError';
+          if (named && /transition/i.test(String(r.message || ''))) ev.preventDefault();
+        });
 
         if (opted && 'onpagereveal' in window) {
           /* pagereveal is the new document's first word, fired before its
@@ -121,21 +198,44 @@
              opt into the jump. That is the fallback's case. */
           window.addEventListener('pagereveal', function (e) {
             if (!e.viewTransition) { settle(); return; }
+            /* A transition can be skipped or aborted -- another navigation
+               lands on top of it, the page goes away mid-flight -- and its
+               promises reject. Nothing awaits them here, so an unhandled
+               AbortError or InvalidStateError went to the console on every
+               such navigation. Claimed, and ignored. */
+            try {
+              e.viewTransition.finished.catch(function () {});
+              e.viewTransition.ready.catch(function () {});
+              e.viewTransition.updateCallbackDone.catch(function () {});
+            } catch (err) { /* older transition object */ }
             if (nav === 'next' || nav === 'prev') {
               try { e.viewTransition.types.add(nav); } catch (err) { /* older types API */ }
             }
-            root.classList.add('zg-vt', 'zg-arriving');
+            /* zg-arriving is the entrance. The Strane handover already played
+               it on the page we came from, and `nav` was cleared above to say
+               so, which is why this is guarded: adding it here would replay
+               the bars and the headline rise the reader just watched. zg-vt
+               still goes on, because the fallback offsets it cancels have to
+               be cancelled either way. */
+            root.classList.add('zg-vt');
+            if (nav) root.classList.add('zg-arriving');
           }, { once: true });
         } else {
           settle();
         }
       } catch (e) { /* storage blocked; no transition, no harm */ }
+      };
+      window.__zgArrival();
     </script><script>
       /* Retire the arrival classes once the animation is over. They are a
          trigger, not a state: left on, they keep the arriving-page rules
          (and anything scoped to them) alive for the whole visit, which is
-         how a one-frame transition detail turns into a permanent bug. */
-      (function () {
+         how a one-frame transition detail turns into a permanent bug.
+
+         Named for the same reason as the block above: it is the other half
+         of one navigation's work, and the two have to be triggerable
+         together. */
+      window.__zgArrivalRetire = function () {
         var root = document.documentElement;
         var opted = root.getAttribute('data-arrival') === 'cinematic' || root.hasAttribute('data-jump');
         var done = function () {
@@ -185,10 +285,11 @@
         document.addEventListener('DOMContentLoaded', function () {
           if (window.__zgArrive) root.classList.add('zg-ready');
         });
-      })();
-    </script><link rel="stylesheet" href="/_astro/index.ZH7OUS-B.css">
+      };
+      window.__zgArrivalRetire();
+    </script><link rel="stylesheet" href="/_astro/index.DhbgnKyF.css">
 <style>html,body{overscroll-behavior-x:contain}
-</style></head> <body> <div id="page-content">  <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z2k08BG" prefix="r1" component-url="/_astro/CaseStudyContent.BYppqOt1.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{&quot;slug&quot;:[0,&quot;hellavated-case&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;CaseStudyContent&quot;,&quot;value&quot;:true}" await-children><link rel="preload" as="image" href="/Wordmark_White.png"/><link rel="preload" as="image" href="/portfolio/hellavated/hellavated-brand-cover.webp"/><link rel="preload" as="image" href="/brand-logo/hellavated.png"/><link rel="preload" as="image" href="/brand-logo/holistic-industries.png"/><link rel="preload" as="image" href="/brand-logo/strane.png"/><div class="cs-page" style="--cs-bg:#070707;--cs-accent:#ff4fd8;--cs-accent-text:#0a0a0a;--cs-glow:rgba(255,120,220,0.35);--cs-bg-src:url(&quot;/portfolio/hellavated/hi/hellavated-live-resin-device-revised-06-06.webp&quot;);--cs-bg-op:0.34;--cs-bg-filter:saturate(1.15) brightness(0.72);--cs-bg-size:cover;--cs-bg-repeat:no-repeat;--cs-bg-pos:50% 35%;--cs-bg-scrim:linear-gradient(180deg, rgba(7,7,7,0.86) 0%, rgba(7,7,7,0.62) 30%, rgba(7,7,7,0.66) 70%, rgba(7,7,7,0.9) 100%);--cs-bg-bleed:16"><div class="cs-bgpin" aria-hidden="true"><div class="cs-bglayer"><div class="cs-bgart"><div class="cs-bgart-img cs-bgart-drift"></div></div><div class="cs-bgscrim"></div></div></div><div class="cs-topbar" aria-hidden="true"></div><nav class="cs-nav" aria-label="Case study"><a href="/" class="cs-nav-logo"><img src="/Wordmark_White.png" alt="Zegoe"/></a><a href="/#work" class="cs-nav-back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12l6-6M5 12l6 6"></path></svg><span>All Work</span></a></nav><main><header class="cs-hero cs-hero-plated"><div class="cs-hero-plate"><img src="/portfolio/hellavated/hellavated-brand-cover.webp" alt="Hellavated brand cover: a model holding a CloudBar against a deep-space field, ringed by fruit and splashes of juice, under the cloud wordmark" draggable="false"/></div><div class="cs-hero-inner"><p class="cs-hero-eyebrow">Case Study<span class="cs-hero-count"><b>03</b><i>/</i>07</span></p><h1 class="cs-hero-name cs-hero-name-logo"><img src="/brand-logo/hellavated.png" alt="Hellavated" draggable="false"/></h1><p class="cs-hero-pos">Gen-Z edibles branding, volume all the way up.</p><div class="cs-hero-chips"><span class="cs-chip">Packaging</span><span class="cs-chip">Edibles</span><span class="cs-chip">Devices</span><span class="cs-chip">Beverages</span></div><p class="cs-hero-client"><span class="cs-hero-client-label">Client</span><img class="cs-hero-clientlogo" src="/brand-logo/holistic-industries.png" alt="Holistic Industries" draggable="false"/></p></div><div class="cs-hero-scroll" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M12 19l-6-6M12 19l6-6"></path></svg></div></header><section class="cs-stage-section" aria-label="Interactive product model"><div class="cs-section-head"><p class="cs-eyebrow">The Product</p><p class="cs-stage-note">The galaxy CloudBar. Spin the real thing.</p></div><div class="cs-stage-frame"><div class="cs-stage" style="cursor:default"><div class="cs-stage-mount" aria-hidden="true"></div><img src="/portfolio/hellavated/hi/hellavated-galaxy-device-mockup.webp" alt="Hellavated galaxy CloudBar device pair" draggable="false" class="cs-stage-poster" style="opacity:1" loading="lazy"/><style>
+</style></head> <body> <div id="page-content">  <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="1YTFtB" prefix="r1" component-url="/_astro/CaseStudyContent.D3XImRMK.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{&quot;slug&quot;:[0,&quot;hellavated-case&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;CaseStudyContent&quot;,&quot;value&quot;:true}" await-children><link rel="preload" as="image" href="/Wordmark_White.png"/><link rel="preload" as="image" href="/portfolio/hellavated/hellavated-brand-cover.webp"/><link rel="preload" as="image" href="/brand-logo/hellavated.png"/><link rel="preload" as="image" href="/brand-logo/holistic-industries.png"/><link rel="preload" as="image" href="/brand-logo/strane.png"/><div class="cs-page" style="--cs-bg:#070707;--cs-accent:#ff4fd8;--cs-accent-text:#0a0a0a;--cs-glow:rgba(255,120,220,0.35);--cs-bg-src:url(&quot;/portfolio/hellavated/hi/hellavated-live-resin-device-revised-06-06.webp&quot;);--cs-bg-op:0.34;--cs-bg-filter:saturate(1.15) brightness(0.72);--cs-bg-size:cover;--cs-bg-repeat:no-repeat;--cs-bg-pos:50% 35%;--cs-bg-scrim:linear-gradient(180deg, rgba(7,7,7,0.86) 0%, rgba(7,7,7,0.62) 30%, rgba(7,7,7,0.66) 70%, rgba(7,7,7,0.9) 100%);--cs-bg-bleed:16"><div class="cs-bgpin" aria-hidden="true"><div class="cs-bglayer"><div class="cs-bgart"><div class="cs-bgart-img cs-bgart-drift"></div></div><div class="cs-bgscrim"></div></div></div><div class="cs-topbar" aria-hidden="true"></div><nav class="cs-nav" aria-label="Case study"><a href="/" class="cs-nav-logo"><img src="/Wordmark_White.png" alt="Zegoe"/></a><a href="/#work" class="cs-nav-back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12l6-6M5 12l6 6"></path></svg><span>All Work</span></a></nav><main><header class="cs-hero cs-hero-plated"><div class="cs-hero-plate"><img src="/portfolio/hellavated/hellavated-brand-cover.webp" alt="Hellavated brand cover: a model holding a CloudBar against a deep-space field, ringed by fruit and splashes of juice, under the cloud wordmark" draggable="false"/></div><div class="cs-hero-inner"><p class="cs-hero-eyebrow">Case Study<span class="cs-hero-count"><b>03</b><i>/</i>07</span></p><h1 class="cs-hero-name cs-hero-name-logo"><img src="/brand-logo/hellavated.png" alt="Hellavated" draggable="false"/></h1><p class="cs-hero-pos">Gen-Z edibles branding, volume all the way up.</p><div class="cs-hero-chips"><span class="cs-chip">Packaging</span><span class="cs-chip">Edibles</span><span class="cs-chip">Devices</span><span class="cs-chip">Beverages</span></div><p class="cs-hero-client"><span class="cs-hero-client-label">Client</span><img class="cs-hero-clientlogo" src="/brand-logo/holistic-industries.png" alt="Holistic Industries" draggable="false"/></p></div><div class="cs-hero-scroll" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M12 19l-6-6M12 19l6-6"></path></svg></div></header><section class="cs-stage-section" aria-label="Interactive product model"><div class="cs-section-head"><p class="cs-eyebrow">The Product</p><p class="cs-stage-note">The galaxy CloudBar. Spin the real thing.</p></div><div class="cs-stage-frame"><div class="cs-stage" style="cursor:default"><div class="cs-stage-mount" aria-hidden="true"></div><img src="/portfolio/hellavated/hi/hellavated-galaxy-device-mockup.webp" alt="Hellavated galaxy CloudBar device pair" draggable="false" class="cs-stage-poster" style="opacity:1" loading="lazy"/><style>
         .cs-stage {
           position: relative;
           width: 100%;
@@ -393,16 +494,16 @@
            scrollport. */
         html.zg-arriving-next .cs-page,
         html.zg-arriving-prev .cs-page { overflow-x: clip; }
-        /* Arrival mirror of warm(): promote the layers before the entrance
-           plays, so the fade and slide stay on the compositor while
-           hydration blocks the main thread (see BaseLayout's zg-arrive
-           note). Same split as warm(), for the same reason: opacity only on
-           .cs-page (it holds the fixed .cs-nav), the transform hint only on
-           <main>, which is the one thing that moves. Scoped to zg-arriving,
-           which is stripped after load, so neither layer outlives the
-           entrance. */
-        html.zg-arriving .cs-page { will-change: opacity; }
-        html.zg-arriving .cs-page > main { will-change: transform; }
+        /* This is where the arrival's mirror of the old warm() lived: a
+           will-change on .cs-page and one on <main>, so the fade and the
+           slide were promoted before the entrance played. Both are gone, for
+           the reason set out at length where warm() used to be: each of them
+           is the size of the document, and either one on its own puts the
+           page over Firefox's will-change budget, at which point EVERY hint
+           in the document is ignored. The slide below is a transform
+           animation and gets its layer when it runs. Verified on all four
+           pager pushes in both engines: the arriving page's first painted
+           frame is already offset and already moving. */
         @keyframes cs-slide-in-right { from { transform: translate3d(7vw, 0, 0); } to { transform: translate3d(0, 0, 0); } }
         @keyframes cs-slide-in-left  { from { transform: translate3d(-7vw, 0, 0); } to { transform: translate3d(0, 0, 0); } }
         /* Everything in the flow sits above the art layer. */
@@ -428,8 +529,11 @@
           left: 0;
           right: 0;
           height: calc(100% + var(--cs-bg-bleed, 14) * 1vh);
+          /* translate3d and no will-change. This layer is a viewport and a
+             fifth tall -- 2.3 megapixels, more than Firefox's entire budget
+             for the page on its own -- and the 3D transform already puts it
+             on its own layer without asking. */
           transform: translate3d(0, 0, 0);
-          will-change: transform;
         }
         .cs-bgart-img {
           position: absolute;
@@ -1387,11 +1491,26 @@
       if (document.readyState === 'complete') idle();
       else addEventListener('load', idle, { once: true });
     })();
-  })();</script>  </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync --> <script type="module">const s=document.getElementById("main-nav");if(s){let m=function(){g=!1;const e=window.scrollY>60,o=k.some(n=>{const c=n.getBoundingClientRect();return c.top<=b&&c.bottom>0});o===v&&e===p||(v=o,p=e,s.classList.toggle("nav-on-light",o),s.classList.toggle("nav-scrolled",e),t&&(o?(t.style.backgroundColor="rgba(255,255,255,0.78)",t.style.backdropFilter="blur(14px) saturate(1.8)",t.style.webkitBackdropFilter="blur(14px) saturate(1.8)",t.style.borderBottomColor="rgba(0,0,0,0.07)",u.forEach(n=>{n.style.color="#1a1a1a"}),a&&(a.style.filter="invert(1)")):(t.style.backgroundColor=e?"rgba(0,0,0,0.45)":"rgba(0,0,0,0)",t.style.backdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.webkitBackdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.borderBottomColor=e?"rgba(255,160,64,0.10)":"transparent",u.forEach(n=>{n.style.color=""}),a&&(a.style.filter=""))))};const t=document.getElementById("nav-bg"),a=s.querySelector("img"),u=Array.from(s.querySelectorAll(".nav-link")),k=Array.from(document.querySelectorAll("[data-nav-light]")),b=69;let g=!1,v=null,p=null;window.addEventListener("scroll",()=>{g||(g=!0,requestAnimationFrame(m))},{passive:!0}),m();const i=u.filter(l=>l.dataset.section);if(i.length){let l=0;const e=()=>{l=0;let f=null,d=-1/0;for(const r of i){const w=document.getElementById(r.dataset.section);if(!w)continue;const y=w.getBoundingClientRect().top-b;y<=0&&y>d&&(d=y,f=r)}for(const r of i)r.classList.toggle("is-active",r===f)},o=()=>{l||(l=requestAnimationFrame(e))};window.addEventListener("scroll",o,{passive:!0}),window.addEventListener("resize",o,{passive:!0});let n=0;const c=window.setInterval(()=>{o(),(i.every(d=>document.getElementById(d.dataset.section))||++n>40)&&window.clearInterval(c)},250)}}</script> <!-- Nav color switch on light sections.
+  })();</script>  </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div>  <div class="zg-bar" aria-hidden="true"><span class="zg-bar-thumb"></span></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync.
+
+         Written as an init/destroy pair and started at module time, so with
+         no router in the page this behaves exactly as it did when the body
+         below ran top to bottom. The pair exists because an ES module is
+         evaluated once per URL: under a same-document router the second
+         visit to a page would re-use this instance, and nothing here could
+         be handed back. `destroy()` is what makes that safe -- it returns
+         the page to the state it was in before `init()` ran, leaving no
+         Lenis, no ticker callback, no ScrollTrigger sync and no delegated
+         click handler behind.
+
+         Nothing else may construct a Lenis. `window.__lenis` is the site's
+         single scroller and a dozen components read it. --> <script type="module">let m=null;function B(){if(m)return;const e=document.querySelector(".zg-bar"),p=e&&e.querySelector(".zg-bar-thumb");if(!e||!p){m=()=>{};return}const b=window.matchMedia("(prefers-reduced-motion: reduce)").matches,C=34,R=1200,S=300;let r=0,g=0,c=0,f=0,L=0,E=0,M=0,w=0,T=-1,_=!1;const D=()=>{const t=window.innerHeight,n=document.documentElement.scrollHeight,o=Math.max(0,n-t),s=o<=0?0:Math.max(C,Math.round(t/n*t)),i=o<=0?0:Math.min(1,Math.max(0,(window.__lenis?.scroll??window.scrollY)/o));return{limit:o,h:s,y:(t-s)*i}},N=()=>{p.style.transform="translate3d(0,"+f.toFixed(2)+"px,0) scaleY("+(c/window.innerHeight).toFixed(5)+")"},x=()=>{r=0;const t=performance.now();if(w&&!b){const n=Math.min(1,(t-w)/S),o=1-Math.pow(1-n,3);c=M+(L-M)*o,f=E,n<1?r=requestAnimationFrame(x):w=0}else c=L,f=E;N()},l=()=>{e.classList.add("is-on"),window.clearTimeout(g),_||(g=window.setTimeout(()=>e.classList.remove("is-on"),R))},u=t=>{const n=D();e.classList.toggle("is-live",n.limit>0),E=n.y,n.limit!==T&&(T>=0&&!b&&(M=c,w=performance.now()),T=n.limit),L=n.h,r||(r=requestAnimationFrame(x)),t||l()},k=69,P=()=>Array.from(document.querySelectorAll("[data-nav-light]")),Y=()=>{const t=P().some(n=>{const o=n.getBoundingClientRect();return o.top<=k&&o.bottom>0});e.classList.toggle("is-light",t)},v=()=>{u(),Y()},y=()=>{u(!0),Y()},H=t=>{const n=window.innerHeight,o=p.getBoundingClientRect(),s=Math.max(0,document.documentElement.scrollHeight-n);if(s<=0)return;const i=window.__lenis;if(t.clientY<o.top||t.clientY>o.bottom){const a=t.clientY<o.top?-1:1,d=Math.min(s,Math.max(0,(i?.scroll??window.scrollY)+a*n*.9));i?.scrollTo?i.scrollTo(d):window.scrollTo({top:d,behavior:"smooth"}),l();return}_=!0,e.classList.add("is-drag"),e.setPointerCapture(t.pointerId);const V=t.clientY-o.top,F=a=>{const d=n-c;if(d<=0)return;const q=Math.min(1,Math.max(0,(a.clientY-V)/d))*s;i?.scrollTo?i.scrollTo(q,{immediate:!0}):window.scrollTo(0,q),l()},h=a=>{_=!1,e.classList.remove("is-drag");try{e.releasePointerCapture(a.pointerId)}catch{}e.removeEventListener("pointermove",F),e.removeEventListener("pointerup",h),e.removeEventListener("pointercancel",h),l()};e.addEventListener("pointermove",F),e.addEventListener("pointerup",h),e.addEventListener("pointercancel",h),t.preventDefault()},z=()=>l(),A=window.__lenis;A?.on?.("scroll",v),window.addEventListener("scroll",v,{passive:!0}),window.addEventListener("resize",y),e.addEventListener("pointerdown",H),e.addEventListener("pointerenter",z);const I=window.setInterval(()=>u(!0),500);window.setTimeout(()=>window.clearInterval(I),6e3),u(!0),Y(),m=()=>{A?.off?.("scroll",v),window.removeEventListener("scroll",v),window.removeEventListener("resize",y),e.removeEventListener("pointerdown",H),e.removeEventListener("pointerenter",z),window.clearInterval(I),window.clearTimeout(g),r&&cancelAnimationFrame(r),e.classList.remove("is-on","is-live","is-drag","is-light")}}function W(){const e=m;m=null,e?.()}window.__zgBar={init:B,destroy:W,refresh:()=>window.__zgBarRead?.()};B();</script> <!-- Nav color switch on light sections.
          The single owner of the nav's appearance. This used to be two scroll
          listeners: this one toggling classes, and a second, unguarded one in
          index.astro writing the inline styles that actually painted the bar.
          They also disagreed on geometry, so the inline copy (which triggers
          earlier and releases later) decided every visible flip. The inline
          copy's thresholds are the ones kept here; the class toggles ride along
-         unchanged. --> <script type="module" src="/_astro/BaseLayout.astro_astro_type_script_index_1_lang.BKQlDpRt.js"></script> </body> </html> 
+         unchanged. --> <script type="module">let s=null;function B(){if(s)return;const l=document.getElementById("main-nav");if(l){let w=function(){f=!1;const o=window.scrollY>60,t=I().some(r=>{const i=r.getBoundingClientRect();return i.top<=y&&i.bottom>0});t===b&&o===p||(b=t,p=o,l.classList.toggle("nav-on-light",t),l.classList.toggle("nav-scrolled",o),e&&(t?(e.style.backgroundColor="rgba(255,255,255,0.78)",e.style.backdropFilter="blur(14px) saturate(1.8)",e.style.webkitBackdropFilter="blur(14px) saturate(1.8)",e.style.borderBottomColor="rgba(0,0,0,0.07)",g.forEach(r=>{r.style.color="#1a1a1a"}),c&&(c.style.filter="invert(1)")):(e.style.backgroundColor=o?"rgba(0,0,0,0.45)":"rgba(0,0,0,0)",e.style.backdropFilter=o?"blur(12px) saturate(1.6)":"none",e.style.webkitBackdropFilter=o?"blur(12px) saturate(1.6)":"none",e.style.borderBottomColor=o?"rgba(255,160,64,0.10)":"transparent",g.forEach(r=>{r.style.color=""}),c&&(c.style.filter=""))))};const e=document.getElementById("nav-bg"),c=l.querySelector("img"),g=Array.from(l.querySelectorAll(".nav-link")),I=()=>Array.from(document.querySelectorAll("[data-nav-light]")),y=69;let f=!1,b=null,p=null;const k=()=>{f||(f=!0,requestAnimationFrame(w))};window.addEventListener("scroll",k,{passive:!0}),w();let E=null;const d=g.filter(n=>n.dataset.section);if(d.length){let n=0;const o=()=>{n=0;let m=null,u=-1/0;for(const a of d){const L=document.getElementById(a.dataset.section);if(!L)continue;const v=L.getBoundingClientRect().top-y;v<=0&&v>u&&(u=v,m=a)}for(const a of d)a.classList.toggle("is-active",a===m)},t=()=>{n||(n=requestAnimationFrame(o))};window.addEventListener("scroll",t,{passive:!0}),window.addEventListener("resize",t,{passive:!0});let r=0;const i=window.setInterval(()=>{t(),(d.every(u=>document.getElementById(u.dataset.section))||++r>40)&&window.clearInterval(i)},250);E=()=>{window.removeEventListener("scroll",t),window.removeEventListener("resize",t),window.clearInterval(i),n&&(cancelAnimationFrame(n),n=0)}}s=()=>{window.removeEventListener("scroll",k),E?.()}}s||(s=()=>{})}function h(){const l=s;s=null,l?.()}window.__zgNav={init:B,destroy:h};B();</script> <!-- The scrollbar's own lifecycle, on the same init/destroy shape as the
+         two above, so it survives the Strane expansion and stays one
+         instance. --> <script type="module" src="/_astro/BaseLayout.astro_astro_type_script_index_2_lang.DJHD6sBR.js"></script>  </body></html>

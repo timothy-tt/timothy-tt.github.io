@@ -17,7 +17,7 @@
 
          Only the latin subsets are preloaded — the others are real
          @font-face entries with their unicode-ranges intact, so they still
-         fetch on demand for anything outside latin. --><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>Strane — Loud. By Design. | Zegoe</title><!-- Cross-document transition, arrival half. A React case study fades
+         fetch on demand for anything outside latin. --><style>html{background:#111110 url(/strane-site/paper-yellow.webp) center 64px / 100% auto no-repeat}</style><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/1Ptgg87LROyAm3Kz-C8.woff2"><link rel="preload" as="image" href="/strane-site/paper-yellow.webp" fetchpriority="high"><link rel="preload" as="image" href="/strane-site/hero-model.webp" fetchpriority="high"><link rel="preload" as="image" href="/strane-site/sticker-eye-sativa.webp"><link rel="preload" as="image" href="/strane-site/sticker-eye-indica.webp"><link rel="preload" as="image" href="/strane-site/sticker-eye-hybrid.webp"><link rel="preload" as="image" href="/strane-site/sticker-star.webp"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>Strane — Loud. By Design. | Zegoe</title><!-- Cross-document transition, arrival half. A React case study fades
          itself out and leaves this flag before navigating; whichever document
          loads next fades in to meet it, so leaving and arriving read as one
          move instead of a cut. Runs in <head>, before first paint, or the page
@@ -35,7 +35,13 @@
          opacity only, never transform: body has position:fixed descendants
          (.cs-nav) and a transform hint would become their containing block.
          Transient by construction: the class is stripped after load. */
-      html.zg-arriving body { animation: zg-arrive 0.45s ease-out both; will-change: opacity; }
+      /* No will-change. body is the whole document -- 7953px tall on AVITAS,
+         over fifteen megapixels of layer -- and Firefox's budget for a page
+         is 2,073,600. Asking for this put the arriving page so far over that
+         every hint in the document was ignored. The animation below gets its
+         own compositor layer when it starts; the hint only asked a few
+         milliseconds earlier and cost the whole budget to do it. */
+      html.zg-arriving body { animation: zg-arrive 0.45s ease-out both; }
       /* The incoming page slides in from the side it was travelling from, so
          it can sit outside the viewport for a frame and something has to clip
          it. NOT the <html> element: body already carries overflow-x:hidden,
@@ -56,7 +62,7 @@
          under the directional fallback, the settle is the entrance. Both of
          those switch it off here. */
       html.zg-vt.zg-arriving body,
-      html[data-arrival='cinematic'].zg-arriving body { animation: none; will-change: auto; }
+      html[data-arrival='cinematic'].zg-arriving body { animation: none; }
 
       @media (prefers-reduced-motion: reduce) {
         html.zg-arriving body { animation: none; }
@@ -136,6 +142,23 @@
         ::view-transition-old(root),
         ::view-transition-new(root) { animation-duration: 0.42s; }
 
+        /* The Strane handover is the one navigation that must NOT dissolve.
+           Everywhere else a cross-fade is the honest answer for a move with
+           no direction; here the two documents have been made into the same
+           picture on purpose, and fading one onto the other only shows where
+           they still differ -- the collage's float phase, the ribbon's crawl
+           -- as a soft double exposure. That is what the flash in Chromium
+           was: the home page's own overlay still readable under the case
+           study's copy. Cut instead. Both frames are the same frame. */
+        html.zg-match-strane::view-transition-old(root),
+        html.zg-match-strane::view-transition-new(root) {
+          animation-duration: 0s;
+        }
+        html.zg-match-strane::view-transition-group(*),
+        html.zg-match-strane::view-transition-image-pair(*) {
+          animation-duration: 0s;
+        }
+
         /* The reduced-motion pair, hoisted out of the media query below so the
            two halves of one idea sit next to the keyframes they replace. */
         @keyframes zg-vt-fade-out { from { opacity: 1; } to { opacity: 0; } }
@@ -162,10 +185,16 @@
           ::view-transition-old(root) { animation: zg-vt-fade-out 0.3s linear both !important; mix-blend-mode: plus-lighter !important; }
           ::view-transition-new(root) { animation: zg-vt-fade-in 0.3s linear both !important; mix-blend-mode: plus-lighter !important; }
         }
-      </style><style>.cs-nav{view-transition-name:cs-nav}.cs-pagerbar{view-transition-name:cs-pager}.noise-overlay{view-transition-name:zg-grain}html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-group(cs-nav),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-group(cs-pager),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-group(zg-grain),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-old(cs-nav),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-new(cs-nav),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-old(cs-pager),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-new(cs-pager),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-old(zg-grain),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-new(zg-grain){animation-duration:.6s;animation-timing-function:cubic-bezier(.22,.61,.36,1)}@keyframes zg-swipe-out-left{to{translate:-12vw 0}}@keyframes zg-swipe-out-right{to{translate:12vw 0}}@keyframes zg-swipe-dim{to{opacity:.7}}html.zg-leaving #page-content{overflow-x:clip}html.zg-leaving #page-content :is(main,.cs-next){animation:zg-swipe-dim .3s ease-in forwards}html.zg-leaving-next #page-content :is(main,.cs-next){animation:zg-swipe-out-left .3s ease-in forwards,zg-swipe-dim .3s ease-in forwards}html.zg-leaving-prev #page-content :is(main,.cs-next){animation:zg-swipe-out-right .3s ease-in forwards,zg-swipe-dim .3s ease-in forwards}html.zg-arriving:not(.zg-vt) #page-content{overflow-x:clip}html.zg-arriving:not(.zg-vt) #page-content :is(main,.cs-next){opacity:.7}html.zg-arriving-next:not(.zg-vt) #page-content :is(main,.cs-next){translate:12vw 0}html.zg-arriving-prev:not(.zg-vt) #page-content :is(main,.cs-next){translate:-12vw 0}@keyframes zg-swipe-in-right{0%{translate:12vw 0}to{translate:0 0}}@keyframes zg-swipe-in-left{0%{translate:-12vw 0}to{translate:0 0}}@keyframes zg-swipe-lift{0%{opacity:.7}to{opacity:1}}@keyframes zg-settle{0%{scale:1.025}to{scale:1}}html.zg-arriving #page-content :is(main,.cs-next){transform-origin:50% 0}html.zg-arriving:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both,zg-settle .9s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-next:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-in-right .55s cubic-bezier(.16,.84,.34,1) both,zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both,zg-settle .9s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-prev:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-in-left .55s cubic-bezier(.16,.84,.34,1) both,zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both,zg-settle .9s cubic-bezier(.16,.84,.34,1) both}html.zg-vt.zg-arriving.zg-ready #page-content :is(main,.cs-next){animation:zg-settle .9s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving.zg-ready-deep:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-next.zg-ready-deep:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-in-right .55s cubic-bezier(.16,.84,.34,1) both,zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-prev.zg-ready-deep:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-in-left .55s cubic-bezier(.16,.84,.34,1) both,zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both}html.zg-vt.zg-arriving.zg-ready-deep #page-content :is(main,.cs-next){animation:none}html.zg-leaving #page-content :is(main,.cs-next){will-change:translate,opacity}html.zg-arriving:not(.zg-vt) #page-content :is(main,.cs-next){will-change:translate,opacity,scale}html.zg-vt.zg-arriving #page-content :is(main,.cs-next){will-change:scale}.zg-line{display:block;clip-path:inset(-.45em -.4em -.25em -.4em)}.zg-line-in{display:block;--zg-line-off: calc(100% + .55em) ;translate:0 var(--zg-line-off)}.zg-lines br{display:none}@keyframes zg-line-up{0%{translate:0 var(--zg-line-off)}to{translate:0 0}}html.zg-hero-go .zg-line-in{animation:zg-line-up .9s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--zg-hero-t0, 0ms) + var(--zg-l, 0) * 90ms)}@media(prefers-reduced-motion:reduce){html.zg-leaving #page-content,html.zg-arriving #page-content,html.zg-leaving #page-content :is(main,.cs-next),html.zg-arriving #page-content :is(main,.cs-next){animation:none!important;translate:none!important;scale:none!important;opacity:1!important;will-change:auto!important}.zg-line{clip-path:none!important}.zg-line-in,html.zg-hero-go .zg-line-in{animation:none!important;translate:none!important}}</style><noscript><style>.zg-line-in { translate: none; }</style></noscript><script>
+      </style><style>.cs-nav{view-transition-name:cs-nav}.cs-pagerbar{view-transition-name:cs-pager}.noise-overlay{view-transition-name:zg-grain}html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-group(cs-nav),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-group(cs-pager),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-group(zg-grain),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-old(cs-nav),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-new(cs-nav),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-old(cs-pager),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-new(cs-pager),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-old(zg-grain),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-new(zg-grain){animation-duration:.6s;animation-timing-function:cubic-bezier(.22,.61,.36,1)}@keyframes zg-swipe-out-left{to{translate:-12vw 0}}@keyframes zg-swipe-out-right{to{translate:12vw 0}}@keyframes zg-swipe-dim{to{opacity:.7}}html.zg-leaving #page-content{overflow-x:clip}html.zg-leaving #page-content :is(main,.cs-next){animation:zg-swipe-dim .3s ease-in forwards}html.zg-leaving-next #page-content :is(main,.cs-next){animation:zg-swipe-out-left .3s ease-in forwards,zg-swipe-dim .3s ease-in forwards}html.zg-leaving-prev #page-content :is(main,.cs-next){animation:zg-swipe-out-right .3s ease-in forwards,zg-swipe-dim .3s ease-in forwards}html.zg-arriving:not(.zg-vt) #page-content{overflow-x:clip}html.zg-arriving:not(.zg-vt) #page-content :is(main,.cs-next){opacity:.7}html.zg-arriving-next:not(.zg-vt) #page-content :is(main,.cs-next){translate:12vw 0}html.zg-arriving-prev:not(.zg-vt) #page-content :is(main,.cs-next){translate:-12vw 0}@keyframes zg-swipe-in-right{0%{translate:12vw 0}to{translate:0 0}}@keyframes zg-swipe-in-left{0%{translate:-12vw 0}to{translate:0 0}}@keyframes zg-swipe-lift{0%{opacity:.7}to{opacity:1}}@keyframes zg-settle{0%{scale:1.025}to{scale:1}}html.zg-arriving #page-content :is(main,.cs-next){transform-origin:50% 0}html.zg-arriving:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both,zg-settle .9s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-next:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-in-right .55s cubic-bezier(.16,.84,.34,1) both,zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both,zg-settle .9s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-prev:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-in-left .55s cubic-bezier(.16,.84,.34,1) both,zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both,zg-settle .9s cubic-bezier(.16,.84,.34,1) both}html.zg-vt.zg-arriving.zg-ready #page-content :is(main,.cs-next){animation:zg-settle .9s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving.zg-ready-deep:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-next.zg-ready-deep:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-in-right .55s cubic-bezier(.16,.84,.34,1) both,zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-prev.zg-ready-deep:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-in-left .55s cubic-bezier(.16,.84,.34,1) both,zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both}html.zg-vt.zg-arriving.zg-ready-deep #page-content :is(main,.cs-next){animation:none}.zg-line{display:block;clip-path:inset(-.45em -.4em -.25em -.4em)}.zg-line-in{display:block;--zg-line-off: calc(100% + .55em) ;translate:0 var(--zg-line-off)}.zg-lines br{display:none}@keyframes zg-line-up{0%{translate:0 var(--zg-line-off)}to{translate:0 0}}html.zg-hero-go .zg-line-in{animation:zg-line-up .9s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--zg-hero-t0, 0ms) + var(--zg-l, 0) * 90ms)}@media(prefers-reduced-motion:reduce){html.zg-leaving #page-content,html.zg-arriving #page-content,html.zg-leaving #page-content :is(main,.cs-next),html.zg-arriving #page-content :is(main,.cs-next){animation:none!important;translate:none!important;scale:none!important;opacity:1!important;will-change:auto!important}.zg-line{clip-path:none!important}.zg-line-in,html.zg-hero-go .zg-line-in{animation:none!important;translate:none!important}}html.zg-match-strane .zg-line-in{animation:none;translate:0 0}html.zg-match-strane .zg-line{clip-path:none}</style><noscript><style>.zg-line-in { translate: none; }</style></noscript><script>
       /* The arrival half, and the direction hand-off. Runs in <head>, before
          first paint, because on a page that is not in the jump the classes
-         below drive a fade that has to own the very first frame. */
+         below drive a fade that has to own the very first frame.
+
+         Named and then called, rather than run inline. It is one-shot work
+         keyed on a navigation, and under a same-document router there is no
+         second parse to trigger it -- a lifecycle event has to. Calling it
+         immediately is what keeps today's timing exactly as it was. */
+      window.__zgArrival = function (sameDoc) {
       try {
         var root = document.documentElement;
         var cinematic = root.getAttribute('data-arrival') === 'cinematic';
@@ -175,7 +204,13 @@
         // after next as well, in the direction of a hop two pages back.
         var nav = sessionStorage.getItem('zg-nav');
         if (nav) sessionStorage.removeItem('zg-nav');
-        if (!nav && cinematic) {
+        /* `sameDoc` is the router calling this after a swap. The inference
+           below asks the NAVIGATION what kind of arrival this is, and after a
+           swap the only navigation entry is the one that loaded the document
+           we are still in -- it would answer for a page the reader opened
+           minutes ago. Under the router an explicit flag is the only thing
+           that counts. */
+        if (!nav && cinematic && !sameDoc) {
           // No flag: a cold load, a bookmark, a link from outside. The four
           // case studies still play their settle, because it is the page's
           // opening shot and not only a stitch between two documents. Not on
@@ -192,6 +227,25 @@
            those do not land until pagereveal fires. */
         window.__zgArrive = nav || null;
 
+        /* The Strane match cut's half of the arrival. The flag carries a
+           value the next/prev branches do not match, so everything below
+           treats it as a plain move and the root pair gets the dissolve --
+           which is what this wants, because the collage is held by a
+           view-transition-name and a push under it would slide the one thing
+           that is meant to stay still. The class goes on before first paint
+           so the name is in place when pagereveal takes the new snapshot. */
+        if (nav === 'match:strane') {
+          root.classList.add('zg-match-strane');
+          /* The handover already played on the home page: the bars came in,
+             the headline rose, and the frame this document is about to paint
+             is the frame that one ended on. So the entrance is CONSUMED --
+             nav is cleared and the arrival classes are never added, and both
+             paths (Chrome's dissolve, Firefox's held frame) land on a page
+             that is already settled rather than one that replays the move
+             the reader just watched. */
+          nav = null;
+        }
+
         /* The fallback entrance: the arrival classes, as they have always
            been. Used where there is no cross-document view transition to ride
            — an older browser, or a hop in from a page that does not opt in
@@ -202,6 +256,46 @@
           // "next"/"prev" carry the direction of travel; "1" is a plain move.
           if (nav === 'next' || nav === 'prev') root.classList.add('zg-arriving-' + nav);
         };
+
+        /* Leaving. This document declares @view-transition, so the browser
+           starts one on every navigation out of it -- and SKIPS it whenever
+           the destination does not opt in, which is most of them. The
+           transition's promises reject when that happens, and with nothing
+           holding them the rejection surfaced as an uncaught AbortError.
+           Claimed here and nowhere else, because this is the only place the
+           object exists on the way out. */
+        var claimVT = function (ev) {
+          if (!ev || !ev.viewTransition) return;
+          try {
+            ev.viewTransition.finished.catch(function () {});
+            ev.viewTransition.ready.catch(function () {});
+            ev.viewTransition.updateCallbackDone.catch(function () {});
+          } catch (err) { /* older transition object */ }
+        };
+        /* On EVERY page, opted in or not. A document that declares
+           @view-transition starts one on the way out and the browser skips
+           it whenever the destination does not declare it too -- which is
+           most of them -- and the skip rejects the transition's promises on
+           BOTH sides. The page that does not opt in is exactly the page with
+           no handler of its own, so the rejection surfaced there as an
+           uncaught AbortError. */
+        if ('onpageswap' in window) window.addEventListener('pageswap', claimVT);
+        if ('onpagereveal' in window) window.addEventListener('pagereveal', claimVT);
+
+        /* And the one the handlers above cannot reach. When the destination
+           does not declare @view-transition the browser skips the transition
+           without ever handing either document the object, so there is
+           nothing to attach a catch to -- the rejection simply surfaces. This
+           swallows that one rejection and nothing else: the two error names a
+           skipped or aborted transition throws, and only when the message
+           says so. Every other unhandled rejection still reaches the
+           console. */
+        window.addEventListener('unhandledrejection', function (ev) {
+          var r = ev && ev.reason;
+          if (!r) return;
+          var named = r.name === 'AbortError' || r.name === 'InvalidStateError';
+          if (named && /transition/i.test(String(r.message || ''))) ev.preventDefault();
+        });
 
         if (opted && 'onpagereveal' in window) {
           /* pagereveal is the new document's first word, fired before its
@@ -222,21 +316,44 @@
              opt into the jump. That is the fallback's case. */
           window.addEventListener('pagereveal', function (e) {
             if (!e.viewTransition) { settle(); return; }
+            /* A transition can be skipped or aborted -- another navigation
+               lands on top of it, the page goes away mid-flight -- and its
+               promises reject. Nothing awaits them here, so an unhandled
+               AbortError or InvalidStateError went to the console on every
+               such navigation. Claimed, and ignored. */
+            try {
+              e.viewTransition.finished.catch(function () {});
+              e.viewTransition.ready.catch(function () {});
+              e.viewTransition.updateCallbackDone.catch(function () {});
+            } catch (err) { /* older transition object */ }
             if (nav === 'next' || nav === 'prev') {
               try { e.viewTransition.types.add(nav); } catch (err) { /* older types API */ }
             }
-            root.classList.add('zg-vt', 'zg-arriving');
+            /* zg-arriving is the entrance. The Strane handover already played
+               it on the page we came from, and `nav` was cleared above to say
+               so, which is why this is guarded: adding it here would replay
+               the bars and the headline rise the reader just watched. zg-vt
+               still goes on, because the fallback offsets it cancels have to
+               be cancelled either way. */
+            root.classList.add('zg-vt');
+            if (nav) root.classList.add('zg-arriving');
           }, { once: true });
         } else {
           settle();
         }
       } catch (e) { /* storage blocked; no transition, no harm */ }
+      };
+      window.__zgArrival();
     </script><script>
       /* Retire the arrival classes once the animation is over. They are a
          trigger, not a state: left on, they keep the arriving-page rules
          (and anything scoped to them) alive for the whole visit, which is
-         how a one-frame transition detail turns into a permanent bug. */
-      (function () {
+         how a one-frame transition detail turns into a permanent bug.
+
+         Named for the same reason as the block above: it is the other half
+         of one navigation's work, and the two have to be triggerable
+         together. */
+      window.__zgArrivalRetire = function () {
         var root = document.documentElement;
         var opted = root.getAttribute('data-arrival') === 'cinematic' || root.hasAttribute('data-jump');
         var done = function () {
@@ -286,24 +403,25 @@
         document.addEventListener('DOMContentLoaded', function () {
           if (window.__zgArrive) root.classList.add('zg-ready');
         });
-      })();
-    </script><link rel="stylesheet" href="/_astro/index.ZH7OUS-B.css">
-<link rel="stylesheet" href="/_astro/strane.DdmL-_MA.css"></head> <body> <div id="page-content">  <script>
+      };
+      window.__zgArrivalRetire();
+    </script><link rel="stylesheet" href="/_astro/index.DhbgnKyF.css">
+<link rel="stylesheet" href="/_astro/strane.BT0VQXIc.css"></head> <body> <div id="page-content"> <script>
   document.documentElement.classList.add('st-js');
-</script><a href="#story" class="skip">Skip to case study</a>  <nav class="cs-nav" aria-label="Case study"> <a href="/" class="cs-nav-logo"> <img src="/Wordmark_White.png" alt="Zegoe"> </a>  <div class="cs-nav-mid"> <span class="cs-nav-brand">Strane</span> <span class="cs-nav-sections"> <a href="#story">The shift</a> <a href="#identity">Identity</a> <a href="#packaging">Packaging</a> <a href="#in-the-wild">In the wild</a> </span> </div> <a href="/#work" class="cs-nav-back"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M19 12H5M5 12l6-6M5 12l6 6"></path> </svg> <span>All Work</span> </a> </nav> <main>  <section class="hero" aria-labelledby="hero-title"> <div class="wrap"> <div class="hero-main">  <div class="hero-collage" aria-hidden="true"> <img class="hs hs-model" src="/strane-site/hero-model.webp" alt="" width="1140" height="1637"> <img class="hs hs-eye-a" src="/strane-site/sticker-eye-sativa.webp" alt="" width="560" height="490"> <img class="hs hs-eye-b" src="/strane-site/sticker-eye-indica.webp" alt="" width="500" height="438"> <img class="hs hs-eye-c" src="/strane-site/sticker-eye-hybrid.webp" alt="" width="560" height="490"> <img class="hs hs-bolt-a" src="/strane-site/bolt-1.svg" alt=""> <img class="hs hs-bolt-b" src="/strane-site/bolt-2.svg" alt=""> <img class="hs hs-star-a" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-b" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-c" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-d" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-e" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> </div> <div class="hero-headline">  <h1 id="hero-title" class="zg-lines"> <span class="zg-line" style="--zg-l:0"><span class="zg-line-in">Loud.</span></span><br><span class="zg-line" style="--zg-l:1"><span class="zg-line-in"><span>By design.</span></span></span> </h1> <p class="hero-copy">
+</script><a href="#story" class="skip">Skip to case study</a>  <nav class="cs-nav" aria-label="Case study"><a href="/" class="cs-nav-logo"><img src="/Wordmark_White.png" alt="Zegoe"></a><div class="cs-nav-mid"><span class="cs-nav-brand">Strane</span><span class="cs-nav-sections"><a href="#story">The shift</a><a href="#identity">Identity</a><a href="#packaging">Packaging</a><a href="#in-the-wild">In the wild</a></span></div><a href="/#work" class="cs-nav-back" data-stage-at="strane"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12l6-6M5 12l6 6"></path></svg><span>All Work</span></a></nav> <main>  <section class="hero" aria-labelledby="hero-title"> <div class="wrap"> <div class="hero-main">  <div class="hero-collage" aria-hidden="true"> <img class="hs hs-model" src="/strane-site/hero-model.webp" alt="" width="1140" height="1637" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-eye-a" src="/strane-site/sticker-eye-sativa.webp" alt="" width="560" height="490" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-eye-b" src="/strane-site/sticker-eye-indica.webp" alt="" width="500" height="438" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-eye-c" src="/strane-site/sticker-eye-hybrid.webp" alt="" width="560" height="490" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-bolt-a" src="/strane-site/bolt-1.svg" alt="" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-bolt-b" src="/strane-site/bolt-2.svg" alt="" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-star-a" src="/strane-site/sticker-star.webp" alt="" width="137" height="138" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-star-b" src="/strane-site/sticker-star.webp" alt="" width="137" height="138" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-star-c" src="/strane-site/sticker-star.webp" alt="" width="137" height="138" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-star-d" src="/strane-site/sticker-star.webp" alt="" width="137" height="138" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-star-e" src="/strane-site/sticker-star.webp" alt="" width="137" height="138" loading="eager" decoding="sync" fetchpriority="high"> </div> <div class="hero-headline"><h1 id="hero-title" class="zg-lines"><span class="zg-line" style="--zg-l:0"><span class="zg-line-in">Loud.</span></span><br><span class="zg-line" style="--zg-l:1"><span class="zg-line-in"><span>By design.</span></span></span></h1><p class="hero-copy">
 A familiar brand. A louder point of view.<br>Turning Strane's yellow and black
-            into an unapologetic punk statement.
-</p> </div> </div> </div> </section>  <div class="ticker" aria-hidden="true" data-crawl="-1"> <div> <span class="ticker-seg">STRANE ✳ THIS IS NEXT LEVEL ✳ UNAPOLOGETICALLY LOUD ✳ </span><span class="ticker-seg">STRANE ✳ THIS IS NEXT LEVEL ✳ UNAPOLOGETICALLY LOUD ✳ </span><span class="ticker-seg">STRANE ✳ THIS IS NEXT LEVEL ✳ UNAPOLOGETICALLY LOUD ✳ </span><span class="ticker-seg">STRANE ✳ THIS IS NEXT LEVEL ✳ UNAPOLOGETICALLY LOUD ✳ </span><span class="ticker-seg">STRANE ✳ THIS IS NEXT LEVEL ✳ UNAPOLOGETICALLY LOUD ✳ </span><span class="ticker-seg">STRANE ✳ THIS IS NEXT LEVEL ✳ UNAPOLOGETICALLY LOUD ✳ </span> </div> </div>  <section class="section wrap" id="story"> <div class="section-head"> <span class="kicker st-rise">The starting point</span> <h2 class="st-rise" style="--i:1">Same roots.<br>New attitude.</h2> <p class="st-rise" style="--i:2">
+      into an unapologetic punk statement.
+</p></div> </div> </div> </section>  <div class="ticker" aria-hidden="true" data-crawl="-1"><div><span class="ticker-seg">STRANE ✳ THIS IS NEXT LEVEL ✳ UNAPOLOGETICALLY LOUD ✳ </span><span class="ticker-seg">STRANE ✳ THIS IS NEXT LEVEL ✳ UNAPOLOGETICALLY LOUD ✳ </span><span class="ticker-seg">STRANE ✳ THIS IS NEXT LEVEL ✳ UNAPOLOGETICALLY LOUD ✳ </span><span class="ticker-seg">STRANE ✳ THIS IS NEXT LEVEL ✳ UNAPOLOGETICALLY LOUD ✳ </span><span class="ticker-seg">STRANE ✳ THIS IS NEXT LEVEL ✳ UNAPOLOGETICALLY LOUD ✳ </span><span class="ticker-seg">STRANE ✳ THIS IS NEXT LEVEL ✳ UNAPOLOGETICALLY LOUD ✳ </span></div></div>  <section class="section wrap" id="story"> <div class="section-head"> <span class="kicker st-rise">The starting point</span> <h2 class="st-rise" style="--i:1">Same roots.<br>New attitude.</h2> <p class="st-rise" style="--i:2">
 Strane already had a recognizable foundation: yellow, black, and three expressive
         eyecons. The rebrand kept those familiar cues and gave them a rawer, more
         confrontational presence.
-</p> </div>  <div class="legacy-grid"> <figure class="st-rise"> <div class="legacy-stack st-wipe"> <img src="/strane-site/legacy-logo.webp" alt="Legacy Strane wordmark in white on black" decoding="async"> <img src="/strane-site/legacy-pour.webp" alt="Legacy yellow and black Strane flower pouches" loading="lazy" decoding="async"> </div> <figcaption class="caption"> <span>THE LEGACY IDENTITY</span> <span>Yellow / Black / Eyecons</span> </figcaption> </figure> <figure class="st-rise" style="--i:1"> <img class="bag st-wipe" src="/strane-site/legacy-bags.webp" alt="Legacy Strane packaging with simple vertical wordmarks and strain labels" loading="lazy" decoding="async"> <figcaption class="caption">The original packaging system</figcaption> </figure> </div> <p class="section-note st-rise">
+</p> </div>  <div class="legacy-grid"> <figure class="st-rise"> <div class="legacy-stack st-wipe"> <img src="/strane-site/legacy-logo.webp" width="1800" height="1007" alt="Legacy Strane wordmark in white on black" decoding="async"> <img src="/strane-site/legacy-pour.webp" width="1700" height="1133" alt="Legacy yellow and black Strane flower pouches" loading="lazy" decoding="async"> </div> <figcaption class="caption"> <span>THE LEGACY IDENTITY</span> <span>Yellow / Black / Eyecons</span> </figcaption> </figure> <figure class="st-rise" style="--i:1"> <img class="bag st-wipe" src="/strane-site/legacy-bags.webp" width="1300" height="1800" alt="Legacy Strane packaging with simple vertical wordmarks and strain labels" loading="lazy" decoding="async"> <figcaption class="caption">The original packaging system</figcaption> </figure> </div> <p class="section-note st-rise">
 Working with Holistic Industries' marketing team, we developed a bold punk direction
       designed to stand out on the shelf and look unmistakably Strane at a glance.
 </p> </section>  <section class="section wrap" id="identity"> <div class="section-head"> <span class="kicker st-rise">The new identity</span> <h2 class="st-rise" style="--i:1">Turn up<br><span class="yellow-strip">the attitude.</span></h2> <p class="st-rise" style="--i:2">
 PANTONE 3955 C yellow leads the charge. Black bags, yellow brick, wheat-paste layers,
         ripped edges, and halftone imagery bring the energy of a punk collage to the brand.
-</p> </div>  <div class="art-wall torn st-rise"> <img src="/strane-site/brand-wall-base.webp" alt="The rebranded Strane identity: yellow brick, ripped-paper wordmark, and expressive eyecons" width="1800" height="1012" loading="lazy" decoding="async">  <div class="wall-collage" aria-hidden="true"> <img class="hs hs-wall-indica" src="/strane-site/sticker-eye-indica.webp" alt="" width="500" height="438" loading="lazy" decoding="async"> <img class="hs hs-wall-hybrid" src="/strane-site/sticker-eye-hybrid.webp" alt="" width="560" height="490" loading="lazy" decoding="async"> <img class="hs hs-wall-sativa" src="/strane-site/sticker-eye-sativa.webp" alt="" width="560" height="490" loading="lazy" decoding="async"> </div> </div> <div class="attitude-grid">  <div class="st-rise"> <figure class="paste"> <img class="st-wipe" src="/strane-site/punk-inspiration.webp" alt="Punk research mood board with photocopied music ephemera and cut-and-paste typography" loading="lazy" decoding="async"> <figcaption class="caption">PUNK REFERENCES / CREATIVE DIRECTION</figcaption> </figure> </div> <div class="attitude-copy st-rise" style="--i:1"> <span class="kicker">The graphic language</span> <h3 class="display">
+</p> </div>  <div class="art-wall torn st-rise"> <img src="/strane-site/brand-wall-base.webp" alt="The rebranded Strane identity: yellow brick, ripped-paper wordmark, and expressive eyecons" width="1800" height="1012" loading="lazy" decoding="async">  <div class="wall-collage" aria-hidden="true"> <img class="hs hs-wall-indica" src="/strane-site/sticker-eye-indica.webp" alt="" width="500" height="438" loading="lazy" decoding="async"> <img class="hs hs-wall-hybrid" src="/strane-site/sticker-eye-hybrid.webp" alt="" width="560" height="490" loading="lazy" decoding="async"> <img class="hs hs-wall-sativa" src="/strane-site/sticker-eye-sativa.webp" alt="" width="560" height="490" loading="lazy" decoding="async"> </div> </div> <div class="attitude-grid">  <div class="st-rise"> <figure class="paste"> <img class="st-wipe" src="/strane-site/punk-inspiration.webp" width="1799" height="1013" alt="Punk research mood board with photocopied music ephemera and cut-and-paste typography" loading="lazy" decoding="async"> <figcaption class="caption">PUNK REFERENCES / CREATIVE DIRECTION</figcaption> </figure> </div> <div class="attitude-copy st-rise" style="--i:1"> <span class="kicker">The graphic language</span> <h3 class="display">
 Rip it.<br>Paste it.<br><span class="yellow-strip">Make it Strane.</span> </h3> <p>
 Distressed type and halftone cutouts sit against yellow brick. Wheat-paste layers
           bring a rough, handmade quality to the surface, while the black bag holds everything
@@ -314,32 +432,32 @@ A striking point of recognition across packaging, merchandise, and the retail
 </p> </div> <span class="color-note">Digital color shown as a screen approximation.</span> </div> </section>  <section class="eye-section section" id="eyecons"> <div class="wrap"> <div class="section-head"> <span class="kicker st-rise">Meet the eyecons</span> <h2 class="st-rise" style="--i:1">Three eyes.<br>All Strane.</h2> <p class="st-rise" style="--i:2">
 The rebrand carries forward the three familiar eyecons. Each expression identifies a
           product type, keeping a recognizable part of Strane at the heart of the new look.
-</p> </div>  <div class="eye-grid"> <div class="eye-slot st-rise"> <figure class="eye-card eye-0"> <span class="kicker">01 / EYECON</span> <img src="/strane-site/eye-hybrid.webp" alt="Hybrid eyecon: half open" loading="lazy" decoding="async"> <figcaption> <h3 class="display">Hybrid</h3> <span class="mono">Half open</span> </figcaption> </figure> </div> <div class="eye-slot st-rise" style="--i:1"> <figure class="eye-card eye-1"> <span class="kicker">02 / EYECON</span> <img src="/strane-site/eye-indica.webp" alt="Indica eyecon: closed" loading="lazy" decoding="async"> <figcaption> <h3 class="display">Indica</h3> <span class="mono">Closed</span> </figcaption> </figure> </div> <div class="eye-slot st-rise" style="--i:2"> <figure class="eye-card eye-2"> <span class="kicker">03 / EYECON</span> <img src="/strane-site/eye-sativa.webp" alt="Sativa eyecon: wide open" loading="lazy" decoding="async"> <figcaption> <h3 class="display">Sativa</h3> <span class="mono">Wide open</span> </figcaption> </figure> </div> </div> </div> </section>  <section class="section wrap" id="packaging"> <div class="section-head"> <span class="kicker st-rise">Packaging</span> <h2 class="st-rise" style="--i:1">Built for<br>the shelf.</h2> <p class="st-rise" style="--i:2">
+</p> </div>  <div class="eye-grid"> <div class="eye-slot st-rise"> <figure class="eye-card eye-0"> <span class="kicker">01 / EYECON</span> <img src="/strane-site/eye-hybrid.webp" width="1550" height="1081" alt="Hybrid eyecon: half open" loading="lazy" decoding="async"> <figcaption> <h3 class="display">Hybrid</h3> <span class="mono">Half open</span> </figcaption> </figure> </div> <div class="eye-slot st-rise" style="--i:1"> <figure class="eye-card eye-1"> <span class="kicker">02 / EYECON</span> <img src="/strane-site/eye-indica.webp" width="1190" height="727" alt="Indica eyecon: closed" loading="lazy" decoding="async"> <figcaption> <h3 class="display">Indica</h3> <span class="mono">Closed</span> </figcaption> </figure> </div> <div class="eye-slot st-rise" style="--i:2"> <figure class="eye-card eye-2"> <span class="kicker">03 / EYECON</span> <img src="/strane-site/eye-sativa.webp" width="622" height="385" alt="Sativa eyecon: wide open" loading="lazy" decoding="async"> <figcaption> <h3 class="display">Sativa</h3> <span class="mono">Wide open</span> </figcaption> </figure> </div> </div> </div> </section>  <section class="section wrap" id="packaging"> <div class="section-head"> <span class="kicker st-rise">Packaging</span> <h2 class="st-rise" style="--i:1">Built for<br>the shelf.</h2> <p class="st-rise" style="--i:2">
 The same yellow-and-black framework connects flower, vapes, pre-rolls, and gummies,
         while each strain gets its own cut-and-paste personality.
-</p> </div>   <div class="product-trio"> <figure class="st-rise st-wipe"> <img src="/strane-site/frosted-jungle.webp" alt="Strane Frosted Jungle packaging and lifestyle photography" loading="lazy" decoding="async"> </figure> <figure class="st-rise st-wipe" style="--i:1"> <img src="/strane-site/juicee-j.webp" alt="Strane Juicee J packaging and lifestyle photography" loading="lazy" decoding="async"> </figure> <figure class="st-rise st-wipe" style="--i:2"> <img src="/strane-site/lemon-maraschino.webp" alt="Strane Lemon Maraschino packaging and lifestyle photography" loading="lazy" decoding="async"> </figure> </div>  <div class="format-grid"> <figure class="st-rise"> <img class="st-wipe" src="/strane-site/lemon-family.webp" alt="Lemon Maraschino pouch, vape and pre-roll tube photographed together" loading="lazy" decoding="async"> <figcaption class="caption">ACROSS FORMATS / A connected strain identity</figcaption> </figure> <div class="format-note st-rise" style="--i:1"> <span class="kicker">One recognizable family</span> <h3 class="display">Different forms.<br>Same volume.</h3> <p>
+</p> </div>   <div class="product-trio"> <figure class="st-rise st-wipe"> <img src="/strane-site/frosted-jungle.webp" width="771" height="1158" alt="Strane Frosted Jungle packaging and lifestyle photography" loading="lazy" decoding="async"> </figure> <figure class="st-rise st-wipe" style="--i:1"> <img src="/strane-site/juicee-j.webp" width="813" height="1219" alt="Strane Juicee J packaging and lifestyle photography" loading="lazy" decoding="async"> </figure> <figure class="st-rise st-wipe" style="--i:2"> <img src="/strane-site/lemon-maraschino.webp" width="812" height="1219" alt="Strane Lemon Maraschino packaging and lifestyle photography" loading="lazy" decoding="async"> </figure> </div>  <div class="format-grid"> <figure class="st-rise"> <img class="st-wipe" src="/strane-site/lemon-family.webp" width="918" height="1378" alt="Lemon Maraschino pouch, vape and pre-roll tube photographed together" loading="lazy" decoding="async"> <figcaption class="caption">ACROSS FORMATS / A connected strain identity</figcaption> </figure> <div class="format-note st-rise" style="--i:1"> <span class="kicker">One recognizable family</span> <h3 class="display">Different forms.<br>Same volume.</h3> <p>
 Flower pouches, vape packaging, pre-rolls, and gummies share the same graphic
           ingredients. The layouts adapt to each format without losing the yellow, the
           attitude, or the eyecons.
-</p> <img class="st-wipe" src="/strane-site/product-family.webp" alt="A coordinated range of Strane products, packaging and branded accessories" loading="lazy" decoding="async"> </div> </div> </section> <div class="ticker black-ticker" aria-hidden="true" data-crawl="1"> <div> <span class="ticker-seg">OFF THE SHELF ✳ INTO THE WORLD ✳ </span><span class="ticker-seg">OFF THE SHELF ✳ INTO THE WORLD ✳ </span><span class="ticker-seg">OFF THE SHELF ✳ INTO THE WORLD ✳ </span><span class="ticker-seg">OFF THE SHELF ✳ INTO THE WORLD ✳ </span><span class="ticker-seg">OFF THE SHELF ✳ INTO THE WORLD ✳ </span><span class="ticker-seg">OFF THE SHELF ✳ INTO THE WORLD ✳ </span> </div> </div>  <section class="section lifestyle" id="in-the-wild"> <div class="wrap"> <div class="section-head"> <span class="kicker st-rise">Lifestyle &amp; merchandise</span> <h2 class="st-rise" style="--i:1">Worn out.<br><span class="paper-strip">Taken out.</span></h2> <p class="st-rise" style="--i:2">
+</p> <img class="st-wipe" src="/strane-site/product-family.webp" width="1400" height="1400" alt="A coordinated range of Strane products, packaging and branded accessories" loading="lazy" decoding="async"> </div> </div> </section> <div class="ticker black-ticker" aria-hidden="true" data-crawl="1"> <div> <span class="ticker-seg">OFF THE SHELF ✳ INTO THE WORLD ✳ </span><span class="ticker-seg">OFF THE SHELF ✳ INTO THE WORLD ✳ </span><span class="ticker-seg">OFF THE SHELF ✳ INTO THE WORLD ✳ </span><span class="ticker-seg">OFF THE SHELF ✳ INTO THE WORLD ✳ </span><span class="ticker-seg">OFF THE SHELF ✳ INTO THE WORLD ✳ </span><span class="ticker-seg">OFF THE SHELF ✳ INTO THE WORLD ✳ </span> </div> </div>  <section class="section lifestyle" id="in-the-wild"> <div class="wrap"> <div class="section-head"> <span class="kicker st-rise">Lifestyle &amp; merchandise</span> <h2 class="st-rise" style="--i:1">Worn out.<br><span class="paper-strip">Taken out.</span></h2> <p class="st-rise" style="--i:2">
 The collage language carries into shirts, accessories, and lifestyle imagery. Away
           from the shelf, yellow and black keep the brand visible while the eyecons become
           graphics people can wear.
-</p> </div>  <figure class="moodboard st-rise"> <div class="mood-label kicker">Merch exploration / Mood board</div> <img class="st-wipe" src="/strane-site/merch-moodboard.webp" alt="Merchandise concept mood board exploring graphic tees, tie-dye, accessories and streetwear references" loading="lazy" decoding="async"> <figcaption class="caption">
+</p> </div>  <figure class="moodboard st-rise"> <div class="mood-label kicker">Merch exploration / Mood board</div> <img class="st-wipe" src="/strane-site/merch-moodboard.webp" width="1800" height="1011" alt="Merchandise concept mood board exploring graphic tees, tie-dye, accessories and streetwear references" loading="lazy" decoding="async"> <figcaption class="caption">
 Creative exploration and references; not a released-product lineup.
-</figcaption> </figure>  <div class="st-rise" style="--i:1"> <figure class="skate-full"> <img class="st-wipe" src="/strane-site/skate-wide.webp" alt="Strane merchandise and products on a skateboard at a sunlit skatepark" loading="lazy" decoding="async"> <figcaption class="caption">LIFESTYLE PHOTOGRAPHY / SKATEPARK</figcaption> </figure> </div> <div class="lifestyle-grid"> <figure class="st-rise"> <img class="st-wipe" src="/strane-site/merch-shirt.webp" alt="Black Strane Alien Mints graphic T-shirt and yellow cap, photographed against a poster-covered brick wall" loading="lazy" decoding="async"> <figcaption class="caption">The packaging collage becomes a wearable graphic</figcaption> </figure> <figure class="st-rise" style="--i:1"> <img class="st-wipe" src="/strane-site/lifestyle-detail.webp" alt="A close-up of Strane lighter and branded case at the skatepark" loading="lazy" decoding="async"> <figcaption class="caption">Small objects carry the same brand cues</figcaption> </figure> </div> </div> </section>  <section class="section wrap" id="retail"> <div class="section-head"> <span class="kicker st-rise">Retail activation</span> <h2 class="st-rise" style="--i:1">A statement.<br>At every scale.</h2> <p class="st-rise" style="--i:2">
+</figcaption> </figure>  <div class="st-rise" style="--i:1"> <figure class="skate-full"> <img class="st-wipe" src="/strane-site/skate-wide.webp" width="1799" height="1198" alt="Strane merchandise and products on a skateboard at a sunlit skatepark" loading="lazy" decoding="async"> <figcaption class="caption">LIFESTYLE PHOTOGRAPHY / SKATEPARK</figcaption> </figure> </div> <div class="lifestyle-grid"> <figure class="st-rise"> <img class="st-wipe" src="/strane-site/merch-shirt.webp" width="1301" height="1041" alt="Black Strane Alien Mints graphic T-shirt and yellow cap, photographed against a poster-covered brick wall" loading="lazy" decoding="async"> <figcaption class="caption">The packaging collage becomes a wearable graphic</figcaption> </figure> <figure class="st-rise" style="--i:1"> <img class="st-wipe" src="/strane-site/lifestyle-detail.webp" width="1290" height="1613" alt="A close-up of Strane lighter and branded case at the skatepark" loading="lazy" decoding="async"> <figcaption class="caption">Small objects carry the same brand cues</figcaption> </figure> </div> </div> </section>  <section class="section wrap" id="retail"> <div class="section-head"> <span class="kicker st-rise">Retail activation</span> <h2 class="st-rise" style="--i:1">A statement.<br>At every scale.</h2> <p class="st-rise" style="--i:2">
 The yellow brick becomes a recognizable backdrop for display stands, cabinets, and
         larger retail graphics. The packaging language grows into an environment.
-</p> </div> <div class="retail-lead">  <figure class="display-render st-rise"> <img class="st-wipe" src="/strane-site/vape-display.webp" alt="A Strane vape display stand with yellow brick graphics, in place on a dispensary counter beside the till" loading="lazy" decoding="async"> <figcaption class="caption">A full-height expression of the brand</figcaption> </figure> <figure class="st-rise" style="--i:1"> <img class="st-wipe" src="/strane-site/retail-feature.webp" alt="Large yellow-brick Strane wall display installed in a retail space" loading="lazy" decoding="async"> <figcaption class="caption">A full-height expression of the brand</figcaption> </figure> </div> <div class="retail-grid"> <figure class="st-rise"> <img class="st-wipe" src="/strane-site/retail-counter.webp" alt="Counter display incorporating Strane yellow-brick branding among Holistic brands" loading="lazy" decoding="async"> <figcaption class="caption">Counter display application</figcaption> </figure> <figure class="st-rise" style="--i:1"> <img class="st-wipe" src="/strane-site/retail-glass.webp" alt="Glass retail cabinet showcasing Strane and other Holistic brands" loading="lazy" decoding="async"> <figcaption class="caption">Glass cabinet application</figcaption> </figure> <figure class="st-rise" style="--i:2"> <img class="st-wipe" src="/strane-site/retail-cabinet.webp" alt="Branded cabinet with Strane, Garcia and Hellavated display graphics" loading="lazy" decoding="async"> <figcaption class="caption">Multi-brand cabinet application</figcaption> </figure> </div> </section>  <section class="section expo"> <div class="wrap"> <div class="section-head"> <span class="kicker st-rise">Exhibition</span> <h2 class="st-rise" style="--i:1">Strane ×<br><span class="yellow-strip">Hellavated.</span></h2> <p class="st-rise" style="--i:2">
+</p> </div> <div class="retail-lead">  <figure class="display-render st-rise"> <img class="st-wipe" src="/strane-site/vape-display.webp" width="1400" height="933" alt="A Strane vape display stand with yellow brick graphics, in place on a dispensary counter beside the till" loading="lazy" decoding="async"> <figcaption class="caption">A full-height expression of the brand</figcaption> </figure> <figure class="st-rise" style="--i:1"> <img class="st-wipe" src="/strane-site/retail-feature.webp" width="1093" height="899" alt="Large yellow-brick Strane wall display installed in a retail space" loading="lazy" decoding="async"> <figcaption class="caption">A full-height expression of the brand</figcaption> </figure> </div> <div class="retail-grid"> <figure class="st-rise"> <img class="st-wipe" src="/strane-site/retail-counter.webp" width="1055" height="749" alt="Counter display incorporating Strane yellow-brick branding among Holistic brands" loading="lazy" decoding="async"> <figcaption class="caption">Counter display application</figcaption> </figure> <figure class="st-rise" style="--i:1"> <img class="st-wipe" src="/strane-site/retail-glass.webp" width="1082" height="648" alt="Glass retail cabinet showcasing Strane and other Holistic brands" loading="lazy" decoding="async"> <figcaption class="caption">Glass cabinet application</figcaption> </figure> <figure class="st-rise" style="--i:2"> <img class="st-wipe" src="/strane-site/retail-cabinet.webp" width="1155" height="770" alt="Branded cabinet with Strane, Garcia and Hellavated display graphics" loading="lazy" decoding="async"> <figcaption class="caption">Multi-brand cabinet application</figcaption> </figure> </div> </section>  <section class="section expo"> <div class="wrap"> <div class="section-head"> <span class="kicker st-rise">Exhibition</span> <h2 class="st-rise" style="--i:1">Strane ×<br><span class="yellow-strip">Hellavated.</span></h2> <p class="st-rise" style="--i:2">
 For Flower Expo, we collaborated with Holistic Industries' marketing team on booth
           concepts, design, and 3D visualization. The co-branded booth brought the graphics to
           life in a shared physical space.
-</p> </div> <div class="expo-grid"> <figure class="st-rise"> <img class="st-wipe" src="/strane-site/expo-outside.webp" alt="Strane and Hellavated co-branded outdoor exhibition booth" loading="lazy" decoding="async"> <figcaption class="caption">FLOWER EXPO / CO-BRANDED ACTIVATION</figcaption> </figure> <figure class="arcade st-rise" style="--i:1"> <img class="st-wipe" src="/strane-site/expo-arcade.webp" alt="Visitor using a Strane-branded yellow claw machine" loading="lazy" decoding="async"> <figcaption class="caption">Brand graphics meet event interaction</figcaption> </figure> <figure class="st-rise" style="--i:2"> <img class="st-wipe" src="/strane-site/expo-team.webp" alt="The event team in front of the Strane and Hellavated Flower Expo booth" loading="lazy" decoding="async"> <figcaption class="caption">The team behind the activation</figcaption> </figure> <figure class="st-rise" style="--i:3"> <img class="st-wipe" src="/strane-site/expo-inside.webp" alt="Interior exhibition space with Strane black brick graphics and oversized eyecons" loading="lazy" decoding="async"> <figcaption class="caption">Inside the brand environment</figcaption> </figure> </div> </div> </section>   <section class="closing"> <div class="wrap closing-copy">  <div class="closing-collage" aria-hidden="true"> <img class="hs hs-hybrid" src="/strane-site/sticker-eye-hybrid.webp" alt="" width="560" height="490"> <img class="hs hs-star-a" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-b" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-c" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-d" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-star-e" src="/strane-site/sticker-star.webp" alt="" width="137" height="138"> <img class="hs hs-indica" src="/strane-site/sticker-eye-indica.webp" alt="" width="500" height="438"> <img class="hs hs-sativa" src="/strane-site/sticker-eye-sativa.webp" alt="" width="560" height="490"> <img class="hs hs-ufo" src="/strane-site/sticker-ufo.webp" alt="" width="692" height="596"> </div> <span class="kicker st-rise">The takeaway</span> <h2 class="st-rise" style="--i:1">
+</p> </div> <div class="expo-grid"> <figure class="st-rise"> <img class="st-wipe" src="/strane-site/expo-outside.webp" width="1256" height="941" alt="Strane and Hellavated co-branded outdoor exhibition booth" loading="lazy" decoding="async"> <figcaption class="caption">FLOWER EXPO / CO-BRANDED ACTIVATION</figcaption> </figure> <figure class="arcade st-rise" style="--i:1"> <img class="st-wipe" src="/strane-site/expo-arcade.webp" width="893" height="1118" alt="Visitor using a Strane-branded yellow claw machine" loading="lazy" decoding="async"> <figcaption class="caption">Brand graphics meet event interaction</figcaption> </figure> <figure class="st-rise" style="--i:2"> <img class="st-wipe" src="/strane-site/expo-team.webp" width="1055" height="707" alt="The event team in front of the Strane and Hellavated Flower Expo booth" loading="lazy" decoding="async"> <figcaption class="caption">The team behind the activation</figcaption> </figure> <figure class="st-rise" style="--i:3"> <img class="st-wipe" src="/strane-site/expo-inside.webp" width="1033" height="689" alt="Interior exhibition space with Strane black brick graphics and oversized eyecons" loading="lazy" decoding="async"> <figcaption class="caption">Inside the brand environment</figcaption> </figure> </div> </div> </section>   <section class="closing"> <div class="wrap closing-copy">  <div class="closing-collage" aria-hidden="true"> <img class="hs hs-hybrid" src="/strane-site/sticker-eye-hybrid.webp" alt="" width="560" height="490" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-star-a" src="/strane-site/sticker-star.webp" alt="" width="137" height="138" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-star-b" src="/strane-site/sticker-star.webp" alt="" width="137" height="138" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-star-c" src="/strane-site/sticker-star.webp" alt="" width="137" height="138" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-star-d" src="/strane-site/sticker-star.webp" alt="" width="137" height="138" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-star-e" src="/strane-site/sticker-star.webp" alt="" width="137" height="138" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-indica" src="/strane-site/sticker-eye-indica.webp" alt="" width="500" height="438" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-sativa" src="/strane-site/sticker-eye-sativa.webp" alt="" width="560" height="490" loading="eager" decoding="sync" fetchpriority="high"> <img class="hs hs-ufo" src="/strane-site/sticker-ufo.webp" alt="" width="692" height="596" loading="eager" decoding="sync" fetchpriority="high"> </div> <span class="kicker st-rise">The takeaway</span> <h2 class="st-rise" style="--i:1">
 Recognizable<br>at a glance.<br><span>Unapologetically<br>Strane.</span> </h2> <p class="st-rise" style="--i:2">
 The rebrand gives Strane a louder expression while keeping the elements people
         recognize. Yellow, black, and the three eyecons connect a punk collage language across
         packaging, merchandise, retail, and events.
-</p> </div> <img class="st-rise st-wipe" src="/strane-site/closing-family.webp" alt="The complete Strane brand expression in packaging, devices and merchandise" loading="lazy" decoding="async"> </section> </main>  <footer class="cs-next"> <a href="/work/avitas/" class="cs-next-link" data-dir="next" style="--nx-bg:#04141c;--nx-accent:#e8c87a;--nx-glow:rgba(64,200,210,0.30);--nx-art:url(&#34;/portfolio/avitas/avitas-wood-pattern.webp&#34;);--nx-art-op:0.384;--nx-art-filter:brightness(0.8);--nx-art-size:cover;--nx-art-repeat:no-repeat;--nx-art-pos:50% 50%;--nx-logo-scale:1.7"> <span class="cs-next-art" aria-hidden="true"></span> <span class="cs-next-scrim" aria-hidden="true"></span> <span class="cs-eyebrow">Next Project</span> <span class="cs-next-name"> <span class="cs-next-index">05</span> <img class="cs-next-logo" src="/brand-logo/avitas-trim.png" alt="AVITAS" draggable="false"> <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M7 17L17 7M17 7H7M17 7V17"></path> </svg> </span> </a> </footer>  <div class="cs-pagerpin"> <nav class="cs-pagerbar" aria-label="Case studies"> <a href="/work/hellavated/" class="cs-pagerbar-link" data-dir="prev"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M19 12H5M5 12l6-6M5 12l6 6"></path> </svg> <span> <i>Previous</i> <b>Hellavated</b> </span> </a> <span class="cs-pagerbar-here"> <span class="cs-pagerbar-count" aria-hidden="true"> <b>04</b> <i>/</i> 07 </span> <em>Strane</em> </span> <a href="/work/avitas/" class="cs-pagerbar-link cs-pagerbar-next" data-dir="next"> <span> <i>Next</i> <b>AVITAS</b> </span> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M5 12h14M19 12l-6-6M19 12l-6 6"></path> </svg> </a> </nav> </div>  <script>
+</p> </div> <img class="st-rise st-wipe" src="/strane-site/closing-family.webp" alt="The complete Strane brand expression in packaging, devices and merchandise" width="1800" height="1162" loading="lazy" decoding="async"> </section> </main>  <footer class="cs-next"> <a href="/work/avitas/" class="cs-next-link" data-dir="next" data-astro-reload style="--nx-bg:#04141c;--nx-accent:#e8c87a;--nx-glow:rgba(64,200,210,0.30);--nx-art:url(&#34;/portfolio/avitas/avitas-wood-pattern.webp&#34;);--nx-art-op:0.384;--nx-art-filter:brightness(0.8);--nx-art-size:cover;--nx-art-repeat:no-repeat;--nx-art-pos:50% 50%;--nx-logo-scale:1.7"> <span class="cs-next-art" aria-hidden="true"></span> <span class="cs-next-scrim" aria-hidden="true"></span> <span class="cs-eyebrow">Next Project</span> <span class="cs-next-name"> <span class="cs-next-index">05</span> <img class="cs-next-logo" src="/brand-logo/avitas-trim.png" alt="AVITAS" draggable="false"> <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M7 17L17 7M17 7H7M17 7V17"></path> </svg> </span> </a> </footer>  <div class="cs-pagerpin"> <nav class="cs-pagerbar" aria-label="Case studies"><a href="/work/hellavated/" class="cs-pagerbar-link" data-dir="prev" data-astro-reload><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12l6-6M5 12l6 6"></path></svg><span><i>Previous</i><b>Hellavated</b></span></a><span class="cs-pagerbar-here"><span class="cs-pagerbar-count" aria-hidden="true"><b>04</b><i>/</i>07</span><em>Strane</em></span><a href="/work/avitas/" class="cs-pagerbar-link cs-pagerbar-next" data-dir="next" data-astro-reload><span><i>Next</i><b>AVITAS</b></span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M19 12l-6-6M19 12l-6 6"></path></svg></a></nav> </div>  <script>
   (function () {
     var root = document.documentElement;
     var go = function () { root.classList.add('zg-hero-go'); };
@@ -368,7 +486,7 @@ The rebrand gives Strane a louder expression while keeping the elements people
     var cap = new Promise(function (resolve) { window.setTimeout(resolve, 350); });
     Promise.race([Promise.all(waits), cap]).then(go, go);
   })();
-</script><script type="module">(()=>{const n=document.documentElement,s=()=>window.matchMedia("(prefers-reduced-motion: reduce)").matches;window.__zgArrive&&((window.scrollY||document.documentElement.scrollTop||0)>0&&n.classList.add("zg-ready-deep"),n.classList.add("zg-ready"));const r=document.getElementById("page-content");r&&(r.addEventListener("click",e=>{if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;const t=e.target?.closest?.("a[href]");if(!t||t.target==="_blank"||t.hasAttribute("download"))return;const i=new URL(t.href,location.href);if(i.origin!==location.origin||i.pathname===location.pathname&&i.hash)return;const a=t.dataset.dir,o=a==="next"||a==="prev";try{sessionStorage.setItem("zg-nav",o?a:"1")}catch{}"onpageswap"in window||s()||n.classList.contains("zg-leaving")||(e.preventDefault(),n.classList.add("zg-leaving"),o&&n.classList.add("zg-leaving-"+a),window.setTimeout(()=>{location.href=i.href},260))}),window.addEventListener("pageshow",()=>{n.classList.remove("zg-leaving","zg-leaving-next","zg-leaving-prev")}),"onpageswap"in window&&window.addEventListener("pageswap",e=>{if(!e.viewTransition)return;let t=null;try{t=sessionStorage.getItem("zg-nav")}catch{}if(t==="next"||t==="prev")try{e.viewTransition.types.add(t)}catch{}}))})();</script><script>(function(){const prefetch = [{"url":"/work/hellavated/","as":"document"},{"url":"/work/avitas/","as":"document"}];
+</script><script type="module">(()=>{const n=document.documentElement,s=()=>window.matchMedia("(prefers-reduced-motion: reduce)").matches;window.__zgArrive&&((window.scrollY||document.documentElement.scrollTop||0)>0&&n.classList.add("zg-ready-deep"),n.classList.add("zg-ready"));const r=document.getElementById("page-content");r&&(r.addEventListener("click",e=>{if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;const t=e.target?.closest?.("a[href]");if(!t||t.target==="_blank"||t.hasAttribute("download"))return;const i=new URL(t.href,location.href);if(i.origin!==location.origin||i.pathname===location.pathname&&i.hash)return;const a=t.dataset.dir,o=a==="next"||a==="prev";try{sessionStorage.setItem("zg-nav",o?a:"1")}catch{}"onpageswap"in window||s()||n.classList.contains("zg-leaving")||(e.preventDefault(),n.classList.add("zg-leaving"),o&&n.classList.add("zg-leaving-"+a),window.setTimeout(()=>{location.href=i.href},260))}),window.addEventListener("pageshow",()=>{n.classList.remove("zg-leaving","zg-leaving-next","zg-leaving-prev")}),"onpageswap"in window&&window.addEventListener("pageswap",e=>{if(!e.viewTransition)return;try{e.viewTransition.finished.catch(()=>{}),e.viewTransition.ready.catch(()=>{}),e.viewTransition.updateCallbackDone.catch(()=>{})}catch{}let t=null;try{t=sessionStorage.getItem("zg-nav")}catch{}if(t==="next"||t==="prev")try{e.viewTransition.types.add(t)}catch{}}))})();</script><script>(function(){const prefetch = [{"url":"/work/hellavated/","as":"document"},{"url":"/work/avitas/","as":"document"}];
 
     (() => {
       const c = navigator.connection;
@@ -389,11 +507,158 @@ The rebrand gives Strane a louder expression while keeping the elements people
       if (document.readyState === 'complete') idle();
       else addEventListener('load', idle, { once: true });
     })();
-  })();</script>  <script type="module" src="/_astro/StraneCaseStudy.astro_astro_type_script_index_0_lang.9RPGMQm4.js"></script>  </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync --> <script type="module">const s=document.getElementById("main-nav");if(s){let m=function(){g=!1;const e=window.scrollY>60,o=k.some(n=>{const c=n.getBoundingClientRect();return c.top<=b&&c.bottom>0});o===v&&e===p||(v=o,p=e,s.classList.toggle("nav-on-light",o),s.classList.toggle("nav-scrolled",e),t&&(o?(t.style.backgroundColor="rgba(255,255,255,0.78)",t.style.backdropFilter="blur(14px) saturate(1.8)",t.style.webkitBackdropFilter="blur(14px) saturate(1.8)",t.style.borderBottomColor="rgba(0,0,0,0.07)",u.forEach(n=>{n.style.color="#1a1a1a"}),a&&(a.style.filter="invert(1)")):(t.style.backgroundColor=e?"rgba(0,0,0,0.45)":"rgba(0,0,0,0)",t.style.backdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.webkitBackdropFilter=e?"blur(12px) saturate(1.6)":"none",t.style.borderBottomColor=e?"rgba(255,160,64,0.10)":"transparent",u.forEach(n=>{n.style.color=""}),a&&(a.style.filter=""))))};const t=document.getElementById("nav-bg"),a=s.querySelector("img"),u=Array.from(s.querySelectorAll(".nav-link")),k=Array.from(document.querySelectorAll("[data-nav-light]")),b=69;let g=!1,v=null,p=null;window.addEventListener("scroll",()=>{g||(g=!0,requestAnimationFrame(m))},{passive:!0}),m();const i=u.filter(l=>l.dataset.section);if(i.length){let l=0;const e=()=>{l=0;let f=null,d=-1/0;for(const r of i){const w=document.getElementById(r.dataset.section);if(!w)continue;const y=w.getBoundingClientRect().top-b;y<=0&&y>d&&(d=y,f=r)}for(const r of i)r.classList.toggle("is-active",r===f)},o=()=>{l||(l=requestAnimationFrame(e))};window.addEventListener("scroll",o,{passive:!0}),window.addEventListener("resize",o,{passive:!0});let n=0;const c=window.setInterval(()=>{o(),(i.every(d=>document.getElementById(d.dataset.section))||++n>40)&&window.clearInterval(c)},250)}}</script> <!-- Nav color switch on light sections.
+  })();</script>  <script type="module" src="/_astro/StraneCaseStudy.astro_astro_type_script_index_0_lang.63ipcPpb.js"></script> <!-- ═══ The Strane match cut, arrival half ═══
+     The homepage's Strane scene is this same collage on the same box, so the
+     hop from there is a match cut rather than a page change: the collage is
+     the one thing that must not move. Chrome morphs it (both documents name
+     it `strane-collage`); Firefox has no morph to ride and instead gets the
+     same picture painted twice, which only works if the sprites are not
+     caught at a different point of their float than they were a frame ago.
+
+     So the leaving page writes each sprite's animation clock and the group's
+     current parallax offset, and this reads them back:
+
+       · animation-delay per sprite, set to minus its phase, so eleven floats
+         carry on from exactly where they were instead of restarting. This is
+         the one that shows -- the sprites are always mid-drift, and without
+         it every one of them jumps.
+       · one vertical offset for the collage as a whole, eased to zero over
+         700ms. It is applied to .hero-collage and not to --py, because --py
+         is written per frame by this page's own scrub and would overwrite it
+         on the first scroll event.
+
+     Nothing here runs without the flag, and the flag is one-shot. --> <script>
+  /* Named and then called. It is one-shot work keyed on a navigation, and
+     under a same-document router there is no second parse to trigger it --
+     a lifecycle event has to. Calling it immediately keeps today's timing. */
+  window.__zgStraneMatch = function () {
+    var root = document.documentElement;
+    if (!root.classList.contains('zg-match-strane')) return;
+    /* In memory first. On the same-document path the home page hands the
+       payload straight across -- there is only one document, so there is
+       nothing to serialise it for -- and sessionStorage is the fallback for
+       a real navigation, where the two sides share nothing else. Both are
+       one-shot. */
+    var data = window.__zgMatchPayload || null;
+    window.__zgMatchPayload = undefined;
+    if (!data) {
+      var raw = null;
+      try {
+        raw = sessionStorage.getItem('zg-match-strane');
+        sessionStorage.removeItem('zg-match-strane');
+      } catch (e) { return; }
+      if (!raw) return;
+      try { data = JSON.parse(raw); } catch (e) { return; }
+    } else {
+      try { sessionStorage.removeItem('zg-match-strane'); } catch (e) {}
+    }
+    // Stale (a back/forward hours later) or a different width, where the
+    // captured phase still applies but the offset was measured elsewhere.
+    if (!data || data.v !== 1 || Date.now() - data.t > 20000) return;
+
+    var apply = function () {
+      var stage = document.querySelector('.hero-collage');
+      if (!stage) return;
+      (data.s || []).forEach(function (rec) {
+        if (!rec.k) return;
+        var el = stage.querySelector('.hs-' + rec.k);
+        if (!el) return;
+        var dur = parseFloat(getComputedStyle(el).animationDuration) * 1000;
+        if (!dur || !isFinite(dur)) return;
+        // rec.p is the fraction of the loop the sprite was at, 0..1, so the
+        // delay that resumes it is minus that much of this page's duration.
+        var prog = Math.min(0.9999, Math.max(0, Number(rec.p) || 0));
+        el.style.animationDelay = '-' + (prog * dur).toFixed(0) + 'ms';
+      });
+
+      /* The ribbon's phase, as a fraction of one period. Published rather
+         than applied: the marquee below measures its own period after fonts
+         are ready, and only then is there a number to multiply this by. */
+      if (typeof data.tk === 'number') window.__zgMatchTicker = data.tk;
+
+      var py = Number(data.py) || 0;
+      if (data.w !== window.innerWidth) py = 0;
+      if (!py) return;
+      stage.style.setProperty('--zg-flip-y', py.toFixed(1) + 'px');
+      // Two frames, so the start value is painted before the ease begins.
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          stage.style.transition = 'transform 700ms cubic-bezier(0.16, 1, 0.3, 1)';
+          stage.style.setProperty('--zg-flip-y', '0px');
+          window.setTimeout(function () {
+            stage.style.transition = '';
+            stage.style.removeProperty('--zg-flip-y');
+          }, 780);
+        });
+      });
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', apply, { once: true });
+    } else {
+      apply();
+    }
+  };
+  window.__zgStraneMatch();
+</script> <!-- ALL WORK, and Back, come back to the slide this page was opened from.
+     The home stage reads zg-stage-at once on mount; without it a cold Back
+     (a new tab, no bfcache entry to restore a scroll from) lands on the hero
+     and the reader has to find Strane again. Delegated, so it covers the bar
+     link without the shared chrome component needing to know about it. --> <script>
+  (function () {
+    /* Delegated on the document, which outlives any swap: bind once, or a
+       second parse of this page would record the slide twice. */
+    if (window.__zgStageAtBound) return;
+    window.__zgStageAtBound = true;
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest && e.target.closest('a[data-stage-at]');
+      if (!a || e.defaultPrevented || e.button !== 0) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      try { sessionStorage.setItem('zg-stage-at', a.dataset.stageAt); } catch (err) {}
+    });
+  })();
+</script><script>
+  addEventListener('popstate', () => {
+    const s = history.state;
+    if (!s || s.zg !== 'home') return;
+    /* Where the home page opens. The entry says which brand it was standing
+       on -- the expansion stamped `at` on it before it pushed -- and a load
+       is the one path that arrives with no scroll of its own, so without
+       this the reader who refreshed inside AVITAS and pressed Back landed on
+       the hero instead of the scene they came from.
+
+       Handed over in the key the stage already reads once on mount
+       (`zg-stage-at` in RecentWorkStage, which centres that slide and
+       removes the key), and not as a scroll: the runway's height depends on
+       what has loaded, so the number that centres a slide is only knowable
+       on the page being loaded. A cold load of `/` is untouched -- nobody
+       writes the key, and a Back that is not out of an expansion has no
+       `zg:'home'` entry to match. */
+    if (typeof s.at === 'string' && s.at) {
+      try { sessionStorage.setItem('zg-stage-at', s.at); } catch (e) { /* private mode */ }
+    }
+    location.reload();
+  });
+</script> </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div>  <div class="zg-bar" aria-hidden="true"><span class="zg-bar-thumb"></span></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync.
+
+         Written as an init/destroy pair and started at module time, so with
+         no router in the page this behaves exactly as it did when the body
+         below ran top to bottom. The pair exists because an ES module is
+         evaluated once per URL: under a same-document router the second
+         visit to a page would re-use this instance, and nothing here could
+         be handed back. `destroy()` is what makes that safe -- it returns
+         the page to the state it was in before `init()` ran, leaving no
+         Lenis, no ticker callback, no ScrollTrigger sync and no delegated
+         click handler behind.
+
+         Nothing else may construct a Lenis. `window.__lenis` is the site's
+         single scroller and a dozen components read it. --> <script type="module">let m=null;function B(){if(m)return;const e=document.querySelector(".zg-bar"),p=e&&e.querySelector(".zg-bar-thumb");if(!e||!p){m=()=>{};return}const b=window.matchMedia("(prefers-reduced-motion: reduce)").matches,C=34,R=1200,S=300;let r=0,g=0,c=0,f=0,L=0,E=0,M=0,w=0,T=-1,_=!1;const D=()=>{const t=window.innerHeight,n=document.documentElement.scrollHeight,o=Math.max(0,n-t),s=o<=0?0:Math.max(C,Math.round(t/n*t)),i=o<=0?0:Math.min(1,Math.max(0,(window.__lenis?.scroll??window.scrollY)/o));return{limit:o,h:s,y:(t-s)*i}},N=()=>{p.style.transform="translate3d(0,"+f.toFixed(2)+"px,0) scaleY("+(c/window.innerHeight).toFixed(5)+")"},x=()=>{r=0;const t=performance.now();if(w&&!b){const n=Math.min(1,(t-w)/S),o=1-Math.pow(1-n,3);c=M+(L-M)*o,f=E,n<1?r=requestAnimationFrame(x):w=0}else c=L,f=E;N()},l=()=>{e.classList.add("is-on"),window.clearTimeout(g),_||(g=window.setTimeout(()=>e.classList.remove("is-on"),R))},u=t=>{const n=D();e.classList.toggle("is-live",n.limit>0),E=n.y,n.limit!==T&&(T>=0&&!b&&(M=c,w=performance.now()),T=n.limit),L=n.h,r||(r=requestAnimationFrame(x)),t||l()},k=69,P=()=>Array.from(document.querySelectorAll("[data-nav-light]")),Y=()=>{const t=P().some(n=>{const o=n.getBoundingClientRect();return o.top<=k&&o.bottom>0});e.classList.toggle("is-light",t)},v=()=>{u(),Y()},y=()=>{u(!0),Y()},H=t=>{const n=window.innerHeight,o=p.getBoundingClientRect(),s=Math.max(0,document.documentElement.scrollHeight-n);if(s<=0)return;const i=window.__lenis;if(t.clientY<o.top||t.clientY>o.bottom){const a=t.clientY<o.top?-1:1,d=Math.min(s,Math.max(0,(i?.scroll??window.scrollY)+a*n*.9));i?.scrollTo?i.scrollTo(d):window.scrollTo({top:d,behavior:"smooth"}),l();return}_=!0,e.classList.add("is-drag"),e.setPointerCapture(t.pointerId);const V=t.clientY-o.top,F=a=>{const d=n-c;if(d<=0)return;const q=Math.min(1,Math.max(0,(a.clientY-V)/d))*s;i?.scrollTo?i.scrollTo(q,{immediate:!0}):window.scrollTo(0,q),l()},h=a=>{_=!1,e.classList.remove("is-drag");try{e.releasePointerCapture(a.pointerId)}catch{}e.removeEventListener("pointermove",F),e.removeEventListener("pointerup",h),e.removeEventListener("pointercancel",h),l()};e.addEventListener("pointermove",F),e.addEventListener("pointerup",h),e.addEventListener("pointercancel",h),t.preventDefault()},z=()=>l(),A=window.__lenis;A?.on?.("scroll",v),window.addEventListener("scroll",v,{passive:!0}),window.addEventListener("resize",y),e.addEventListener("pointerdown",H),e.addEventListener("pointerenter",z);const I=window.setInterval(()=>u(!0),500);window.setTimeout(()=>window.clearInterval(I),6e3),u(!0),Y(),m=()=>{A?.off?.("scroll",v),window.removeEventListener("scroll",v),window.removeEventListener("resize",y),e.removeEventListener("pointerdown",H),e.removeEventListener("pointerenter",z),window.clearInterval(I),window.clearTimeout(g),r&&cancelAnimationFrame(r),e.classList.remove("is-on","is-live","is-drag","is-light")}}function W(){const e=m;m=null,e?.()}window.__zgBar={init:B,destroy:W,refresh:()=>window.__zgBarRead?.()};B();</script> <!-- Nav color switch on light sections.
          The single owner of the nav's appearance. This used to be two scroll
          listeners: this one toggling classes, and a second, unguarded one in
          index.astro writing the inline styles that actually painted the bar.
          They also disagreed on geometry, so the inline copy (which triggers
          earlier and releases later) decided every visible flip. The inline
          copy's thresholds are the ones kept here; the class toggles ride along
-         unchanged. --> <script type="module" src="/_astro/BaseLayout.astro_astro_type_script_index_1_lang.BKQlDpRt.js"></script> </body> </html> 
+         unchanged. --> <script type="module">let s=null;function B(){if(s)return;const l=document.getElementById("main-nav");if(l){let w=function(){f=!1;const o=window.scrollY>60,t=I().some(r=>{const i=r.getBoundingClientRect();return i.top<=y&&i.bottom>0});t===b&&o===p||(b=t,p=o,l.classList.toggle("nav-on-light",t),l.classList.toggle("nav-scrolled",o),e&&(t?(e.style.backgroundColor="rgba(255,255,255,0.78)",e.style.backdropFilter="blur(14px) saturate(1.8)",e.style.webkitBackdropFilter="blur(14px) saturate(1.8)",e.style.borderBottomColor="rgba(0,0,0,0.07)",g.forEach(r=>{r.style.color="#1a1a1a"}),c&&(c.style.filter="invert(1)")):(e.style.backgroundColor=o?"rgba(0,0,0,0.45)":"rgba(0,0,0,0)",e.style.backdropFilter=o?"blur(12px) saturate(1.6)":"none",e.style.webkitBackdropFilter=o?"blur(12px) saturate(1.6)":"none",e.style.borderBottomColor=o?"rgba(255,160,64,0.10)":"transparent",g.forEach(r=>{r.style.color=""}),c&&(c.style.filter=""))))};const e=document.getElementById("nav-bg"),c=l.querySelector("img"),g=Array.from(l.querySelectorAll(".nav-link")),I=()=>Array.from(document.querySelectorAll("[data-nav-light]")),y=69;let f=!1,b=null,p=null;const k=()=>{f||(f=!0,requestAnimationFrame(w))};window.addEventListener("scroll",k,{passive:!0}),w();let E=null;const d=g.filter(n=>n.dataset.section);if(d.length){let n=0;const o=()=>{n=0;let m=null,u=-1/0;for(const a of d){const L=document.getElementById(a.dataset.section);if(!L)continue;const v=L.getBoundingClientRect().top-y;v<=0&&v>u&&(u=v,m=a)}for(const a of d)a.classList.toggle("is-active",a===m)},t=()=>{n||(n=requestAnimationFrame(o))};window.addEventListener("scroll",t,{passive:!0}),window.addEventListener("resize",t,{passive:!0});let r=0;const i=window.setInterval(()=>{t(),(d.every(u=>document.getElementById(u.dataset.section))||++r>40)&&window.clearInterval(i)},250);E=()=>{window.removeEventListener("scroll",t),window.removeEventListener("resize",t),window.clearInterval(i),n&&(cancelAnimationFrame(n),n=0)}}s=()=>{window.removeEventListener("scroll",k),E?.()}}s||(s=()=>{})}function h(){const l=s;s=null,l?.()}window.__zgNav={init:B,destroy:h};B();</script> <!-- The scrollbar's own lifecycle, on the same init/destroy shape as the
+         two above, so it survives the Strane expansion and stays one
+         instance. --> <script type="module" src="/_astro/BaseLayout.astro_astro_type_script_index_2_lang.DJHD6sBR.js"></script>  </body></html>
