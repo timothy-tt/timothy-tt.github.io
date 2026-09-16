@@ -21,9 +21,9 @@ import{j as e}from"./jsx-runtime.D_zvdyIk.js";import{r as i}from"./index.DiEladB
            --svc-nav is the fixed nav's bottom edge once the page is scrolled
            (5px top offset + 52px bar, see .nav-bar in global.css); --svc-h
            is the rest of the viewport, the one-screen height. The wrapper is
-           three of those tall and starts one early, so it spends one screen
-           under the stage (the reveal), one with the screen held (the hold)
-           and one letting it go. The foot hangs off the bottom by margin,
+           2.3 of those tall and starts one early, so it spends one screen
+           under the stage (the reveal), 0.3 with the screen held (the hold,
+           --svc-hold) and one letting it go. The foot hangs off the bottom by margin,
            outside the sticky range. z-index 1 keeps the wrapper under the
            stage's 20; it must never rise above it, and the stage must keep
            its own opaque ground, or this section shows through early.
@@ -33,9 +33,10 @@ import{j as e}from"./jsx-runtime.D_zvdyIk.js";import{r as i}from"./index.DiEladB
           --svc-nav: 57px;
           --svc-h: calc(100svh - var(--svc-nav));
           --svc-x: clamp(24px, 4vw, 80px);
+          --svc-hold: 0.3;
           position: relative;
           z-index: 1;
-          height: calc(3 * var(--svc-h));
+          height: calc((2 + var(--svc-hold)) * var(--svc-h));
           margin: calc(-1 * var(--svc-h)) 0 160px;
           color: #fff;
         }
