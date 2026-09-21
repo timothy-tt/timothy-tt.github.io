@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-arrival="cinematic"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="An AVITAS brand evolution case study: an Oregon outdoor identity built on landscape illustration — logo system, AVITAS Blue and the Oregon Collection packaging, applications and a trail-map website concept. By Lenore Hensley."><!-- Tab icons: the wordmark's own `z`, on the page's near-black so it
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="An AVITAS brand evolution case study: an Oregon outdoor identity built on landscape illustration — logo system, AVITAS Blue and the Oregon Collection packaging, applications and a trail-map website concept. By Lenore Hensley."><!-- Tab icons: the wordmark's own `z`, on the page's near-black so it
          still reads in a light tab strip. Cut by scripts/build-favicons.mjs,
          re-run it if Wordmark_White.png is ever replaced. The .ico is listed
          too, because that is the file a crawler asks for by name. --><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><!-- Fonts are self-hosted (public/fonts + styles/fonts.css): Google's own
@@ -17,7 +17,7 @@
 
          Only the latin subsets are preloaded — the others are real
          @font-face entries with their unicode-ranges intact, so they still
-         fetch on demand for anything outside latin. --><style>html{background:#0a1f1a}</style><link rel="preload" as="image" href="/portfolio/avitas/map/avitas-map-parallax-mountain.webp" fetchpriority="high"><link rel="preload" as="image" href="/portfolio/avitas/map/avitas-map-parallax-sky.webp" fetchpriority="high"><link rel="preload" as="image" href="/portfolio/avitas/map/avitas-map-parallax-land.webp" fetchpriority="high"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/HTxqL289NzCGg4MzN6KJ7eW6CYyF_g.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/FwZY7-Qmy14u9lezJ-6H6Mk.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>AVITAS — Blazing Trails | Zegoe</title><!-- Cross-document transition, arrival half. A React case study fades
+         fetch on demand for anything outside latin. --><style>html{background:#0a1f1a}</style> <link rel="preload" as="image" href="/portfolio/avitas/map/avitas-map-parallax-mountain.webp" fetchpriority="high"> <link rel="preload" as="image" href="/portfolio/avitas/map/avitas-map-parallax-sky.webp" fetchpriority="high"> <link rel="preload" as="image" href="/portfolio/avitas/map/avitas-map-parallax-land.webp" fetchpriority="high"> <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/HTxqL289NzCGg4MzN6KJ7eW6CYyF_g.woff2"> <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/FwZY7-Qmy14u9lezJ-6H6Mk.woff2"> <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>AVITAS — Blazing Trails | Zegoe</title><!-- Cross-document transition, arrival half. A React case study fades
          itself out and leaves this flag before navigating; whichever document
          loads next fades in to meet it, so leaving and arriving read as one
          move instead of a cut. Runs in <head>, before first paint, or the page
@@ -67,125 +67,7 @@
       @media (prefers-reduced-motion: reduce) {
         html.zg-arriving body { animation: none; }
       }
-    </style><style>
-        @view-transition { navigation: auto; }
-
-        /* Direction, and the shape of the move. The pager knows whether you
-           are going forward or back through the set, and that survives the
-           document swap as a view transition TYPE ('next' or 'prev'), added in
-           pageswap on the way out and in pagereveal on the way in (see the
-           script below and CaseStudyTransition). A type is the right channel
-           for this because it is scoped to the one transition: nothing has to
-           be cleaned up afterwards, and an untyped navigation simply does not
-           match.
-
-           The move is a push. The outgoing page travels off one edge while
-           the incoming page travels in from the other, the way a deck
-           advances, and the owner's word for that is a swipe. What was
-           here before was 6vw of travel with the old page fading all the way
-           to zero and the new one fading up from zero, and that is what he
-           read as "it just jumps in": for most of the cut the old page was
-           nearly gone, the new one was nearly transparent, and the frame was
-           mostly the space between them. The new snapshot now crosses the
-           whole viewport (100% to 0), which is what makes the edge between the
-           two pages a travelling seam you can follow.
-
-           The old page never reaches zero. It dims to 0.55 and gives up 28% of
-           the width, which is the depth cue that says it is passing behind the
-           page arriving over it, and it keeps real content in every frame of
-           the hop. The two snapshots covering different distances is the point:
-           the fast one covers the slow one, so there is a single moving edge
-           rather than two sheets sliding in lockstep.
-
-           mix-blend-mode is forced to normal on both. The UA sheet paints the
-           root pair with plus-lighter, which is the correct recipe for a
-           cross-fade, where two half-opaque copies of the page have to add
-           back up to one. Here the old page sits at 0.55 UNDER an opaque new
-           page, and plus-lighter would add its light through, so the dim would
-           read as a glow along the seam. Normal keeps the dim a dim.
-
-           0.6s on an ease-out with a long tail, so both pages are moving
-           fastest at the start and arrive rather than stop.
-
-           What travels under these keyframes is the content and not the whole
-           page. The nav, the pager bar and the screen grain are each given a
-           view-transition-name in src/styles/case-study-swipe.css, which takes
-           them out of the root capture and gives each one a group of its own,
-           so `root` here is the four case studies minus their furniture. The
-           bars have the same box on both sides of a hop, so their groups have
-           nothing to animate but the dissolve from one page's bar to the
-           next's, and they hold their place while this push runs underneath
-           them. That is the owner's ask, "keep the menu bar and nav bar and
-           only swipe the content inside", and it is why the numbers here did
-           not have to change to answer it. The home page opts into the jump
-           without that stylesheet and has none of those elements, so a hop to
-           or from home is this push over the whole page, as before. */
-        @keyframes zg-vt-push-out-left { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-28%); opacity: 0.55; } }
-        @keyframes zg-vt-push-in-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        @keyframes zg-vt-push-out-right { from { transform: translateX(0); opacity: 1; } to { transform: translateX(28%); opacity: 0.55; } }
-        @keyframes zg-vt-push-in-left { from { transform: translateX(-100%); } to { transform: translateX(0); } }
-
-        html:active-view-transition-type(next)::view-transition-old(root) { animation: zg-vt-push-out-left 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both; mix-blend-mode: normal; }
-        html:active-view-transition-type(next)::view-transition-new(root) { animation: zg-vt-push-in-right 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both; mix-blend-mode: normal; }
-        html:active-view-transition-type(prev)::view-transition-old(root) { animation: zg-vt-push-out-right 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both; mix-blend-mode: normal; }
-        html:active-view-transition-type(prev)::view-transition-new(root) { animation: zg-vt-push-in-left 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both; mix-blend-mode: normal; }
-
-        /* Everything with no direction to carry (the home page's cards, the
-           wordmark, All Work, a bookmark, back and forward) keeps the
-           browser's own cross-fade and only has its length set. A push needs a
-           direction to mean anything, and a bookmark has none, so a dissolve
-           is the honest answer there. DO DROPS declares the same pair at 0.32s
-           for its light/dark switch (dodrops-page.css), and on that page that
-           rule wins the untyped case on source order. Both are a dissolve of
-           the same length class, so the two are interchangeable here; the
-           typed rules above carry a pseudo-class on html and outrank it. */
-        ::view-transition-old(root),
-        ::view-transition-new(root) { animation-duration: 0.42s; }
-
-        /* The Strane handover is the one navigation that must NOT dissolve.
-           Everywhere else a cross-fade is the honest answer for a move with
-           no direction; here the two documents have been made into the same
-           picture on purpose, and fading one onto the other only shows where
-           they still differ -- the collage's float phase, the ribbon's crawl
-           -- as a soft double exposure. That is what the flash in Chromium
-           was: the home page's own overlay still readable under the case
-           study's copy. Cut instead. Both frames are the same frame. */
-        html.zg-match-strane::view-transition-old(root),
-        html.zg-match-strane::view-transition-new(root) {
-          animation-duration: 0s;
-        }
-        html.zg-match-strane::view-transition-group(*),
-        html.zg-match-strane::view-transition-image-pair(*) {
-          animation-duration: 0s;
-        }
-
-        /* The reduced-motion pair, hoisted out of the media query below so the
-           two halves of one idea sit next to the keyframes they replace. */
-        @keyframes zg-vt-fade-out { from { opacity: 1; } to { opacity: 0; } }
-        @keyframes zg-vt-fade-in { from { opacity: 0; } to { opacity: 1; } }
-
-        @media (prefers-reduced-motion: reduce) {
-          /* Travel is the thing to drop here, and travel alone. This used to
-             switch every animation off, which captured and swapped the two
-             documents on a single frame: a hard cut, which is the same
-             complaint the push was built to answer, with the motion taken away
-             as well. Both documents are on screen either way, so the answer
-             that respects the setting is the oldest one available: dissolve
-             one into the other with nothing moving.
-
-             plus-lighter and a linear pair is the browser's own recipe for
-             that. The two opacities sum to 1 on every frame inside the
-             isolated image pair, so the blend holds the brightness of a single
-             page instead of washing towards the canvas underneath, and it puts
-             back the blend mode the typed rules above turn off.
-
-             !important because those typed rules carry a pseudo-class on html
-             and out-specify anything written against the bare pseudo-elements,
-             and a media query adds no specificity of its own. */
-          ::view-transition-old(root) { animation: zg-vt-fade-out 0.3s linear both !important; mix-blend-mode: plus-lighter !important; }
-          ::view-transition-new(root) { animation: zg-vt-fade-in 0.3s linear both !important; mix-blend-mode: plus-lighter !important; }
-        }
-      </style><style>.cs-nav{view-transition-name:cs-nav}.cs-pagerbar{view-transition-name:cs-pager}.noise-overlay{view-transition-name:zg-grain}html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-group(cs-nav),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-group(cs-pager),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-group(zg-grain),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-old(cs-nav),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-new(cs-nav),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-old(cs-pager),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-new(cs-pager),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-old(zg-grain),html:is(:active-view-transition-type(next),:active-view-transition-type(prev))::view-transition-new(zg-grain){animation-duration:.6s;animation-timing-function:cubic-bezier(.22,.61,.36,1)}@keyframes zg-swipe-out-left{to{translate:-12vw 0}}@keyframes zg-swipe-out-right{to{translate:12vw 0}}@keyframes zg-swipe-dim{to{opacity:.7}}html.zg-leaving #page-content{overflow-x:clip}html.zg-leaving #page-content :is(main,.cs-next){animation:zg-swipe-dim .3s ease-in forwards}html.zg-leaving-next #page-content :is(main,.cs-next){animation:zg-swipe-out-left .3s ease-in forwards,zg-swipe-dim .3s ease-in forwards}html.zg-leaving-prev #page-content :is(main,.cs-next){animation:zg-swipe-out-right .3s ease-in forwards,zg-swipe-dim .3s ease-in forwards}html.zg-arriving:not(.zg-vt) #page-content{overflow-x:clip}html.zg-arriving:not(.zg-vt) #page-content :is(main,.cs-next){opacity:.7}html.zg-arriving-next:not(.zg-vt) #page-content :is(main,.cs-next){translate:12vw 0}html.zg-arriving-prev:not(.zg-vt) #page-content :is(main,.cs-next){translate:-12vw 0}@keyframes zg-swipe-in-right{0%{translate:12vw 0}to{translate:0 0}}@keyframes zg-swipe-in-left{0%{translate:-12vw 0}to{translate:0 0}}@keyframes zg-swipe-lift{0%{opacity:.7}to{opacity:1}}@keyframes zg-settle{0%{scale:1.025}to{scale:1}}html.zg-arriving #page-content :is(main,.cs-next){transform-origin:50% 0}html.zg-arriving:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both,zg-settle .9s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-next:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-in-right .55s cubic-bezier(.16,.84,.34,1) both,zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both,zg-settle .9s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-prev:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-in-left .55s cubic-bezier(.16,.84,.34,1) both,zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both,zg-settle .9s cubic-bezier(.16,.84,.34,1) both}html.zg-vt.zg-arriving.zg-ready #page-content :is(main,.cs-next){animation:zg-settle .9s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving.zg-ready-deep:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-next.zg-ready-deep:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-in-right .55s cubic-bezier(.16,.84,.34,1) both,zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both}html.zg-arriving-prev.zg-ready-deep:not(.zg-vt) #page-content :is(main,.cs-next){animation:zg-swipe-in-left .55s cubic-bezier(.16,.84,.34,1) both,zg-swipe-lift .55s cubic-bezier(.16,.84,.34,1) both}html.zg-vt.zg-arriving.zg-ready-deep #page-content :is(main,.cs-next){animation:none}.zg-line{display:block;clip-path:inset(-.45em -.4em -.25em -.4em)}.zg-line-in{display:block;--zg-line-off: calc(100% + .55em) ;translate:0 var(--zg-line-off)}.zg-lines br{display:none}@keyframes zg-line-up{0%{translate:0 var(--zg-line-off)}to{translate:0 0}}html.zg-hero-go .zg-line-in{animation:zg-line-up .9s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--zg-hero-t0, 0ms) + var(--zg-l, 0) * 90ms)}@media(prefers-reduced-motion:reduce){html.zg-leaving #page-content,html.zg-arriving #page-content,html.zg-leaving #page-content :is(main,.cs-next),html.zg-arriving #page-content :is(main,.cs-next){animation:none!important;translate:none!important;scale:none!important;opacity:1!important;will-change:auto!important}.zg-line{clip-path:none!important}.zg-line-in,html.zg-hero-go .zg-line-in{animation:none!important;translate:none!important}}html.zg-match-strane .zg-line-in{animation:none;translate:0 0}html.zg-match-strane .zg-line{clip-path:none}</style><noscript><style>.zg-line-in { translate: none; }</style></noscript><script>
+    </style><script>
       /* The arrival half, and the direction hand-off. Runs in <head>, before
          first paint, because on a page that is not in the jump the classes
          below drive a fade that has to own the very first frame.
@@ -405,10 +287,10 @@
         });
       };
       window.__zgArrivalRetire();
-    </script><link rel="stylesheet" href="/_astro/index.BjEgjBuj.css">
-<link rel="stylesheet" href="/_astro/avitas.Ctl7gqee.css"></head> <body> <div id="page-content"> <script>
+    </script><link rel="stylesheet" href="/_astro/avitas-site.DDHMNU2f.css">
+<link rel="stylesheet" href="/_astro/index.BjEgjBuj.css"></head> <body> <div id="page-content">   <script>
   document.documentElement.classList.add('av-js');
-</script><a href="#brief" class="skip av-skip">Skip to case study</a>  <nav class="cs-nav" aria-label="Case study"><a href="/" class="cs-nav-logo"><img src="/Wordmark_White.png" alt="Zegoe"></a><a href="/#work" class="cs-nav-back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12l6-6M5 12l6 6"></path></svg><span>All Work</span></a></nav> <div class="av-page"> <main>  <section class="av-hero" id="top" aria-labelledby="av-hero-title">  <div class="av-hero-art" aria-hidden="true"> <div class="av-stage"> <img class="av-plate av-plate-sky" src="/portfolio/avitas/map/avitas-map-parallax-sky.webp" alt="" width="1920" height="847" loading="eager" decoding="sync" fetchpriority="high"> <img class="av-plate av-plate-sun" src="/portfolio/avitas/map/avitas-map-parallax-sun.webp" alt="" width="286" height="286" loading="eager" decoding="sync" fetchpriority="high"> <img class="av-plate av-plate-mtn" src="/portfolio/avitas/map/avitas-map-parallax-mountain.webp" alt="" width="1920" height="1061" loading="eager" decoding="sync" fetchpriority="high"> <img class="av-plate av-plate-land" src="/portfolio/avitas/map/avitas-map-parallax-land.webp" alt="" width="1743" height="957" loading="eager" decoding="sync" fetchpriority="high"> </div> </div> <div class="av-wrap av-masthead"> <span class="av-sig"> <b>Lenore Hensley</b> <span>SELECTED WORK / 2024</span> </span> <nav class="av-navlinks" aria-label="Case study sections"> <a href="#identity">Identity</a> <a href="#packaging">Packaging</a> <a href="#digital">Digital</a>  <a href="https://www.avitasgrown.com/" target="_blank" rel="noopener noreferrer">AVITAS ↗</a> </nav> </div>  <div class="av-wrap av-hero-copy"> <p class="av-kicker zg-line" style="--zg-l:0"> <span class="zg-line-in">AVITAS / BRAND EVOLUTION</span> </p> <h1 class="av-hero-title zg-lines" id="av-hero-title"> <b class="zg-line" style="--zg-l:1"><span class="zg-line-in">Blazing</span></b> <i class="zg-line" style="--zg-l:2"><span class="zg-line-in">Trails.</span></i> </h1> <p class="av-hero-lede">An outdoor identity,<br>rooted in Oregon.</p> </div> <div class="av-wrap av-hero-foot"> <span>Brand identity · Illustration · Packaging · UI/UX</span> <a href="#brief">Explore the story ↓</a> </div> </section>  <section class="av-section" id="brief" aria-labelledby="av-brief-h"> <div class="av-wrap"> <div class="av-intro"> <div class="av-rise av-still"> <p class="av-eyebrow">The brief / 2024</p> <h2 class="av-head" id="av-brief-h"> <span class="av-mask"><span class="av-mask-in">A familiar blue.</span></span> <span class="av-script av-mask" style="--l:1"><span class="av-mask-in">A new horizon.</span></span> </h2> </div> <div class="av-rise" style="--i:1"> <p class="av-body">AVITAS had a recognizable color. The next chapter needed a world around it.</p> <p class="av-body" style="margin-top:1.5em">
+</script><a href="#brief" class="skip av-skip">Skip to case study</a>   <div class="av-page"> <main>  <section class="av-hero" id="top" aria-labelledby="av-hero-title">  <div class="av-hero-art" aria-hidden="true"> <div class="av-stage"> <img class="av-plate av-plate-sky" src="/portfolio/avitas/map/avitas-map-parallax-sky.webp" alt="" width="1920" height="847" loading="eager" decoding="sync" fetchpriority="high"> <img class="av-plate av-plate-sun" src="/portfolio/avitas/map/avitas-map-parallax-sun.webp" alt="" width="286" height="286" loading="eager" decoding="sync" fetchpriority="high"> <img class="av-plate av-plate-mtn" src="/portfolio/avitas/map/avitas-map-parallax-mountain.webp" alt="" width="1920" height="1061" loading="eager" decoding="sync" fetchpriority="high"> <img class="av-plate av-plate-land" src="/portfolio/avitas/map/avitas-map-parallax-land.webp" alt="" width="1743" height="957" loading="eager" decoding="sync" fetchpriority="high"> </div> </div> <div class="av-wrap av-masthead"> <a class="av-sig" href="/#work"> <b>Lenore Hensley</b> <span>SELECTED WORK / 2024</span> <span class="av-sr">Zegoe: back to all work</span> </a> <nav class="av-navlinks" aria-label="Case study sections"> <a href="#identity">Identity</a> <a href="#packaging">Packaging</a> <a href="#digital">Digital</a>  <a href="https://www.avitasgrown.com/" target="_blank" rel="noopener noreferrer">AVITAS ↗</a> </nav> </div>  <div class="av-wrap av-hero-copy"> <p class="av-kicker zg-line" style="--zg-l:0"> <span class="zg-line-in">AVITAS / BRAND EVOLUTION</span> </p> <h1 class="av-hero-title zg-lines" id="av-hero-title"> <b class="zg-line" style="--zg-l:1"><span class="zg-line-in">Blazing</span></b> <i class="zg-line" style="--zg-l:2"><span class="zg-line-in">Trails.</span></i> </h1> <p class="av-hero-lede">An outdoor identity,<br>rooted in Oregon.</p> </div> <div class="av-wrap av-hero-foot"> <span>Brand identity · Illustration · Packaging · UI/UX</span> <a href="#brief">Explore the story ↓</a> </div> </section>  <section class="av-section" id="brief" aria-labelledby="av-brief-h"> <div class="av-wrap"> <div class="av-intro"> <div class="av-rise av-still"> <p class="av-eyebrow">The brief / 2024</p> <h2 class="av-head" id="av-brief-h"> <span class="av-mask"><span class="av-mask-in">A familiar blue.</span></span> <span class="av-script av-mask" style="--l:1"><span class="av-mask-in">A new horizon.</span></span> </h2> </div> <div class="av-rise" style="--i:1"> <p class="av-body">AVITAS had a recognizable color. The next chapter needed a world around it.</p> <p class="av-body" style="margin-top:1.5em">
 I reimagined this Oregon cannabis brand, also present in Washington, for people
               drawn to trails, mountains, and the coast. Landscape illustration connects the
               identity, packaging, and website concept through a shared sense of place.
@@ -469,57 +351,7 @@ From a minimal turquoise identity to an illustrated outdoor system, the rebrand 
           concept.
 </p> <p class="av-credit av-rise" style="--i:3">
 Lenore Hensley<br>Brand design · Illustration · Packaging · UI/UX
-</p> <div class="av-closing-foot av-rise" style="--i:4"> <span>AVITAS / LENORE HENSLEY / 2024</span> <a href="#top" data-av-top>BACK TO TOP ↑</a> </div> </div> </section> </main> </div> <footer class="cs-next"> <a href="/work/lootbar/" class="cs-next-link" data-dir="next" data-astro-reload style="--nx-bg:#02040e;--nx-accent:#00e0f0;--nx-glow:rgba(0,224,240,0.30);--nx-art:url(&#34;/portfolio/lootbar/lootbar-bg.webp&#34;);--nx-art-op:0.6;--nx-art-filter:saturate(1.25) brightness(0.72);--nx-art-size:cover;--nx-art-repeat:no-repeat;--nx-art-pos:50% 50%"> <span class="cs-next-art" aria-hidden="true"></span> <span class="cs-next-scrim" aria-hidden="true"></span> <span class="cs-eyebrow">Next Project</span> <span class="cs-next-name"> <span class="cs-next-index">06</span> <img class="cs-next-logo" src="/brand-logo/loot-bar.png" alt="Lootbar" draggable="false"> <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M7 17L17 7M17 7H7M17 7V17"></path> </svg> </span> </a> </footer>  <div class="cs-pagerpin"><nav class="cs-pagerbar" aria-label="Case studies"><a href="/work/strane/" class="cs-pagerbar-link" data-dir="prev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M5 12l6-6M5 12l6 6"></path></svg><span><i>Previous</i><b>Strane</b></span></a><span class="cs-pagerbar-here"><span class="cs-pagerbar-count" aria-hidden="true"><b>05</b><i>/</i>07</span><em>AVITAS</em></span><a href="/work/lootbar/" class="cs-pagerbar-link cs-pagerbar-next" data-dir="next"><span><i>Next</i><b>Lootbar</b></span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M19 12l-6-6M19 12l-6 6"></path></svg></a></nav></div>  <script>
-  (function () {
-    var root = document.documentElement;
-    var go = function () { root.classList.add('zg-hero-go'); };
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { go(); return; }
-    if (window.__zgArrive) root.style.setProperty('--zg-hero-t0', '220ms');
-
-    var waits = [];
-    try {
-      /* The headline's first line, which is the line whose face matters. The
-         kicker is set in the page's body or mono face and is small enough
-         that a swap under it is not what anyone is looking at. */
-      var line = document.querySelector('.zg-lines .zg-line-in');
-      if (document.fonts) {
-        if (line) {
-          var cs = getComputedStyle(line);
-          waits.push(document.fonts.load(
-            cs.fontStyle + ' ' + cs.fontWeight + ' 1em ' + cs.fontFamily,
-          ));
-        }
-        waits.push(document.fonts.ready);
-      }
-    } catch (e) { /* no font loading API, or a shorthand it would not parse */ }
-
-    if (!waits.length) { go(); return; }
-    var cap = new Promise(function (resolve) { window.setTimeout(resolve, 350); });
-    Promise.race([Promise.all(waits), cap]).then(go, go);
-  })();
-</script><script type="module">(()=>{const n=document.documentElement,s=()=>window.matchMedia("(prefers-reduced-motion: reduce)").matches;window.__zgArrive&&((window.scrollY||document.documentElement.scrollTop||0)>0&&n.classList.add("zg-ready-deep"),n.classList.add("zg-ready"));const r=document.getElementById("page-content");r&&(r.addEventListener("click",e=>{if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;const t=e.target?.closest?.("a[href]");if(!t||t.target==="_blank"||t.hasAttribute("download"))return;const i=new URL(t.href,location.href);if(i.origin!==location.origin||i.pathname===location.pathname&&i.hash)return;const a=t.dataset.dir,o=a==="next"||a==="prev";try{sessionStorage.setItem("zg-nav",o?a:"1")}catch{}"onpageswap"in window||s()||n.classList.contains("zg-leaving")||(e.preventDefault(),n.classList.add("zg-leaving"),o&&n.classList.add("zg-leaving-"+a),window.setTimeout(()=>{location.href=i.href},260))}),window.addEventListener("pageshow",()=>{n.classList.remove("zg-leaving","zg-leaving-next","zg-leaving-prev")}),"onpageswap"in window&&window.addEventListener("pageswap",e=>{if(!e.viewTransition)return;try{e.viewTransition.finished.catch(()=>{}),e.viewTransition.ready.catch(()=>{}),e.viewTransition.updateCallbackDone.catch(()=>{})}catch{}let t=null;try{t=sessionStorage.getItem("zg-nav")}catch{}if(t==="next"||t==="prev")try{e.viewTransition.types.add(t)}catch{}}))})();</script><script>(function(){const prefetch = [{"url":"/work/strane/","as":"document"},{"url":"/work/lootbar/","as":"document"}];
-
-    (() => {
-      const c = navigator.connection;
-      if (c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''))) return;
-      const warm = () => {
-        for (const item of prefetch) {
-          const l = document.createElement('link');
-          l.rel = 'prefetch';
-          l.href = item.url;
-          if (item.as === 'image') l.as = 'image';
-          document.head.appendChild(l);
-        }
-      };
-      const idle = () =>
-        'requestIdleCallback' in window
-          ? requestIdleCallback(warm, { timeout: 3000 })
-          : setTimeout(warm, 1200);
-      if (document.readyState === 'complete') idle();
-      else addEventListener('load', idle, { once: true });
-    })();
-  })();</script>  <script type="module" src="/_astro/AvitasCaseStudy.astro_astro_type_script_index_0_lang.2qwjzuib.js"></script>  </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div>  <div class="zg-bar" aria-hidden="true"><span class="zg-bar-thumb"></span></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync.
+</p> <div class="av-closing-foot av-rise" style="--i:4"> <span>AVITAS / LENORE HENSLEY / 2024</span> <a href="#top" data-av-top>BACK TO TOP ↑</a> </div> </div> </section> </main> </div>       <script type="module" src="/_astro/AvitasCaseStudy.astro_astro_type_script_index_0_lang.2qwjzuib.js"></script>   </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div>  <div class="zg-bar" aria-hidden="true"><span class="zg-bar-thumb"></span></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync.
 
          Written as an init/destroy pair and started at module time, so with
          no router in the page this behaves exactly as it did when the body
