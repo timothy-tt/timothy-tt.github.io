@@ -196,9 +196,17 @@ import{j as e}from"./jsx-runtime.D_zvdyIk.js";import{r as i}from"./index.DiEladB
           transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
           pointer-events: none;
         }
-        .svc-row:hover::before,
+        /* The :hover halves of these three rules sit under (hover: hover):
+           iOS holds :hover on the last thing tapped, so the row a modal was
+           opened from stayed lit after it closed. Focus-visible stays
+           ungated for the keyboard. */
         .svc-row:focus-visible::before {
           transform: scaleX(1);
+        }
+        @media (hover: hover) {
+          .svc-row:hover::before {
+            transform: scaleX(1);
+          }
         }
 
         /* The bottom rule is drawn, not set: scaled from the left over 1.1s
@@ -279,10 +287,15 @@ import{j as e}from"./jsx-runtime.D_zvdyIk.js";import{r as i}from"./index.DiEladB
           transition: --svc-ramp-a 0.35s ease, --svc-ramp-b 0.35s ease;
         }
         @supports (color: color-mix(in oklab, #fff, #000 18%)) {
-          .svc-row:hover,
           .svc-row:focus-visible {
             --svc-ramp-a: color-mix(in oklab, var(--svc-ramp-rest-a), white 18%);
             --svc-ramp-b: color-mix(in oklab, var(--svc-ramp-rest-b), white 18%);
+          }
+          @media (hover: hover) {
+            .svc-row:hover {
+              --svc-ramp-a: color-mix(in oklab, var(--svc-ramp-rest-a), white 18%);
+              --svc-ramp-b: color-mix(in oklab, var(--svc-ramp-rest-b), white 18%);
+            }
           }
         }
         .svc-row-number .svc-mask-in,
@@ -340,9 +353,13 @@ import{j as e}from"./jsx-runtime.D_zvdyIk.js";import{r as i}from"./index.DiEladB
           color: rgba(255, 255, 255, 0.6);
           transition: color 0.35s ease;
         }
-        .svc-row:hover .svc-row-list,
         .svc-row:focus-visible .svc-row-list {
           color: rgba(255, 255, 255, 0.8);
+        }
+        @media (hover: hover) {
+          .svc-row:hover .svc-row-list {
+            color: rgba(255, 255, 255, 0.8);
+          }
         }
         .svc-row-list li {
           break-inside: avoid;
