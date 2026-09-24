@@ -1557,6 +1557,28 @@ import{j as e}from"./jsx-runtime.D_zvdyIk.js";import{r as j}from"./index.DiEladB
         /* ═══ Mobile ═══ */
         @media (max-width: 767px) {
           .cs-hero { min-height: 88vh; padding-top: 6rem; }
+          /* A collage hero opens on the copy AND the art in one screen (Tim:
+             the art started under the pager on an iPhone). The hero is the
+             small viewport, the pager's 4.75rem is its foot padding, the copy
+             tightens a step, and the art takes whatever height is left
+             rather than a fixed 5:4, so it never runs under the bar. */
+          .cs-hero-arted {
+            height: 100svh;
+            min-height: 34rem;
+            justify-content: flex-start;
+            padding-top: 5.5rem;
+            padding-bottom: 4.75rem;
+          }
+          .cs-hero-arted .cs-hero-name { margin-top: 0.9rem; }
+          .cs-hero-arted .cs-hero-pos { margin-top: 1rem; font-size: 1rem; }
+          .cs-hero-arted .cs-hero-chips { margin-top: 1.1rem; gap: 0.45rem; }
+          .cs-hero-arted .cs-hero-client { margin-top: 1.1rem; }
+          .cs-hero-arted .cs-hero-art {
+            aspect-ratio: auto;
+            flex: 1 1 0;
+            min-height: 11rem;
+            margin-top: 1rem;
+          }
           .cs-hero-count { font-size: 1.15rem; }
           /* A phone keeps the desktop's three-across arrangement; what gives
              is the name, which wraps instead of being cut. "Garcia
@@ -1590,6 +1612,12 @@ import{j as e}from"./jsx-runtime.D_zvdyIk.js";import{r as j}from"./index.DiEladB
               rgba(0,0,0,0.70) 74%,
               rgba(0,0,0,0) 100%
             );
+            /* iOS Safari with its toolbar out ends the viewport at the
+               toolbar's top and paints the page under it, so the art ran on
+               beneath the bar (Tim, on an iPhone). The bar's foot continues
+               below it as an outer shadow: painted only outside the box, and
+               no added scroll length at the page's end. */
+            box-shadow: 0 12rem 0 12rem rgba(0,0,0,0.93);
           }
           .cs-pagerbar::before {
             -webkit-mask-image: linear-gradient(to top, #000 0%, #000 62%, rgba(0,0,0,0.4) 84%, transparent 100%);
