@@ -851,32 +851,15 @@ void main() {
            foot, which is the last card's own foot, so the section after
            follows the last card up with no gap and no overlap. runStack
            writes the channels (see it); this sheet only reads them:
-             arriving (--rws-a 0 -> 1): the accent hairline on the top edge
-               wipes across left to right, the site's rule-and-wipe, and the
-               plate settles from 1.08 off the top edge, so the picture is
-               still coming to rest as the edge carries it up;
-             covered (--rws-d 0 -> 1): the pinned card eases back to 0.93 and
-               down to 0.4 light, so the one on top reads as nearer.
+             arriving (--rws-a 0 -> 1): the plate settles from 1.08 off the
+               top edge, so the picture is still coming to rest as the edge
+               carries it up;
+             covered (--rws-d 0 -> 1): the pinned card dims to 0.4 light at
+               full size (Tim: a card scaling back uncovered the page at its
+               sides and foot, and the edge's progress wipe went too).
            The scenes' own layers move on --rws-lc through both. */
         @media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
           .rws-card { position: sticky; top: 0; }
-          .rws-list.is-stack .rws-card {
-            scale: calc(1 - var(--rws-d, 0) * 0.07);
-            transform-origin: 50% 38%;
-          }
-          .rws-list.is-stack .rws-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            z-index: 4;
-            background: var(--rws-accent);
-            transform-origin: 0 50%;
-            scale: var(--rws-a, 1) 1;
-            pointer-events: none;
-          }
           .rws-list.is-stack .rws-card::after {
             content: '';
             position: absolute;
@@ -897,10 +880,8 @@ void main() {
              each frame: measured on a 390x844 scripted scroll, p50 frame
              50ms without these, 16.7ms with (the column's own figure). Only
              the live pair, so six full-screen layers are never held at once. */
-          .rws-list.is-stack .rws-card.is-live,
           .rws-list.is-js.is-stack .rws-card.is-live .rws-card-plate { will-change: transform; }
-          .rws-list.is-stack .rws-card.is-live::before,
-          .rws-list.is-stack .rws-card.is-live::after { will-change: transform, opacity; }
+          .rws-list.is-stack .rws-card.is-live::after { will-change: opacity; }
           /* Fully covered: not painted. The card on top is opaque edge to
              edge, so this changes nothing anyone can see. */
           .rws-list.is-stack .rws-card.is-under { visibility: hidden; }
