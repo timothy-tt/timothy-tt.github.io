@@ -818,13 +818,15 @@ void main() {
         }
 
         /* ── Phone portrait: one card, one screen ──
-           Each card is a full small-viewport screen: the scene takes what
+           Each card is a full large-viewport screen: the scene takes what
            the text band leaves (flex-basis 0, so a frame that
            content-visibility is skipping sizes exactly as a rendered one) and
-           the band sits on the card's own black. svh, not dvh: the address
-           bar coming and going must not relayout six screens mid-scroll; on a
-           large viewport the next card's edge shows in the extra strip,
-           which is the cue that there is more. Reduced motion stops here:
+           the band sits on the card's own black. lvh, not svh (Tim, on an
+           iPhone: with Safari's toolbar collapsed an svh card stopped short
+           and the next card's edge showed under it) and not dvh (the toolbar
+           coming and going must not relayout six screens mid-scroll). The
+           band's foot carries the lvh-svh difference as extra black, so with
+           the toolbar out the CTA still clears it. Reduced motion stops here:
            full-screen cards in plain flow. */
         @media (max-width: 767px) {
           .rws-list { gap: 0; padding-bottom: 0; }
@@ -834,13 +836,14 @@ void main() {
             display: flex;
             flex-direction: column;
             height: 100vh;
-            height: 100svh;
+            height: 100lvh;
             background: #050505;
           }
           .rws-card-frame { flex: 1 1 0; height: auto; min-height: 0; }
           .rws-card-text {
             flex: none;
             padding-bottom: calc(1.6rem + env(safe-area-inset-bottom, 0px));
+            padding-bottom: calc(1.6rem + env(safe-area-inset-bottom, 0px) + 100lvh - 100svh);
           }
         }
         /* ── The stack ──
