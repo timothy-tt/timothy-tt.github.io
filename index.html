@@ -456,7 +456,7 @@ Start a Project
         var n = e.animationName;
         if (n === 'zg-hero-p-rise' || n === 'zg-hw-rise') e.target.classList.add('zg-in');
       }, true);
-    </script><!-- Recent Work: pinned single-stage showcase --><astro-island uid="Z2cs5uI" prefix="r11" component-url="/_astro/RecentWorkStage.D09N5YrI.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;RecentWorkStage&quot;,&quot;value&quot;:true}" await-children><section id="work" class="rws rws-mode-stage" style="background:#050505;--rws-n:6"><style>
+    </script><!-- Recent Work: pinned single-stage showcase --><astro-island uid="Z1ASqtb" prefix="r11" component-url="/_astro/RecentWorkStage.BOhyXh0T.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;RecentWorkStage&quot;,&quot;value&quot;:true}" await-children><section id="work" class="rws rws-mode-stage" style="background:#050505;--rws-n:6"><style>
         .rws-list { display: none; }
         @media (max-width: 767px), (max-height: 599px) {
           .rws-runway { display: none; }
@@ -1204,12 +1204,9 @@ Start a Project
             overflow: visible;
             pointer-events: none;
           }
-          .rws-list.is-stack .rws-list-head .rws-eyebrow {
-            opacity: 0;
-            translate: 0 -6px;
-            transition: opacity .45s cubic-bezier(.22, 1, .36, 1), translate .45s cubic-bezier(.22, 1, .36, 1), color .25s ease, text-shadow .25s ease;
-          }
-          .rws-list.is-stack .rws-list-head.is-on .rws-eyebrow { opacity: 1; translate: 0 0; }
+          /* No fade: it is simply there from STACK_HEAD_AT on. */
+          .rws-list.is-stack .rws-list-head .rws-eyebrow { visibility: hidden; }
+          .rws-list.is-stack .rws-list-head.is-on .rws-eyebrow { visibility: visible; }
           .rws-list-head .rws-eyebrow {
             margin-bottom: 0;
             font-weight: 700;
@@ -1287,6 +1284,45 @@ Start a Project
            The scenes' own layers move on --rws-lc through both. */
         @media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
           .rws-card { position: sticky; top: 0; }
+          /* ── The card is a window onto its text ──
+             While a card rises, its text holds at the foot of the SCREEN and
+             the card's top edge uncovers it from the bottom up: the picture
+             and the CTA first, then the line, then the category, the
+             wordmark and the number (Tim: "Reveal Garcia images - Reveal
+             View Case Study -> ... scroll a bit more - reveal Jerry Garcia,
+             officially licensed ... No in-transition. It's just there").
+             The card's top is (1 - a) of its own height below the screen's
+             top, so the text is lifted by exactly that; the card's
+             overflow:hidden is the mask. Once the card is pinned the lift is
+             0 and nothing moves.
+
+             The lift is a scroll-driven view timeline on the card, so the
+             compositor runs it in step with the thumb: entry 0% is the
+             card's top at the fold (lift one card height), entry 100% its
+             foot at the fold (lift 0). The timeline is NAMED on the card
+             because the card's overflow:hidden makes it the text's nearest
+             scroller, where an anonymous view() would never move. Where
+             scroll timelines are missing (Firefox), the same lift comes off
+             runStack's --rws-a, a frame behind the scroll. */
+          .rws-list.is-stack .rws-card-over,
+          .rws-list.is-stack .rws-card-text {
+            translate: 0 calc((var(--rws-a, 1) - 1) * 100lvh);
+          }
+          @supports (animation-timeline: view()) {
+            .rws-list.is-stack .rws-card { view-timeline: --rws-card block; }
+            .rws-list.is-stack .rws-card-over,
+            .rws-list.is-stack .rws-card-text {
+              translate: none;
+              animation: rws-card-window linear both;
+              animation-timeline: --rws-card;
+              animation-range: entry 0% entry 100%;
+            }
+          }
+          @keyframes rws-card-window {
+            /* One card height: the card is 100lvh (100vh where lvh is not). */
+            from { transform: translateY(-100vh); transform: translateY(-100lvh); }
+            to { transform: none; }
+          }
           .rws-list.is-stack .rws-card::after {
             content: '';
             position: absolute;
