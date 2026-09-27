@@ -74,7 +74,7 @@ import{j as t}from"./jsx-runtime.D_zvdyIk.js";import{r as o}from"./index.DiEladB
         .tm-intro {
           font-size: 14px;
           line-height: 1.75;
-          color: rgba(255, 255, 255, 0.4);
+          color: rgba(255, 255, 255, 0.48);
           max-width: 380px;
         }
 
@@ -322,11 +322,11 @@ import{j as t}from"./jsx-runtime.D_zvdyIk.js";import{r as o}from"./index.DiEladB
           font-weight: 800;
           font-size: 0.9rem;
           letter-spacing: 0.1em;
-          color: rgba(255, 255, 255, 0.35);
+          color: rgba(255, 255, 255, 0.46);
           display: flex;
           gap: 0.35rem;
         }
-        .tm-count-sep { color: rgba(255, 255, 255, 0.2); }
+        .tm-count-sep { color: rgba(255, 255, 255, 0.35); }
         .tm-progress-track {
           flex: 1 1 auto;
           height: 3px;
