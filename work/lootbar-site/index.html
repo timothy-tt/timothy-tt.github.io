@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="A design case study for Lost Lake: a game-inspired identity, flavor lettering, launched packaging and spatial concept extensions."><!-- Tab icons: the wordmark's own `z`, on the page's near-black so it
+         still reads in a light tab strip. Cut by scripts/build-favicons.mjs,
+         re-run it if Wordmark_White.png is ever replaced. The .ico is listed
+         too, because that is the file a crawler asks for by name. --><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><!-- Fonts are self-hosted (public/fonts + styles/fonts.css): Google's own
+         woff2 files, unchanged, with the same @font-face rules and
+         unicode-ranges. Rendering is identical — which matters because
+         DreamsScript's Caveat glyph centre-lines are screenshot-tuned.
+
+         They used to come from fonts.googleapis.com with display=swap, and
+         that is what made a case-study page jump. The chain was two sequential
+         cross-origin round trips (HTML → CSS on googleapis → woff2 on
+         gstatic), so the text painted in the fallback and reflowed when
+         Montserrat finally landed: measured on /work/avitas, the heading rose
+         18px in two steps starting 49ms after document.fonts.ready, ~0.65s in.
+         Same-origin and preloaded, the file is there for the first paint, so
+         there is no second pass to shift.
+
+         Only the latin subsets are preloaded — the others are real
+         @font-face entries with their unicode-ranges intact, so they still
+         fetch on demand for anything outside latin. --><style>html{background:#060706}</style> <link rel="preload" as="image" href="/lootbar-site/product-line/opening-banner.webp" fetchpriority="high"> <link rel="preload" as="font" type="font/woff2" href="/fonts/lootbar/ubuntu-400.woff2" crossorigin> <link rel="preload" as="font" type="font/woff2" href="/fonts/lootbar/broken-console.woff2" crossorigin> <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYQ.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/XLYgIZbkc4JPUL5CVArUVL0ntnAOSA.woff2"><title>Loot Bar — Brand Identity &amp; Visual Worlds | Zegoe</title><!-- Cross-document transition, arrival half. A React case study fades
+         itself out and leaves this flag before navigating; whichever document
+         loads next fades in to meet it, so leaving and arriving read as one
+         move instead of a cut. Runs in <head>, before first paint, or the page
+         would flash at full opacity first. On an ordinary page nothing happens
+         without the flag, so a cold load or a bookmark is untouched. The pages
+         that opt into the jump get the browser's own cross-document view
+         transition instead, in the second block below. --><style>
+      @keyframes zg-arrive { from { opacity: 0; } to { opacity: 1; } }
+      /* will-change lifts the fade onto the compositor. Without it the
+         animation runs on the main thread, and hydrating the case-study
+         island lands right in its window: the clock keeps counting while no
+         frames render, so the page jumps forward mid-fade when the thread
+         frees up. That skip is the "jerk" on a case-study switch. The exit
+         half already primes the same way (warm() in CaseStudyContent);
+         opacity only, never transform: body has position:fixed descendants
+         (.cs-nav) and a transform hint would become their containing block.
+         Transient by construction: the class is stripped after load. */
+      /* No will-change. body is the whole document -- 7953px tall on AVITAS,
+         over fifteen megapixels of layer -- and Firefox's budget for a page
+         is 2,073,600. Asking for this put the arriving page so far over that
+         every hint in the document was ignored. The animation below gets its
+         own compositor layer when it starts; the hint only asked a few
+         milliseconds earlier and cost the whole budget to do it. */
+      html.zg-arriving body { animation: zg-arrive 0.45s ease-out both; }
+      /* The incoming page slides in from the side it was travelling from, so
+         it can sit outside the viewport for a frame and something has to clip
+         it. NOT the <html> element: body already carries overflow-x:hidden,
+         and that only reaches the viewport because html's overflow is
+         `visible`: the moment html is anything else the propagation stops,
+         body becomes a scroll container in its own right, and every
+         position:sticky pin inside it (the pager bar, the page-art layer)
+         loses its scrollport and drops to the foot of the document. The
+         clip now lives on .cs-page, which wraps the sliding <main> and is
+         not itself scrollable, so sticky still resolves against the
+         viewport. See CaseStudyContent's slide rules. */
+
+      /* The body fade is for the pages that are NOT in the jump: the React
+         case studies, which meet an exit fade of their own. Where the browser
+         is running a view transition the root snapshot already carries the
+         cross-fade, and a second opacity animation inside the new snapshot
+         would compound it into a slow, muddy fade; where the page settles in
+         under the directional fallback, the settle is the entrance. Both of
+         those switch it off here. */
+      html.zg-vt.zg-arriving body,
+      html[data-arrival='cinematic'].zg-arriving body { animation: none; }
+
+      @media (prefers-reduced-motion: reduce) {
+        html.zg-arriving body { animation: none; }
+      }
+    </style><script>
+      /* The arrival half, and the direction hand-off. Runs in <head>, before
+         first paint, because on a page that is not in the jump the classes
+         below drive a fade that has to own the very first frame.
+
+         Named and then called, rather than run inline. It is one-shot work
+         keyed on a navigation, and under a same-document router there is no
+         second parse to trigger it -- a lifecycle event has to. Calling it
+         immediately is what keeps today's timing exactly as it was. */
+      window.__zgArrival = function (sameDoc) {
+      try {
+        var root = document.documentElement;
+        var cinematic = root.getAttribute('data-arrival') === 'cinematic';
+        var opted = cinematic || root.hasAttribute('data-jump');
+        // One-shot: the page you left wrote it immediately before navigating,
+        // and it is consumed here. Left in place it would steer the arrival
+        // after next as well, in the direction of a hop two pages back.
+        var nav = sessionStorage.getItem('zg-nav');
+        if (nav) sessionStorage.removeItem('zg-nav');
+        /* `sameDoc` is the router calling this after a swap. The inference
+           below asks the NAVIGATION what kind of arrival this is, and after a
+           swap the only navigation entry is the one that loaded the document
+           we are still in -- it would answer for a page the reader opened
+           minutes ago. Under the router an explicit flag is the only thing
+           that counts. */
+        if (!nav && cinematic && !sameDoc) {
+          // No flag: a cold load, a bookmark, a link from outside. The four
+          // case studies still play their settle, because it is the page's
+          // opening shot and not only a stitch between two documents. Not on
+          // a reload and not on back/forward, where the reader already knows
+          // the page and an entrance reads as a stall.
+          var e0 = performance.getEntriesByType('navigation')[0];
+          if (e0 && e0.type === 'navigate') nav = '1';
+        }
+        /* Published for the two scripts that run later in this document: the
+           strip below, and the "the page is parsed" marker at the foot of the
+           four case studies (CaseStudyTransition). Neither can read the flag
+           itself, because it has already been consumed here, and on the view
+           transition path neither can read the arrival classes either, since
+           those do not land until pagereveal fires. */
+        window.__zgArrive = nav || null;
+
+        /* The Strane match cut's half of the arrival. The flag carries a
+           value the next/prev branches do not match, so everything below
+           treats it as a plain move and the root pair gets the dissolve --
+           which is what this wants, because the collage is held by a
+           view-transition-name and a push under it would slide the one thing
+           that is meant to stay still. The class goes on before first paint
+           so the name is in place when pagereveal takes the new snapshot. */
+        if (nav === 'match:strane') {
+          root.classList.add('zg-match-strane');
+          /* The handover already played on the home page: the bars came in,
+             the headline rose, and the frame this document is about to paint
+             is the frame that one ended on. So the entrance is CONSUMED --
+             nav is cleared and the arrival classes are never added, and both
+             paths (Chrome's dissolve, Firefox's held frame) land on a page
+             that is already settled rather than one that replays the move
+             the reader just watched. */
+          nav = null;
+        }
+
+        /* The fallback entrance: the arrival classes, as they have always
+           been. Used where there is no cross-document view transition to ride
+           — an older browser, or a hop in from a page that does not opt in
+           (a React case study, a -site microsite, an external link). */
+        var settle = function () {
+          if (!nav) return;
+          root.classList.add('zg-arriving');
+          // "next"/"prev" carry the direction of travel; "1" is a plain move.
+          if (nav === 'next' || nav === 'prev') root.classList.add('zg-arriving-' + nav);
+        };
+
+        /* Leaving. This document declares @view-transition, so the browser
+           starts one on every navigation out of it -- and SKIPS it whenever
+           the destination does not opt in, which is most of them. The
+           transition's promises reject when that happens, and with nothing
+           holding them the rejection surfaced as an uncaught AbortError.
+           Claimed here and nowhere else, because this is the only place the
+           object exists on the way out. */
+        var claimVT = function (ev) {
+          if (!ev || !ev.viewTransition) return;
+          try {
+            ev.viewTransition.finished.catch(function () {});
+            ev.viewTransition.ready.catch(function () {});
+            ev.viewTransition.updateCallbackDone.catch(function () {});
+          } catch (err) { /* older transition object */ }
+        };
+        /* On EVERY page, opted in or not. A document that declares
+           @view-transition starts one on the way out and the browser skips
+           it whenever the destination does not declare it too -- which is
+           most of them -- and the skip rejects the transition's promises on
+           BOTH sides. The page that does not opt in is exactly the page with
+           no handler of its own, so the rejection surfaced there as an
+           uncaught AbortError. */
+        if ('onpageswap' in window) window.addEventListener('pageswap', claimVT);
+        if ('onpagereveal' in window) window.addEventListener('pagereveal', claimVT);
+
+        /* And the one the handlers above cannot reach. When the destination
+           does not declare @view-transition the browser skips the transition
+           without ever handing either document the object, so there is
+           nothing to attach a catch to -- the rejection simply surfaces. This
+           swallows that one rejection and nothing else: the two error names a
+           skipped or aborted transition throws, and only when the message
+           says so. Every other unhandled rejection still reaches the
+           console. */
+        window.addEventListener('unhandledrejection', function (ev) {
+          var r = ev && ev.reason;
+          if (!r) return;
+          var named = r.name === 'AbortError' || r.name === 'InvalidStateError';
+          if (named && /transition/i.test(String(r.message || ''))) ev.preventDefault();
+        });
+
+        if (opted && 'onpagereveal' in window) {
+          /* pagereveal is the new document's first word, fired before its
+             first rendering opportunity, and it is the only place the
+             transition object exists on this side. Two things happen here and
+             nowhere else:
+
+               · the direction becomes a view-transition TYPE, which is what
+                 the :active-view-transition-type() rules above are keyed on.
+                 Set here rather than only in pageswap because the pseudo-
+                 elements resolve against THIS document's style.
+               · zg-arriving goes on now, not at parse time, so the settle
+                 underneath starts inside the live new snapshot and runs with
+                 the cut rather than ahead of it.
+
+             e.viewTransition is null when the navigation did not produce one:
+             a cold load, a bookmark, or a hop in from a document that does not
+             opt into the jump. That is the fallback's case. */
+          window.addEventListener('pagereveal', function (e) {
+            if (!e.viewTransition) { settle(); return; }
+            /* A transition can be skipped or aborted -- another navigation
+               lands on top of it, the page goes away mid-flight -- and its
+               promises reject. Nothing awaits them here, so an unhandled
+               AbortError or InvalidStateError went to the console on every
+               such navigation. Claimed, and ignored. */
+            try {
+              e.viewTransition.finished.catch(function () {});
+              e.viewTransition.ready.catch(function () {});
+              e.viewTransition.updateCallbackDone.catch(function () {});
+            } catch (err) { /* older transition object */ }
+            if (nav === 'next' || nav === 'prev') {
+              try { e.viewTransition.types.add(nav); } catch (err) { /* older types API */ }
+            }
+            /* zg-arriving is the entrance. The Strane handover already played
+               it on the page we came from, and `nav` was cleared above to say
+               so, which is why this is guarded: adding it here would replay
+               the bars and the headline rise the reader just watched. zg-vt
+               still goes on, because the fallback offsets it cancels have to
+               be cancelled either way. */
+            root.classList.add('zg-vt');
+            if (nav) root.classList.add('zg-arriving');
+          }, { once: true });
+        } else {
+          settle();
+        }
+      } catch (e) { /* storage blocked; no transition, no harm */ }
+      };
+      window.__zgArrival();
+    </script><script>
+      /* Retire the arrival classes once the animation is over. They are a
+         trigger, not a state: left on, they keep the arriving-page rules
+         (and anything scoped to them) alive for the whole visit, which is
+         how a one-frame transition detail turns into a permanent bug.
+
+         Named for the same reason as the block above: it is the other half
+         of one navigation's work, and the two have to be triggerable
+         together. */
+      window.__zgArrivalRetire = function () {
+        var root = document.documentElement;
+        var opted = root.getAttribute('data-arrival') === 'cinematic' || root.hasAttribute('data-jump');
+        var done = function () {
+          root.classList.remove(
+            'zg-vt', 'zg-arriving', 'zg-arriving-next', 'zg-arriving-prev', 'zg-ready', 'zg-ready-deep',
+          );
+        };
+        if (!opted) {
+          if (!root.classList.contains('zg-arriving')) return;
+          window.addEventListener('load', function () { window.setTimeout(done, 700); });
+          window.setTimeout(done, 2500); // load never fired (bfcache, blocked asset)
+          return;
+        }
+        // No arrival pending on this document (a reload, back/forward, a
+        // bookmark): there is nothing to watch for and nothing to retire.
+        if (!window.__zgArrive) return;
+        /* A page in the jump cannot strip on load+700ms. With the assets warm
+           that fires while the settle is still running, and the page snaps the
+           rest of its move to identity in one frame. The settle's own clock is
+           what to measure from, and it starts when BOTH halves are in place:
+           zg-ready (the document is parsed, marked at the foot of the page by
+           CaseStudyTransition) and zg-arriving (the entrance is on, which on
+           the view-transition path does not happen until pagereveal). Either
+           can land first, so wait for the pair.
+
+           1000ms after that, which is the whole of the entrance now. The
+           settle is a 900ms scale, the fallback's swipe-in is 550ms, and the
+           two bars that used to be dealt in on their own 650 + 600 are gone
+           (a swipe moves the page with its furniture attached). 1000 clears
+           the longest of them and is short enough that nothing is still
+           sitting on a composited layer by the time the reader has started
+           scrolling. */
+        var arm = function () {
+          arm = function () {};
+          window.setTimeout(done, 1000);
+        };
+        var watch = new MutationObserver(function () {
+          var c = root.classList;
+          if (c.contains('zg-ready') && c.contains('zg-arriving')) { watch.disconnect(); arm(); }
+        });
+        watch.observe(root, { attributes: true, attributeFilter: ['class'] });
+        /* Belt and braces: nothing may outlive the entrance, so a page whose
+           own script never ran, or which was never marked ready at all, is
+           still cleared. From load rather than from parse, because that is the
+           last moment with a fixed relationship to anything. */
+        window.addEventListener('load', function () { window.setTimeout(done, 4000); });
+        document.addEventListener('DOMContentLoaded', function () {
+          if (window.__zgArrive) root.classList.add('zg-ready');
+        });
+      };
+      window.__zgArrivalRetire();
+    </script><link rel="stylesheet" href="/_astro/lootbar-site.BUrN22tB.css">
+<link rel="stylesheet" href="/_astro/index.DTqmGw9P.css"></head> <body> <div id="page-content">   <div class="lb-page"> <a class="skip" href="#story">Skip to case study</a> <header class="topbar">  <a class="brand-link" href="/#work" aria-label="Loot Bar. Zegoe: back to all work"> <img src="/lootbar-site/wordmark.webp" width="1530" height="295" alt="Loot Bar"> </a> <nav aria-label="Case study chapters"> <a href="#story">Story</a> <a href="#direction">Direction</a> <a href="#product-line">Product Line</a> <a href="#extensions">Extensions</a> </nav> <button id="effects-toggle" type="button" aria-pressed="true">FX <span>ON</span></button> </header> <main id="top"> <section class="hero banner-hero" aria-labelledby="hero-title">  <div class="hero-meta mono"><span class="zg-line" style="--zg-l:0"><span class="zg-line-in">LOST LAKE / C.2023</span></span><span class="zg-line" style="--zg-l:1"><span class="zg-line-in">BRAND IDENTITY + PACKAGING</span></span></div> <h1 id="hero-title" class="sr-only">Loot Bar: flavor, rendered as a game world</h1> <figure class="hero-banner crt"><img src="/lootbar-site/product-line/opening-banner.webp" width="1920" height="1080" alt="Loot Bar artwork with Peachy Ringz, Marionberry Pie and Yuzu Sherbet packaging, the device, floating fruit and neon architecture" fetchpriority="high" decoding="async"><div class="hud-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div></figure> <div class="hero-bottom"><strong class="pixel glitch" data-text="FLAVOR, RENDERED."><span class="zg-line" style="--zg-l:2"><span class="zg-line-in">FLAVOR, RENDERED.</span></span></strong><a class="mono" href="#story">LOAD THE CASE STUDY <span aria-hidden="true">↓</span></a></div> </section> <div class="signal-strip mono" aria-hidden="true"><span>RGB LIGHT</span><span>PIXEL DETAIL</span><span>GAME-TITLE LETTERING</span><span>LOOT BAR</span></div> <section class="wrap section matrix-surface" id="story"> <div class="section-index mono"><span>01 / THE BRIEF</span><span>ORIGINAL PROJECT</span></div> <div class="split intro"><h2>Small device.<br><em>Big lore.</em></h2><div class="copy"><p class="lead">That split second before the loot chest opens? That was our starting point.</p><p>Lost Lake’s brief brought together accessible pricing in Oregon and adult gaming culture. We built the visual world around that combo: a compact wordmark, RGB color and a different cast of lettering for every flavor.</p><p>Our loadout: identity, art direction, packaging artwork, device graphics and mockups.</p></div></div> <dl class="facts"><div><dt>CLIENT</dt><dd>Lost Lake</dd></div><div><dt>YEAR</dt><dd>Circa 2023</dd></div><div><dt>ROLE</dt><dd>Identity + art direction</dd></div><div><dt>ORIGINAL WORK</dt><dd>Launched in Oregon</dd></div></dl> </section> <section class="strategy section matrix-surface" id="strategy"><div class="wrap"> <div class="section-index mono"><span>02 / BRAND STRATEGY</span><span>THE BUILD BEHIND THE GLOW</span></div> <div class="section-heading"><h2>Behind<br><span class="neon-text">the glow.</span></h2><p>Every good game world has its own logic. Ours starts with a recognizable core, then gives the artwork room to go a little extra.</p></div> <div class="strategy-rows"> <article><span class="row-no mono">01</span><h3>Positioning</h3><div><strong>The brief: accessible price. Big visual presence.</strong><p>Lost Lake placed Loot Bar in Oregon’s competitive middle and lower price range. We answered with a compact identity and expressive artwork built around gaming references.</p></div></article> <article><span class="row-no mono">02</span><h3>Central idea</h3><div><strong>The chest-opening moment.</strong><p>The glowing chest is our recurring scene. Light spills out, details stack up, and each flavor gets its own reveal. That little moment of “wait, what’s in there?” drives the artwork.</p></div></article> <article><span class="row-no mono">03</span><h3>Recognition</h3><div><strong>Same character. Different skins.</strong><p>The wordmark and chest stay in the party. Color, lettering and imagery switch skins from one flavor to the next, keeping the family recognizable while every pack gets its own personality.</p></div></article> <article><span class="row-no mono">04</span><h3>Cultural reference</h3><div><strong>Straight from the setup.</strong><p>The original brief centered on adult men, 21+, with gaming interests. We pulled from that visual vocabulary: RGB peripherals, pixel interfaces and the oversized lettering of game title screens.</p></div></article> </div> </div></section> <section class="reveal-section crt"><img src="/lootbar-site/mango.webp" alt="Detail of the original glowing chest in Mango Mana packaging" loading="lazy" decoding="async"><div class="reveal-copy wrap"><span class="mono eyebrow">THE BRAND STORY</span><h2 class="glitch" data-text="LORE,
+UNLOCKED.">LORE,<br>UNLOCKED.</h2><p>We started with the chest-opening moment and built the scene around it. The chest gives the artwork a story; the light makes the reveal. From there, every flavor gets a different setting, color palette and title treatment. Same universe. Plenty of side quests.</p></div></section> <section class="wrap section identity matrix-surface" id="identity"> <div class="section-index mono"><span>03 / IDENTITY</span><span>FORM STUDY</span></div> <div class="form-study" id="form-study"> <div class="form-study-heading"><div><h2>Hardware.<br>Meet <span class="cyan">wordmark.</span></h2></div><p>The plot twist: the “b” was hiding in the hardware. We stripped the device back to its silhouette, turned its raised shoulder into the letter’s curve, and used the window as the opening. Then the “b” joined the rest of the wordmark.</p></div> <div class="form-player" data-stage="0"> <div class="form-stage-top mono"><span>FORM EVOLUTION</span><span id="form-state">01 / BLUEPRINT</span></div> <svg id="form-canvas" viewBox="0 0 1200 620" role="img" aria-labelledby="form-title form-description"><title id="form-title">From the device blueprint to the Loot Bar logo</title><desc id="form-description">The technical details fade to a simple device silhouette. The silhouette and window reshape into the original b icon, which moves into the complete Loot Bar wordmark.</desc> <defs> <pattern id="form-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#4bdfff" stroke-opacity=".10" stroke-width="1"></path></pattern> <radialGradient id="form-halo"><stop stop-color="#006f93" stop-opacity=".20"></stop><stop offset="1" stop-color="#060b10" stop-opacity="0"></stop></radialGradient> <clipPath id="form-reveal"><rect id="form-reveal-rect" x="0" y="0" width="1200" height="620"></rect></clipPath> </defs> <rect width="1200" height="620" fill="#060b10"></rect><rect width="1200" height="620" fill="url(#form-grid)"></rect><ellipse cx="600" cy="310" rx="460" ry="320" fill="url(#form-halo)"></ellipse> <g id="form-guides" fill="none" stroke="#4bdfff" stroke-width="1" stroke-opacity=".3"><path d="M600 26V594 M340 310H860" stroke-dasharray="4 9"></path><path d="M443 55H424V558H443 M757 55H776V558H757 M414 64H434 M414 552H434 M766 64H786 M766 552H786"></path></g> <g id="form-blueprint" clip-path="url(#form-reveal)"></g> <path id="form-morph" fill="#eaf8ff" fill-rule="evenodd" stroke="#4bdfff" stroke-width="1.6" stroke-linejoin="round"></path> <g id="form-wordmark"></g> <g aria-hidden="true" fill="none" stroke="#4bdfff" stroke-width="1.5" opacity=".65"><path d="M25 48V25H48 M1152 25H1175V48 M25 572V595H48 M1152 595H1175V572"></path></g> </svg> <div class="form-controls"><div class="form-steps" role="group" aria-label="View a stage of the form study"><button type="button" data-form-time="1.6" aria-pressed="true"><span>01</span>Blueprint</button><button type="button" data-form-time="4.15" aria-pressed="false"><span>02</span>Silhouette</button><button type="button" data-form-time="7.2" aria-pressed="false"><span>03</span>“b” icon</button><button type="button" data-form-time="12" aria-pressed="false"><span>04</span>Wordmark</button></div><button id="form-play" type="button" aria-label="Play the form study animation"><span aria-hidden="true">↻</span> Replay</button></div> <div class="form-progress" aria-hidden="true"><span id="form-progress-fill"></span></div> </div> <p class="form-caption">Blueprint → silhouette → “b” → wordmark. Original vectors, with a new animation connecting the dots.</p> <noscript><p>Blueprint → device silhouette → “b” icon → Loot Bar wordmark.</p><img src="/lootbar-site/lootbar-logo.svg" alt="The complete Loot Bar wordmark" width="830" height="235"></noscript> </div> </section> <section class="direction section matrix-surface" id="direction"><div class="wrap"> <div class="section-index mono"><span>04 / VISUAL DIRECTION</span><span>MOODBOARD / EXTENDED DIRECTION</span></div> <div class="section-heading"><h2>Pixels after dark.</h2><p>We pulled from the setup: RGB peripherals, prismatic surfaces and a portrait with a little signal interference. Deep shadows set the stage. Color gets the main-character lighting.</p></div> <figure class="moodboard"> <div class="moodboard-grid"> <div class="mood-tile mood-portrait"><img src="/lootbar-site/moodboard/portrait-glitch.webp" width="1024" height="1536" alt="Blue and red portrait with digital glitch fragments across the face and a white Loot Bar logo on the sweater" loading="lazy" decoding="async"><span class="mood-label mono">01 / SIGNAL BREAK</span></div> <div class="mood-tile mood-crystal"><img src="/lootbar-site/moodboard/crystal.webp" width="1024" height="1024" alt="Faceted crystal reflecting cyan and magenta light against dark navy" loading="lazy" decoding="async"><span class="mood-label mono">02 / PRISMATIC LIGHT</span></div> <div class="mood-tile mood-iridescence"><img src="/lootbar-site/moodboard/iridescence.webp" width="1400" height="933" alt="Folded iridescent surface reflecting green, lilac, pink and gold" loading="lazy" decoding="async"><span class="mood-label mono">03 / CHROMATIC SHIFT</span></div> <div class="mood-tile mood-keyboard"><img src="/lootbar-site/moodboard/keyboard.webp" width="1600" height="1067" alt="Close-up of black keyboard keys glowing with cyan, blue and magenta RGB lighting" loading="lazy" decoding="async"><span class="mood-label mono">04 / RGB AFTER HOURS</span></div> </div> <figcaption><span class="mono">RGB LIGHT / GLITCH / FACETS / IRIDESCENCE</span></figcaption> </figure> <div class="direction-notes"><div><h3>Dark mode, always</h3><p>Black is the base layer. Neon edges and saturated color get the spotlight.</p></div><div><h3>Pixels with an afterglow</h3><p>Crisp squares meet soft light spill. A little screen nostalgia goes a long way.</p></div><div><h3>Texture settings: high</h3><p>Crystal facets, shifting reflections and matte fabric keep the world from feeling flat.</p></div></div> </div></section> <section class="wrap section flavors matrix-surface" id="product-line"> <span id="flavors" class="anchor-alias" aria-hidden="true"></span> <div class="section-index mono"><span>05 / PRODUCT LINE</span><span>THE ARTWORK ROSTER</span></div> <div class="section-heading flavor-heading"><h2>11 flavors.<br><span class="pink">One universe.</span></h2><div><p class="lead">Every artwork gets its own visual power.</p><p>Golden bloom. Chrome frost. Neon rush. We built each flavor name like a game title, with its “power” expressed through lettering, texture and color. The assignment: <strong>make flavor something you could taste visually.</strong></p></div></div> <div class="artwork-stage" id="artwork-stage" style="--artwork-accent:#ffd635"> <figure class="artwork-screen crt"><img id="roster-art" src="/lootbar-site/product-line/mango-mana.webp" width="1200" height="1200" alt="Mango Mana artwork with gold fantasy lettering, a glowing chest, fruit and the device in a yellow grid" loading="lazy" decoding="async"><span class="reveal-sweep" aria-hidden="true"></span></figure> <div class="artwork-info"><div class="artwork-meta mono"><span>ARTWORK FILE</span><span id="artwork-number">01 / 11</span></div><h3 id="artwork-name">Mango Mana</h3><div class="artwork-power"><span class="mono">VISUAL POWER</span><strong id="artwork-power">Golden Bloom</strong></div><p id="artwork-story">Fantasy-RPG energy. Curling gold letterforms and warm light give the mango artwork a lush, golden character.</p><dl class="artwork-traits"><div><dt>LETTERING</dt><dd id="artwork-type">Fantasy lettering</dd></div><div><dt>PALETTE</dt><dd id="artwork-palette" class="palette-dots"><span class="palette-dot" style="--swatch:#fbd011" role="img" aria-label="Mango gold: #fbd011" title="Mango gold · #fbd011"></span><span class="palette-dot" style="--swatch:#fcf08e" role="img" aria-label="Cream: #fcf08e" title="Cream · #fcf08e"></span><span class="palette-dot" style="--swatch:#97ad6c" role="img" aria-label="Sage: #97ad6c" title="Sage · #97ad6c"></span><span class="palette-dot" style="--swatch:#ef788d" role="img" aria-label="Guava pink: #ef788d" title="Guava pink · #ef788d"></span></dd></div></dl><p class="roster-instruction">Select an artwork below to reveal its design story.</p></div> </div> <p class="sr-only" id="roster-announcement" aria-live="polite" aria-atomic="true"></p> <div class="roster-label mono"><span>ARTWORK COLLECTION</span><span>11 / 11 ON DISPLAY</span></div> <div class="product-roster" role="group" aria-label="Explore the product-line artwork"> <button type="button" class="roster-card" data-artwork="0" aria-pressed="true" aria-controls="artwork-stage" style="--card-accent:#ffd635"><span class="roster-thumb crt"><img src="/lootbar-site/product-line/mango-mana-thumb.webp" width="320" height="320" alt="" loading="lazy" decoding="async"></span><span class="roster-card-label"><span class="mono">01 / Golden Bloom</span><strong>Mango Mana</strong></span></button> <button type="button" class="roster-card" data-artwork="1" aria-pressed="false" aria-controls="artwork-stage" style="--card-accent:#647dff"><span class="roster-thumb crt"><img src="/lootbar-site/product-line/bomb-blaster-thumb.webp" width="320" height="320" alt="" loading="lazy" decoding="async"></span><span class="roster-card-label"><span class="mono">02 / Chromatic Burst</span><strong>Bomb Blaster</strong></span></button> <button type="button" class="roster-card" data-artwork="2" aria-pressed="false" aria-controls="artwork-stage" style="--card-accent:#ed59f4"><span class="roster-thumb crt"><img src="/lootbar-site/product-line/marionberry-pie-thumb.webp" width="320" height="320" alt="" loading="lazy" decoding="async"></span><span class="roster-card-label"><span class="mono">03 / Gloss Field</span><strong>Marionberry Pie</strong></span></button> <button type="button" class="roster-card" data-artwork="3" aria-pressed="false" aria-controls="artwork-stage" style="--card-accent:#ffe34d"><span class="roster-thumb crt"><img src="/lootbar-site/product-line/yuzu-sherbet-thumb.webp" width="320" height="320" alt="" loading="lazy" decoding="async"></span><span class="roster-card-label"><span class="mono">04 / Citrus Flare</span><strong>Yuzu Sherbet</strong></span></button> <button type="button" class="roster-card" data-artwork="4" aria-pressed="false" aria-controls="artwork-stage" style="--card-accent:#65dfff"><span class="roster-thumb crt"><img src="/lootbar-site/product-line/blueberry-dream-thumb.webp" width="320" height="320" alt="" loading="lazy" decoding="async"></span><span class="roster-card-label"><span class="mono">05 / Chrome Frost</span><strong>Blueberry Dream</strong></span></button> <button type="button" class="roster-card" data-artwork="5" aria-pressed="false" aria-controls="artwork-stage" style="--card-accent:#ffb83e"><span class="roster-thumb crt"><img src="/lootbar-site/product-line/tigers-blood-thumb.webp" width="320" height="320" alt="" loading="lazy" decoding="async"></span><span class="roster-card-label"><span class="mono">06 / Tiger Flare</span><strong>Tigers Blood</strong></span></button> <button type="button" class="roster-card" data-artwork="6" aria-pressed="false" aria-controls="artwork-stage" style="--card-accent:#ff6559"><span class="roster-thumb crt"><img src="/lootbar-site/product-line/ruby-red-thumb.webp" width="320" height="320" alt="" loading="lazy" decoding="async"></span><span class="roster-card-label"><span class="mono">07 / Prism Strike</span><strong>Ruby Red</strong></span></button> <button type="button" class="roster-card" data-artwork="7" aria-pressed="false" aria-controls="artwork-stage" style="--card-accent:#b5f936"><span class="roster-thumb crt"><img src="/lootbar-site/product-line/lime-sorbet-thumb.webp" width="320" height="320" alt="" loading="lazy" decoding="async"></span><span class="roster-card-label"><span class="mono">08 / Frost Grid</span><strong>Lime Sorbet</strong></span></button> <button type="button" class="roster-card" data-artwork="8" aria-pressed="false" aria-controls="artwork-stage" style="--card-accent:#ff6b9c"><span class="roster-thumb crt"><img src="/lootbar-site/product-line/strawberry-lemonaid-thumb.webp" width="320" height="320" alt="" loading="lazy" decoding="async"></span><span class="roster-card-label"><span class="mono">09 / Neon Rush</span><strong>Strawberry Lemonaid</strong></span></button> <button type="button" class="roster-card" data-artwork="9" aria-pressed="false" aria-controls="artwork-stage" style="--card-accent:#ffab73"><span class="roster-thumb crt"><img src="/lootbar-site/product-line/peachy-ringz-thumb.webp" width="320" height="320" alt="" loading="lazy" decoding="async"></span><span class="roster-card-label"><span class="mono">10 / Arcade Pulse</span><strong>Peachy Ringz</strong></span></button> <button type="button" class="roster-card" data-artwork="10" aria-pressed="false" aria-controls="artwork-stage" style="--card-accent:#75dfff"><span class="roster-thumb crt"><img src="/lootbar-site/product-line/hawaiian-shave-ice-thumb.webp" width="320" height="320" alt="" loading="lazy" decoding="async"></span><span class="roster-card-label"><span class="mono">11 / Prism Wave</span><strong>Hawaiian Shaved Ice</strong></span></button> </div> <p class="lettering-note"><strong>Different visual powers.<br>One shared universe.</strong></p>  <script type="application/json" id="artwork-data">[{"name":"Mango Mana","slug":"mango-mana","power":"Golden Bloom","type":"Fantasy lettering","palette":"Gold / amber","accent":"#ffd635","story":"Fantasy-RPG energy. Curling gold letterforms and warm light give the mango artwork a lush, golden character.","colors":[{"hex":"#fbd011","name":"Mango gold"},{"hex":"#fcf08e","name":"Cream"},{"hex":"#97ad6c","name":"Sage"},{"hex":"#ef788d","name":"Guava pink"}]},{"name":"Bomb Blaster","slug":"bomb-blaster","power":"Chromatic Burst","type":"Arcade volume","palette":"Cobalt / red","accent":"#647dff","story":"Big arcade-title energy. Rounded blue letters stack above a red punchline, with white bevels making both jump out of the dark grid.","colors":[{"hex":"#0b1472","name":"Cobalt"},{"hex":"#12aef6","name":"Electric blue"},{"hex":"#fe2814","name":"Scarlet"},{"hex":"#d9f334","name":"Citrus"}]},{"name":"Marionberry Pie","slug":"marionberry-pie","power":"Gloss Field","type":"Rounded volume","palette":"Violet / magenta","accent":"#ed59f4","story":"Soft, glossy, a little extra. Rounded purple letters give the berry artwork its rich, pillowy feel.","colors":[{"hex":"#71066f","name":"Deep berry"},{"hex":"#cb0eb0","name":"Magenta"},{"hex":"#916db1","name":"Lilac"},{"hex":"#feef8e","name":"Pastry cream"}]},{"name":"Yuzu Sherbet","slug":"yuzu-sherbet","power":"Citrus Flare","type":"Neon + script","palette":"Yellow / pink","accent":"#ffe34d","story":"A two-part combo: sharp uppercase letters over soft, flowing script. Yellow light ties the two treatments together.","colors":[{"hex":"#f5eb52","name":"Yuzu yellow"},{"hex":"#6f7205","name":"Olive"},{"hex":"#902a4c","name":"Berry pink"},{"hex":"#fef3c3","name":"Sherbet cream"}]},{"name":"Blueberry Dream","slug":"blueberry-dream","power":"Chrome Frost","type":"Icy bevels","palette":"Cyan / blue","accent":"#65dfff","story":"Chrome meets an ice level. Hard blue bevels and frosted edges give the lettering a cool, reflective finish.","colors":[{"hex":"#0b3373","name":"Midnight blue"},{"hex":"#508fca","name":"Blueberry"},{"hex":"#07f2fc","name":"Electric cyan"},{"hex":"#a8d7ec","name":"Ice"}]},{"name":"Tigers Blood","slug":"tigers-blood","power":"Tiger Flare","type":"Stripes + texture","palette":"Amber / black","accent":"#ffb83e","story":"The title comes in claws first. Tiger stripes, rough edges and amber light give this artwork a deliberately wild texture.","colors":[{"hex":"#8f3207","name":"Burnt amber"},{"hex":"#f06c28","name":"Tiger orange"},{"hex":"#f3d505","name":"Gold"},{"hex":"#92ac04","name":"Chartreuse"}]},{"name":"Ruby Red","slug":"ruby-red","power":"Prism Strike","type":"Faceted lettering","palette":"Ruby / orange","accent":"#ff6559","story":"Big gem-cut letters take center stage. Angular red faces catch the light like pieces of the ruby imagery around them.","colors":[{"hex":"#730c05","name":"Deep ruby"},{"hex":"#ee0b09","name":"Scarlet"},{"hex":"#ec8c94","name":"Rose"},{"hex":"#fce509","name":"Citrus yellow"}]},{"name":"Lime Sorbet","slug":"lime-sorbet","power":"Frost Grid","type":"Frosted lettering","palette":"Lime / white","accent":"#b5f936","story":"Acid green meets the ice level. Frosted uppercase letters and a softer script pair sharp edges with a smooth curve.","colors":[{"hex":"#2e9002","name":"Lime green"},{"hex":"#b1f70c","name":"Acid yellow"},{"hex":"#53e159","name":"Mint green"},{"hex":"#d6e7aa","name":"Frost"}]},{"name":"Strawberry Lemonaid","slug":"strawberry-lemonaid","power":"Neon Rush","type":"Speed lettering","palette":"Red / yellow","accent":"#ff6b9c","story":"Racing-title energy. Slanted letters, sharp edges and red-yellow highlights make the artwork feel bright and in motion.","colors":[{"hex":"#720517","name":"Burgundy"},{"hex":"#f66c8f","name":"Strawberry pink"},{"hex":"#fdd314","name":"Lemon"},{"hex":"#f5144c","name":"Hot pink"},{"hex":"#fdf2b0","name":"Cream"}]},{"name":"Peachy Ringz","slug":"peachy-ringz","power":"Arcade Pulse","type":"Arcade bevels","palette":"Peach / pink","accent":"#ffab73","story":"Peachy Ringz goes full arcade. Beveled letters and pink-orange color echo the round forms in the name.","colors":[{"hex":"#73060a","name":"Deep red"},{"hex":"#fc708d","name":"Peach pink"},{"hex":"#fdb632","name":"Golden peach"},{"hex":"#fee790","name":"Vanilla"}]},{"name":"Hawaiian Shaved Ice","slug":"hawaiian-shave-ice","power":"Prism Wave","type":"Layered script","palette":"Cyan / gold","accent":"#75dfff","story":"A whole color party. Warm golden script sits over icy blue block lettering, echoing the rainbow imagery in the chest.","colors":[{"hex":"#f8d24e","name":"Golden yellow"},{"hex":"#0d3372","name":"Ocean blue"},{"hex":"#aad3ed","name":"Ice blue"},{"hex":"#5091cc","name":"Sky blue"},{"hex":"#901107","name":"Hibiscus red"}]}]</script> </section> <section class="packaging section matrix-surface" id="packaging"><div class="wrap"><div class="section-index mono"><span>06 / LAUNCHED PACKAGING</span><span>ORIGINAL PROJECT</span></div><div class="section-heading"><h2>Same party.<br>New skins.</h2><p>The wordmark, chest and dark background are the shared loadout. Each flavor brings a different title and palette. Line the packs up and the family resemblance is still there.</p></div></div> <div class="package-row"> <img src="/lootbar-site/pack-mango-dark.webp" alt="Launched Mango Mana one-gram packaging and device" loading="lazy" decoding="async"><img src="/lootbar-site/pack-berry-dark.webp" alt="Launched Marionberry Pie one-gram packaging and device" loading="lazy" decoding="async"><img src="/lootbar-site/pack-peach-dark.webp" alt="Launched Peachy Ringz one-gram packaging and device" loading="lazy" decoding="async"><img src="/lootbar-site/pack-ruby-dark.webp" alt="Launched Ruby Red one-gram packaging and device" loading="lazy" decoding="async"><img src="/lootbar-site/pack-lime-dark.webp" alt="Launched Lime Sorbet one-gram packaging and device" loading="lazy" decoding="async"></div> </section> <section class="extensions section matrix-surface" id="extensions"><div class="wrap"><div class="section-index mono"><span>07 / SPATIAL DESIGN</span><span>CONCEPT EXTENSION</span></div><div class="section-heading"><h2>World-building.<br><span class="cyan">Now in 3D.</span></h2><p>Side quest: give the identity a room of its own. This exhibition concept turns neon edges into an illuminated portal and scales the original wireframe artwork into a wall.</p></div></div> <figure class="wide-figure"><img src="/lootbar-site/spatial.webp" width="1672" height="941" alt="Concept rendering of a Loot Bar design exhibition with cyan and magenta portal lighting, a white wordmark and dark metal plinths" loading="lazy" decoding="async"><figcaption class="wrap"><span class="mono">SPATIAL CONCEPT / AI-ASSISTED VISUALIZATION</span><span>Proposed for the case study. Not a built installation.</span></figcaption></figure> <div class="wrap direction-notes"><div><h3>The portal</h3><p>Cyan on one edge, magenta on the other. The entrance borrows its frame from the screen.</p></div><div><h3>The structure</h3><p>Black steel, brushed metal and smoked acrylic give the digital palette something solid to stand on.</p></div><div><h3>The artwork</h3><p>The original fractured wireframe gets the full-wall treatment. Same graphic, much bigger canvas.</p></div></div> </section> <section class="merch section matrix-surface" id="merchandise"><div class="wrap"><div class="section-index mono"><span>08 / SWAG</span><span>CONCEPT EXTENSION</span></div><div class="section-heading"><h2>The IRL<br><span class="pink">loadout.</span></h2><p>We took the identity off-screen and onto hats, tees and hoodies. A small embroidered “b”, a bold chest mark and a fractured back graphic give each piece its own role in the same apparel lineup.</p></div></div><figure class="wide-figure swag-portrait"><img src="/lootbar-site/swag-apparel.webp" width="1536" height="1024" alt="Three adult models in a Loot Bar hoodie, logo T-shirt and embroidered cap, photographed under cyan and magenta studio light" loading="lazy" decoding="async"><figcaption class="wrap"><span class="mono">SWAG / AI-ASSISTED APPAREL STUDY</span><span>New clothing concepts for the case study.</span></figcaption></figure><figure class="wide-figure swag-display"><img src="/lootbar-site/merchandise.webp" width="1672" height="941" alt="Concept merchandise display featuring two black graphic T-shirts, embroidered caps and a canvas tote on a neon-edged black steel rack" loading="lazy" decoding="async"><figcaption class="wrap"><span class="mono">SWAG DISPLAY / AI-ASSISTED VISUALIZATION</span><span>Proposed merchandise. Not part of the original launch.</span></figcaption></figure><div class="wrap merchandise-notes"><p><span class="mono">ON THE GARMENT</span>Hoodie, tee, cap. Bold chest marks and a compact embroidered “b” bring the identity into different scales. White against black keeps the details readable.</p><p><span class="mono">IN THE DISPLAY</span>The rack joins the party: black metal, cyan on one side, magenta on the other. It shares the exhibition concept’s visual language.</p></div></section> <section class="closing section crt" id="reflection"><div class="wrap"><div class="section-index mono"><span>09 / REFLECTION</span><span>LOOT BAR / LOST LAKE</span></div><h2 class="glitch pixel-bleed rgb-glitch" data-text="GG.
+WORLD BUILT.">GG.<br>WORLD BUILT.</h2><div class="split"><p class="lead">The chest was the starting point. The rest became a whole design universe.</p><div><p>We gave each flavor its own title-screen energy, with a shared wordmark and chest keeping the party together. Different palettes, textures and lettering. Still unmistakably part of the same build.</p><p>And because world-building tends to come with side quests, we explored a space and a wearable collection too. Those are new concept studies; the original identity and packaging made it into the real world.</p></div></div><div class="credits"><div><span class="mono">ORIGINAL PROJECT / C.2023</span><p>We created the identity, artwork, packaging, device graphics and mockups for Lost Lake.</p></div><div><span class="mono">CASE-STUDY EXTENSIONS</span><p>New visual direction, screen effects, spatial concept and SWAG studies. Spatial and apparel concepts use AI assistance.</p></div></div></div></section> </main> <footer class="wrap footer mono"><span>LOOT BAR / DESIGN CASE STUDY</span> <a href="#top" data-lb-top>BACK TO SPAWN ↑</a></footer> </div>       <script type="module" src="/_astro/LootbarCaseStudy.astro_astro_type_script_index_0_lang.DumcWNfr.js"></script>  </div> <!-- Global noise overlay --> <div class="noise-overlay" aria-hidden="true"></div>  <div class="zg-bar" aria-hidden="true"><span class="zg-bar-thumb"></span></div> <!-- Lenis smooth scroll + GSAP ScrollTrigger sync.
+
+         Written as an init/destroy pair and started at module time, so with
+         no router in the page this behaves exactly as it did when the body
+         below ran top to bottom. The pair exists because an ES module is
+         evaluated once per URL: under a same-document router the second
+         visit to a page would re-use this instance, and nothing here could
+         be handed back. `destroy()` is what makes that safe -- it returns
+         the page to the state it was in before `init()` ran, leaving no
+         Lenis, no ticker callback, no ScrollTrigger sync and no delegated
+         click handler behind.
+
+         Nothing else may construct a Lenis. `window.__lenis` is the site's
+         single scroller and a dozen components read it. --> <script type="module">let m=null;function C(){if(m)return;const e=document.querySelector(".zg-bar"),f=e&&e.querySelector(".zg-bar-thumb");if(!e||!f){m=()=>{};return}const b=window.matchMedia("(prefers-reduced-motion: reduce)").matches,R=34,S=1200,k=300;let r=0,h=0,c=0,g=0,L=0,E=0,M=0,w=0,T=-1,_=!1;const D=()=>{const t=window.innerHeight,n=document.documentElement.scrollHeight,o=Math.max(0,n-t),s=o<=0?0:Math.max(R,Math.round(t/n*t)),i=o<=0?0:Math.min(1,Math.max(0,(window.__lenis?.scroll??window.scrollY)/o));return{limit:o,h:s,y:(t-s)*i}},N=()=>{f.style.transform="translate3d(0,"+g.toFixed(2)+"px,0) scaleY("+(c/window.innerHeight).toFixed(5)+")"},x=()=>{r=0;const t=performance.now();if(w&&!b){const n=Math.min(1,(t-w)/k),o=1-Math.pow(1-n,3);c=M+(L-M)*o,g=E,n<1?r=requestAnimationFrame(x):w=0}else c=L,g=E;N()},l=()=>{e.classList.add("is-on"),window.clearTimeout(h),_||(h=window.setTimeout(()=>e.classList.remove("is-on"),S))},u=t=>{const n=D();e.classList.toggle("is-live",n.limit>0),E=n.y,n.limit!==T&&(T>=0&&!b&&(M=c,w=performance.now()),T=n.limit),L=n.h,r||(r=requestAnimationFrame(x)),t||l()},P=69,V=()=>Array.from(document.querySelectorAll("[data-nav-light]")),y=()=>{const t=V().some(n=>{const o=n.getBoundingClientRect();return o.top<=P&&o.bottom>0});e.classList.toggle("is-light",t)};let Y=!1;const v=()=>{Y||(Y=!0,requestAnimationFrame(()=>{Y=!1,u(),y()}))},A=()=>{u(!0),y()},H=t=>{if(t.pointerType!=="mouse")return;const n=window.innerHeight,o=f.getBoundingClientRect(),s=Math.max(0,document.documentElement.scrollHeight-n);if(s<=0)return;const i=window.__lenis;if(t.clientY<o.top||t.clientY>o.bottom){const a=t.clientY<o.top?-1:1,d=Math.min(s,Math.max(0,(i?.scroll??window.scrollY)+a*n*.9));i?.scrollTo?i.scrollTo(d):window.scrollTo({top:d,behavior:"smooth"}),l();return}_=!0,e.classList.add("is-drag"),e.setPointerCapture(t.pointerId);const W=t.clientY-o.top,q=a=>{const d=n-c;if(d<=0)return;const B=Math.min(1,Math.max(0,(a.clientY-W)/d))*s;i?.scrollTo?i.scrollTo(B,{immediate:!0}):window.scrollTo(0,B),l()},p=a=>{_=!1,e.classList.remove("is-drag");try{e.releasePointerCapture(a.pointerId)}catch{}e.removeEventListener("pointermove",q),e.removeEventListener("pointerup",p),e.removeEventListener("pointercancel",p),l()};e.addEventListener("pointermove",q),e.addEventListener("pointerup",p),e.addEventListener("pointercancel",p),t.preventDefault()},z=()=>l(),F=window.__lenis;F?.on?.("scroll",v),window.addEventListener("scroll",v,{passive:!0}),window.addEventListener("resize",A),e.addEventListener("pointerdown",H),e.addEventListener("pointerenter",z);const I=window.setInterval(()=>u(!0),500);window.setTimeout(()=>window.clearInterval(I),6e3),u(!0),y(),m=()=>{F?.off?.("scroll",v),window.removeEventListener("scroll",v),window.removeEventListener("resize",A),e.removeEventListener("pointerdown",H),e.removeEventListener("pointerenter",z),window.clearInterval(I),window.clearTimeout(h),r&&cancelAnimationFrame(r),e.classList.remove("is-on","is-live","is-drag","is-light")}}function j(){const e=m;m=null,e?.()}window.__zgBar={init:C,destroy:j,refresh:()=>window.__zgBarRead?.()};C();</script> <!-- Nav color switch on light sections.
+         The single owner of the nav's appearance. This used to be two scroll
+         listeners: this one toggling classes, and a second, unguarded one in
+         index.astro writing the inline styles that actually painted the bar.
+         They also disagreed on geometry, so the inline copy (which triggers
+         earlier and releases later) decided every visible flip. The inline
+         copy's thresholds are the ones kept here; the class toggles ride along
+         unchanged. --> <script type="module">let s=null;function B(){if(s)return;const l=document.getElementById("main-nav");if(l){let w=function(){f=!1;const o=window.scrollY>60,t=I().some(r=>{const i=r.getBoundingClientRect();return i.top<=y&&i.bottom>0});t===b&&o===p||(b=t,p=o,l.classList.toggle("nav-on-light",t),l.classList.toggle("nav-scrolled",o),e&&(t?(e.style.backgroundColor="rgba(255,255,255,0.78)",e.style.backdropFilter="blur(14px) saturate(1.8)",e.style.webkitBackdropFilter="blur(14px) saturate(1.8)",e.style.borderBottomColor="rgba(0,0,0,0.07)",g.forEach(r=>{r.style.color="#1a1a1a"}),c&&(c.style.filter="invert(1)")):(e.style.backgroundColor=o?"rgba(0,0,0,0.45)":"rgba(0,0,0,0)",e.style.backdropFilter=o?"blur(12px) saturate(1.6)":"none",e.style.webkitBackdropFilter=o?"blur(12px) saturate(1.6)":"none",e.style.borderBottomColor=o?"rgba(255,160,64,0.10)":"transparent",g.forEach(r=>{r.style.color=""}),c&&(c.style.filter=""))))};const e=document.getElementById("nav-bg"),c=l.querySelector("img"),g=Array.from(l.querySelectorAll(".nav-link")),I=()=>Array.from(document.querySelectorAll("[data-nav-light]")),y=69;let f=!1,b=null,p=null;const k=()=>{f||(f=!0,requestAnimationFrame(w))};window.addEventListener("scroll",k,{passive:!0}),w();let E=null;const d=g.filter(n=>n.dataset.section);if(d.length){let n=0;const o=()=>{n=0;let m=null,u=-1/0;for(const a of d){const L=document.getElementById(a.dataset.section);if(!L)continue;const v=L.getBoundingClientRect().top-y;v<=0&&v>u&&(u=v,m=a)}for(const a of d)a.classList.toggle("is-active",a===m)},t=()=>{n||(n=requestAnimationFrame(o))};window.addEventListener("scroll",t,{passive:!0}),window.addEventListener("resize",t,{passive:!0});let r=0;const i=window.setInterval(()=>{t(),(d.every(u=>document.getElementById(u.dataset.section))||++r>40)&&window.clearInterval(i)},250);E=()=>{window.removeEventListener("scroll",t),window.removeEventListener("resize",t),window.clearInterval(i),n&&(cancelAnimationFrame(n),n=0)}}s=()=>{window.removeEventListener("scroll",k),E?.()}}s||(s=()=>{})}function h(){const l=s;s=null,l?.()}window.__zgNav={init:B,destroy:h};B();</script> <!-- The scrollbar's own lifecycle, on the same init/destroy shape as the
+         two above, so it survives the Strane expansion and stays one
+         instance. --> <script type="module" src="/_astro/BaseLayout.astro_astro_type_script_index_2_lang.DJHD6sBR.js"></script>  </body></html>
