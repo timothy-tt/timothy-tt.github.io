@@ -456,7 +456,7 @@ Start a Project
         var n = e.animationName;
         if (n === 'zg-hero-p-rise' || n === 'zg-hw-rise') e.target.classList.add('zg-in');
       }, true);
-    </script><!-- Recent Work: pinned single-stage showcase --><astro-island uid="1PVAro" prefix="r7" component-url="/_astro/RecentWorkStage.BvbzqdHJ.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;RecentWorkStage&quot;,&quot;value&quot;:true}" await-children><section id="work" class="rws rws-mode-stage" style="background:#050505;--rws-n:6"><style>
+    </script><!-- Recent Work: pinned single-stage showcase --><astro-island uid="Z2bSEgK" prefix="r7" component-url="/_astro/RecentWorkStage.BMkN0FBg.js" component-export="default" renderer-url="/_astro/client.i8_f7Fkk.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;RecentWorkStage&quot;,&quot;value&quot;:true}" await-children><section id="work" class="rws rws-mode-stage" style="background:#050505;--rws-n:6"><style>
         .rws-list { display: none; }
         @media (max-width: 767px), (max-height: 599px) {
           .rws-runway { display: none; }
@@ -1201,9 +1201,13 @@ Start a Project
             overflow: visible;
             pointer-events: none;
           }
-          /* No fade: it is simply there from STACK_HEAD_AT on. */
-          .rws-list.is-stack .rws-list-head .rws-eyebrow { visibility: hidden; }
-          .rws-list.is-stack .rws-list-head.is-on .rws-eyebrow { visibility: visible; }
+          /* No fade: the label is wiped on left to right by the scroll
+             (--rws-h, runStack), and wiped back off on the way up. The
+             clip's negative insets leave room for the shadow. */
+          .rws-list.is-stack .rws-list-head .rws-eyebrow {
+            width: fit-content;
+            clip-path: inset(-12px calc((1 - var(--rws-h, 0)) * (100% + 12px)) -12px 0);
+          }
           .rws-list-head .rws-eyebrow {
             margin-bottom: 0;
             font-weight: 700;
@@ -1311,6 +1315,22 @@ Start a Project
           .rws-card-m .rws-card-over { padding: 0 var(--zg-gutter) .4rem; }
           .rws-card-m .rws-card-cta { pointer-events: auto; }
           .rws-card-m .rws-card-text { padding-bottom: calc(1.6rem + env(safe-area-inset-bottom, 0px)); }
+          /* The sticky lifts the band clear of Safari's toolbar, which
+             left the art behind the toolbar bare under a hard-edged shade.
+             The shade runs on half a screen past the band at its foot's
+             0.9 (lvh - svh measured short of Safari 27's floating toolbar),
+             and the gradient keeps its own height over the band; the
+             card's overflow:clip cuts whatever lies past the screen's foot. */
+          .rws-card-m .rws-card-text::before {
+            bottom: -50lvh;
+            background:
+              linear-gradient(to bottom,
+                rgba(5,5,5,0) 0%,
+                rgba(5,5,5,0.55) 30%,
+                rgba(5,5,5,0.82) 55%,
+                rgba(5,5,5,0.9) 100%) top / 100% calc(100% - 50lvh) no-repeat,
+              linear-gradient(rgba(5,5,5,0.9), rgba(5,5,5,0.9)) bottom / 100% 50lvh no-repeat;
+          }
         }
         /* ── The stack ──
            Every card pins at the top of the screen, so the next one in the
@@ -1336,8 +1356,14 @@ Start a Project
              pinned card's text clears on the scroll itself (not a timed
              fade) over the first ~7% of the next card's rise, before that
              card's CTA is uncovered, and comes back the same way on the way
-             up. */
-          .rws-list.is-stack .rws-card-foot {
+             up. Only the WORDS clear: the shade behind them
+             (.rws-card-text::before) stays on the pinned card, so the foot
+             of the screen is shaded the whole way through the handover.
+             Fading the shade with the words left the pinned card bare above
+             the edge and the new card's shade clipped hard at its edge,
+             which read as a dark band chasing the edge up the screen. */
+          .rws-list.is-stack .rws-card-over,
+          .rws-list.is-stack .rws-card-text > * {
             opacity: clamp(0, 1 - var(--rws-d, 0) * 15, 1);
           }
           .rws-list.is-stack .rws-card::after {
